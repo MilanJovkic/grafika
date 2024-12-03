@@ -84,9 +84,10 @@ struct RoadSegment {
             congestion += speed;
             getColorFromCongestion();
             if (isGreen == true) {
+                int numConnectedRoads = connectedRoads.size(); // Get the number of connected roads
                 for (RoadSegment* road : connectedRoads) {
                     if (road != nullptr) { // Proveri da li je pokazivač validan
-                        road->congestion -= speed / 3;
+                        road->congestion -= speed / numConnectedRoads;
                         road->getColorFromCongestion();
                     }
                 }
@@ -195,12 +196,14 @@ int main(void)
 
     RoadSegment road1(-1.0, 0.76, 0.0, 0.76, -1.0, 0.74, 0.0, 0.74, true, "Main Street", false);
     RoadSegment road2(0.0, 0.76, 1.0, 0.76, 0.0, 0.74, 1.0, 0.74, true, "Main Street", true);
+    RoadSegment road3(0.0, 0.76, 0.0, 1.0, 0.02, 0.76, 0.02, 1.0, true, "Main Street", true);
     road1.addConnectedRoad(&road2);
+    road1.addConnectedRoad(&road3);
     TrafficLight light1(road1, 0.0, 0.75);
     // Pozivamo funkciju za prigušenost
     road1.getColorFromCongestion();
     road2.getColorFromCongestion();
-
+    road3.getColorFromCongestion();
     float vertices[] = {
         road1.x1, road1.y1, road1.r,road1.g, road1.b,
         road1.x2, road1.y2,road1.r, road1.g, road1.b,
@@ -211,6 +214,11 @@ int main(void)
         road2.x2, road2.y2,road2.r, road2.g, road2.b,
          road2.x3, road2.y3, road2.r,road2.g, road2.b,
         road2.x4, road2.y4,road2.r, road2.g, road2.b,
+
+        road3.x1, road3.y1, road3.r,road3.g, road3.b,
+        road3.x2, road3.y2,road3.r, road3.g, road3.b,
+         road3.x3, road3.y3, road3.r,road3.g, road3.b,
+        road3.x4, road3.y4,road3.r, road3.g, road3.b,
     };
 
     glBindVertexArray(VAO1);
@@ -223,6 +231,12 @@ int main(void)
     glEnableVertexAttribArray(1);
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++ RENDER LOOP - PETLJA ZA CRTANJE +++++++++++++++++++++++++++++++++++++++++++++++++
 
+    // Inside the main loop:
+    double  mouseX, mouseY;
+    int mouseButtonStateLeft, mouseButtonStateRight;
+
+
+
     glClearColor(0.5, 0.5, 0.5, 1.0); //Podesavanje boje pozadine: RGBA (R - Crvena, G - Zelena, B - Plava, A = neprovidno; Opseg od 0 do 1, gdje je 0 crno a 1 svijetlo)
     float lastTime = 0.0f;
     while (!glfwWindowShouldClose(window)) //Beskonacna petlja iz koje izlazimo tek kada prozor treba da se zatvori
@@ -231,6 +245,40 @@ int main(void)
         if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         {
             glfwSetWindowShouldClose(window, GL_TRUE);
+        }
+
+        glfwGetCursorPos(window, &mouseX, &mouseY);
+
+        // Convert mouse position from screen coordinates to OpenGL coordinates
+        float xPos = (2.0f * mouseX) / wWidth - 1.0f;
+        float yPos = 1.0f - (2.0f * mouseY) / wHeight;
+
+        // Check if the left or right mouse button is pressed
+        mouseButtonStateLeft = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
+        mouseButtonStateRight = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT);
+
+        // Only proceed if either mouse button is pressed
+        if (mouseButtonStateLeft == GLFW_PRESS || mouseButtonStateRight == GLFW_PRESS) {
+            vector<RoadSegment*> roads = { &road1, &road2, &road3 };
+            for (auto* road : roads) {
+                float minX = std::min({ road->x1, road->x2, road->x3, road->x4 });
+                float maxX = std::max({ road->x1, road->x2, road->x3, road->x4 });
+                float minY = std::min({ road->y1, road->y2, road->y3, road->y4 });
+                float maxY = std::max({ road->y1, road->y2, road->y3, road->y4 });
+                if (xPos >= minX && xPos <= maxX && yPos >= minY && yPos <= maxY) {
+                    if (mouseButtonStateLeft == GLFW_PRESS) {
+                        road->congestion += 0.0003;
+                        if (road->congestion > 1.0f) road->congestion = 1.0f;
+                        road->getColorFromCongestion();
+                    }
+                    else if (mouseButtonStateRight == GLFW_PRESS) {
+                        road->congestion -= 0.0003;
+                        if (road->congestion < 0.0f) road->congestion = 0.0f;
+                        road->getColorFromCongestion();
+                    }
+                }
+
+            }
         }
 
         float currentTime = glfwGetTime();
@@ -242,6 +290,7 @@ int main(void)
        
         road1.changeCongestion();
         road2.changeCongestion();
+        road3.changeCongestion();
         float vertices[] = {
         road1.x1, road1.y1, road1.r,road1.g, road1.b,
         road1.x2, road1.y2,road1.r, road1.g, road1.b,
@@ -252,6 +301,11 @@ int main(void)
         road2.x2, road2.y2,road2.r, road2.g, road2.b,
          road2.x3, road2.y3, road2.r,road2.g, road2.b,
         road2.x4, road2.y4,road2.r, road2.g, road2.b,
+
+        road3.x1, road3.y1, road3.r,road3.g, road3.b,
+        road3.x2, road3.y2,road3.r, road3.g, road3.b,
+         road3.x3, road3.y3, road3.r,road3.g, road3.b,
+        road3.x4, road3.y4,road3.r, road3.g, road3.b,
         };
 
         glBindVertexArray(VAO1);
@@ -267,6 +321,7 @@ int main(void)
         glBindVertexArray(VAO1);
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);   // Horizontalna 1
         glDrawArrays(GL_TRIANGLE_STRIP, 4, 4);
+        glDrawArrays(GL_TRIANGLE_STRIP, 8, 4);
 
 
         glUseProgram(basicShader);
