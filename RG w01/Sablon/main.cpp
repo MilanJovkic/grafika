@@ -82,12 +82,24 @@ struct RoadSegment {
         }
         else {
             congestion += speed;
+            if (congestion < 0) {
+                congestion = 0;
+            };
+            if (congestion > 1) {
+                congestion = 1;
+            };
             getColorFromCongestion();
             if (isGreen == true) {
                 int numConnectedRoads = connectedRoads.size(); // Get the number of connected roads
                 for (RoadSegment* road : connectedRoads) {
                     if (road != nullptr) { // Proveri da li je pokazivač validan
                         road->congestion -= speed / numConnectedRoads;
+                        if (road->congestion < 0) {
+                            road->congestion = 0;
+                        };
+                        if (road->congestion > 1) {
+                            road->congestion = 1;
+                        };
                         road->getColorFromCongestion();
                     }
                 }
@@ -135,7 +147,7 @@ void initTrafficLight(TrafficLight& light, float x, float y);
 void updateTrafficLight(TrafficLight& light, float deltaTime);
 void drawCircle(float offsetX, float offsetY, float r, float red, float green, float blue, unsigned int& VAO, unsigned int& VBO, int& vertexCount);
 void drawTrafficLight(TrafficLight& light, unsigned int& VAO, unsigned int& VBO, int& vertexCount);
-
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 
 
 
@@ -180,6 +192,7 @@ int main(void)
         std::cout << "GLEW nije mogao da se ucita! :'(\n";
         return 3;
     }
+    glfwSetScrollCallback(window, scroll_callback);
 
     unsigned int basicShader = createShader("basic.vert", "basic.frag");
 
@@ -538,4 +551,23 @@ void drawCircle(float offsetX, float offsetY, float r, float red, float green, f
 
     // Return the vertex count (the number of vertices in the circle)
     vertexCount = circleVertices.size() / 5;  // 5 values per vertex (X, Y, R, G, B)
+}
+
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
+    // Adjust speed based on vertical scroll
+    if (speed > 0) {
+        speed += yoffset * 0.00005;  // Adjust this multiplier for desired sensitivity
+
+        // Limit the speed to be within a certain range
+        if (speed < 0.00005) speed = 0.00005;  // Minimum speed
+        if (speed > 0.002) speed = 0.002;      // Maximum speed
+    }
+    else {
+        speed -= yoffset * 0.00005;  // Adjust this multiplier for desired sensitivity
+
+        // Limit the speed to be within a certain range
+        if (speed > -0.00005) speed = -0.00005;  // Minimum speed
+        if (speed < -0.002) speed = -0.002;
+    }
+    std::cout << "Current speed: " << speed << std::endl;
 }
