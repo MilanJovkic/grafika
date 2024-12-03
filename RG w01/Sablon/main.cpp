@@ -555,7 +555,7 @@ void drawCircle(float offsetX, float offsetY, float r, float red, float green, f
 
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
     // Adjust speed based on vertical scroll
-    if (speed > 0) {
+    if (speed >= 0) {
         speed += yoffset * 0.00005;  // Adjust this multiplier for desired sensitivity
 
         // Limit the speed to be within a certain range
@@ -569,5 +569,11 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
         if (speed > -0.00005) speed = -0.00005;  // Minimum speed
         if (speed < -0.002) speed = -0.002;
     }
+    freeSpeed += yoffset * 0.00001;  // Adjust this multiplier for desired sensitivity
+
+    // Limit the speed to be within a certain range
+    if (freeSpeed < 0.00001) freeSpeed = 0.00001;  // Minimum speed
+    if (freeSpeed > 0.00004) freeSpeed = 0.00004;
     std::cout << "Current speed: " << speed << std::endl;
+    std::cout << "Current free: " << freeSpeed << std::endl;
 }
