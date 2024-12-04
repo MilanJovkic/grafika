@@ -135,7 +135,7 @@ struct TrafficLight {
 
         rightTurnActive = false; // Početno isključeno
         color = "red";
-        nextColor = "yellow";
+        nextColor = "redyellow";
     }
 };
 
@@ -146,10 +146,8 @@ unsigned int createShader(const char* vsSource, const char* fsSource); //Pravi o
 void initTrafficLight(TrafficLight& light, float x, float y);
 void updateTrafficLight(TrafficLight& light, float deltaTime);
 void drawCircle(float offsetX, float offsetY, float r, float red, float green, float blue, unsigned int& VAO, unsigned int& VBO, int& vertexCount);
-void drawTrafficLight(TrafficLight& light, unsigned int& VAO, unsigned int& VBO, int& vertexCount);
+bool drawTrafficLight(TrafficLight& light, unsigned int& VAO, unsigned int& VBO, unsigned int& VAO1, unsigned int& VBO1, unsigned int& VAO2, unsigned int& VBO2, unsigned int& VAO3, unsigned int& VBO3, int& vertexCount);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
-
-
 
 int main(void)
 {
@@ -200,6 +198,18 @@ int main(void)
     glGenVertexArrays(1, &VAO);
     unsigned VBO;
     glGenBuffers(1, &VBO);
+    unsigned VAO2;
+    glGenVertexArrays(1, &VAO2);
+    unsigned VBO2;
+    glGenBuffers(1, &VBO2);
+    unsigned VAO3;
+    glGenVertexArrays(1, &VAO3);
+    unsigned VBO3;
+    glGenBuffers(1, &VBO3);
+    unsigned VAO4;
+    glGenVertexArrays(1, &VAO4);
+    unsigned VBO4;
+    glGenBuffers(1, &VBO4);
     int vertexCount = 0;
     unsigned VAO1;
     glGenVertexArrays(1, &VAO1);
@@ -341,9 +351,18 @@ int main(void)
         glViewport(0, 0, wWidth, wHeight);
        // for (int i = 0; i < 3; i++) {
             updateTrafficLight(light1, deltaTime);
-            drawTrafficLight(light1, VAO, VBO, vertexCount);
+            bool isTwo = false;
+            isTwo = drawTrafficLight(light1, VAO, VBO, VAO2, VBO2, VAO3, VBO3, VAO4, VBO4, vertexCount);
             glBindVertexArray(VAO);
             glDrawArrays(GL_TRIANGLE_FAN, 0, vertexCount);
+            glBindVertexArray(VAO2);
+            glDrawArrays(GL_TRIANGLE_FAN, 0, vertexCount);
+            glBindVertexArray(VAO3);
+            glDrawArrays(GL_TRIANGLE_FAN, 0, vertexCount);
+            glBindVertexArray(VAO4);
+            glDrawArrays(GL_TRIANGLE_FAN, 0, vertexCount);
+
+
       //  }
 
 
@@ -453,13 +472,13 @@ void updateTrafficLight(TrafficLight& light, float deltaTime) {
 
     if (light.remainingTime <= 0) {
         // Prebacivanje boje semafora
-        if (light.color == "red" && light.nextColor=="yellow") { // Ako je trenutno crveno
-            light.red[0] = 0.0f; light.yellow[0] = 1.0f;
+        if (light.color == "red" && light.nextColor=="redyellow") { // Ako je trenutno crveno
+            light.yellow[0] = 1.0f;
             light.remainingTime = 3.0f; // Trajanje žutog svetla
-            light.color = "yellow"; light.nextColor = "green";
+            light.color = "redyellow"; light.nextColor = "green";
             return;
         }
-        else if (light.color == "yellow" && light.nextColor == "green") { // Ako je trenutno žuto
+        else if (light.color == "redyellow" && light.nextColor == "green") { // Ako je trenutno žuto
             light.yellow[0] = 0.0f; light.green[1] = 1.0f; // Prelazak u zeleno
             light.remainingTime = light.timer / 2; // Polovinu vremena za zeleno
             light.color = "green"; light.nextColor = "yellow";
@@ -475,7 +494,7 @@ void updateTrafficLight(TrafficLight& light, float deltaTime) {
         else if (light.color == "yellow" && light.nextColor == "red") { // Ako je trenutno zeleno
             light.red[0] = 1.0f; light.yellow[0] = 0.0f; // Prelazak u žuto
             light.remainingTime = light.timer; // Trajanje žutog svetla
-            light.color = "red"; light.nextColor = "yellow";
+            light.color = "red"; light.nextColor = "redyellow";
             light.road.lightIsRed();
             return;
         }
@@ -485,27 +504,46 @@ void updateTrafficLight(TrafficLight& light, float deltaTime) {
     }
 }
 
-void drawTrafficLight(TrafficLight& light, unsigned int& VAO, unsigned int& VBO, int& vertexCount) {
+bool drawTrafficLight(TrafficLight& light, unsigned int& VAO, unsigned int& VBO, unsigned int& VAO1, unsigned int& VBO1, unsigned int& VAO2, unsigned int& VBO2, unsigned int& VAO3, unsigned int& VBO3, int& vertexCount) {
     // Prikazivanje crvenog svetla
+    bool isTwo = false;
     if (light.color == "red") {
         drawCircle(light.x, light.y, 0.02f, light.red[0], light.red[1], light.red[2], VAO, VBO, vertexCount);
+        drawCircle(light.x, light.y - 0.05f, 0.02f, 0.3, 0.3, 0.3, VAO1, VBO1, vertexCount);
+        drawCircle(light.x, light.y - 0.1f, 0.02f, 0.3, 0.3, 0.3, VAO2, VBO2, vertexCount);
+        drawCircle(light.x + 0.05f, light.y - 0.1f, 0.02f, light.rightTurn[0], light.rightTurn[1], light.rightTurn[2], VAO3, VBO3, vertexCount);
     }
 
     // Prikazivanje žutog svetla
     if (light.color == "yellow") {
         drawCircle(light.x, light.y - 0.05f, 0.02f, light.yellow[0], light.yellow[1], light.yellow[2], VAO, VBO, vertexCount);
+        drawCircle(light.x, light.y, 0.02f, 0.3, 0.3, 0.3, VAO1, VBO1, vertexCount);
+        drawCircle(light.x, light.y - 0.1f, 0.02f, 0.3, 0.3, 0.3, VAO2, VBO2, vertexCount);
+        drawCircle(light.x + 0.05f, light.y - 0.1f, 0.02f, light.rightTurn[0], light.rightTurn[1], light.rightTurn[2], VAO3, VBO3, vertexCount);
+
     }
 
     // Prikazivanje zelenog svetla
     if (light.color == "green") {
         drawCircle(light.x, light.y - 0.1f, 0.02f, light.green[0], light.green[1], light.green[2], VAO, VBO, vertexCount);
+        drawCircle(light.x, light.y, 0.02f, 0.3, 0.3, 0.3, VAO1, VBO1, vertexCount);
+        drawCircle(light.x, light.y - 0.05f, 0.02f, 0.3, 0.3, 0.3, VAO2, VBO2, vertexCount);
+        drawCircle(light.x + 0.05f, light.y - 0.1f, 0.02f, light.rightTurn[0], light.rightTurn[1], light.rightTurn[2], VAO3, VBO3, vertexCount);
+    }
+    if (light.color == "redyellow") {
+        drawCircle(light.x, light.y, 0.02f, light.red[0], light.red[1], light.red[2], VAO, VBO, vertexCount);
+        drawCircle(light.x, light.y - 0.05f, 0.02f, light.yellow[0], light.yellow[1], light.yellow[2], VAO1, VBO1, vertexCount);
+        drawCircle(light.x, light.y - 0.1f, 0.02f, 0.3, 0.3, 0.3, VAO2, VBO2, vertexCount);
+        drawCircle(light.x + 0.05f, light.y - 0.1f, 0.02f, light.rightTurn[0], light.rightTurn[1], light.rightTurn[2], VAO3, VBO3, vertexCount);
     }
 
     // Prikazivanje indikatora za desno skretanje ako je aktivan
     if (light.rightTurnActive) {
         drawCircle(light.x + 0.03f, light.y - 0.1f, 0.02f, light.rightTurn[0], light.rightTurn[1], light.rightTurn[2], VAO, VBO, vertexCount);
     }
+    return isTwo;
 }
+
 
 
 void drawCircle(float offsetX, float offsetY, float r, float red, float green, float blue, unsigned int& VAO, unsigned int& VBO, int& vertexCount) {
@@ -552,6 +590,10 @@ void drawCircle(float offsetX, float offsetY, float r, float red, float green, f
     // Return the vertex count (the number of vertices in the circle)
     vertexCount = circleVertices.size() / 5;  // 5 values per vertex (X, Y, R, G, B)
 }
+
+
+
+
 
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
     // Adjust speed based on vertical scroll
