@@ -118,6 +118,7 @@ struct TrafficLight {
     float timer;
     float remainingTime;
     bool rightTurnActive;
+    int rightTurnNum;
     string color;
     string nextColor;
     RoadSegment& road;
@@ -131,10 +132,11 @@ struct TrafficLight {
         red[0] = 1.0f; red[1] = 0.0f; red[2] = 0.0f;
         yellow[0] = 1.0f; yellow[1] = 1.0f; yellow[2] = 0.0f;
         green[0] = 0.0f; green[1] = 1.0f; green[2] = 0.0f;
-        rightTurn[0] = 0.3f; rightTurn[1] = 0.3f; rightTurn[2] = 0.3f;
+        rightTurn[0] = 0.0f; rightTurn[1] = 1.0f; rightTurn[2] = 0.0f;
 
         rightTurnActive = false; // Početno isključeno
         color = "red";
+        rightTurnNum = 30;
         nextColor = "redyellow";
     }
 };
@@ -511,6 +513,7 @@ bool drawTrafficLight(TrafficLight& light, unsigned int& VAO, unsigned int& VBO,
         drawCircle(light.x, light.y, 0.02f, light.red[0], light.red[1], light.red[2], VAO, VBO, vertexCount);
         drawCircle(light.x, light.y - 0.05f, 0.02f, 0.3, 0.3, 0.3, VAO1, VBO1, vertexCount);
         drawCircle(light.x, light.y - 0.1f, 0.02f, 0.3, 0.3, 0.3, VAO2, VBO2, vertexCount);
+        light.rightTurn[0] = 0.0f; light.rightTurn[1] = 1.0f; light.rightTurn[2] = 0.0f;
         drawCircle(light.x + 0.05f, light.y - 0.1f, 0.02f, light.rightTurn[0], light.rightTurn[1], light.rightTurn[2], VAO3, VBO3, vertexCount);
     }
 
@@ -519,7 +522,17 @@ bool drawTrafficLight(TrafficLight& light, unsigned int& VAO, unsigned int& VBO,
         drawCircle(light.x, light.y - 0.05f, 0.02f, light.yellow[0], light.yellow[1], light.yellow[2], VAO, VBO, vertexCount);
         drawCircle(light.x, light.y, 0.02f, 0.3, 0.3, 0.3, VAO1, VBO1, vertexCount);
         drawCircle(light.x, light.y - 0.1f, 0.02f, 0.3, 0.3, 0.3, VAO2, VBO2, vertexCount);
+        if (light.rightTurnNum <= 0) {
+            light.rightTurnNum = 30;
+            if (light.rightTurn[0] >= 0.2) {
+                light.rightTurn[0] = 0.0f; light.rightTurn[1] = 1.0f; light.rightTurn[2] = 0.0f;
+            }
+            else {
+                light.rightTurn[0] = 0.3f; light.rightTurn[1] = 0.3f; light.rightTurn[2] = 0.3f;
+            }
+        }
         drawCircle(light.x + 0.05f, light.y - 0.1f, 0.02f, light.rightTurn[0], light.rightTurn[1], light.rightTurn[2], VAO3, VBO3, vertexCount);
+        light.rightTurnNum -= 1;
 
     }
 
@@ -528,19 +541,26 @@ bool drawTrafficLight(TrafficLight& light, unsigned int& VAO, unsigned int& VBO,
         drawCircle(light.x, light.y - 0.1f, 0.02f, light.green[0], light.green[1], light.green[2], VAO, VBO, vertexCount);
         drawCircle(light.x, light.y, 0.02f, 0.3, 0.3, 0.3, VAO1, VBO1, vertexCount);
         drawCircle(light.x, light.y - 0.05f, 0.02f, 0.3, 0.3, 0.3, VAO2, VBO2, vertexCount);
+        light.rightTurn[0] = 0.3f; light.rightTurn[1] = 0.3f; light.rightTurn[2] = 0.3f;
         drawCircle(light.x + 0.05f, light.y - 0.1f, 0.02f, light.rightTurn[0], light.rightTurn[1], light.rightTurn[2], VAO3, VBO3, vertexCount);
     }
     if (light.color == "redyellow") {
         drawCircle(light.x, light.y, 0.02f, light.red[0], light.red[1], light.red[2], VAO, VBO, vertexCount);
         drawCircle(light.x, light.y - 0.05f, 0.02f, light.yellow[0], light.yellow[1], light.yellow[2], VAO1, VBO1, vertexCount);
         drawCircle(light.x, light.y - 0.1f, 0.02f, 0.3, 0.3, 0.3, VAO2, VBO2, vertexCount);
+        if (light.rightTurnNum <= 0) {
+            light.rightTurnNum = 30;
+            if (light.rightTurn[0] >= 0.2) {
+                light.rightTurn[0] = 0.0f; light.rightTurn[1] = 1.0f; light.rightTurn[2] = 0.0f;
+            }
+            else {
+                light.rightTurn[0] = 0.3f; light.rightTurn[1] = 0.3f; light.rightTurn[2] = 0.3f;
+            }
+        }
         drawCircle(light.x + 0.05f, light.y - 0.1f, 0.02f, light.rightTurn[0], light.rightTurn[1], light.rightTurn[2], VAO3, VBO3, vertexCount);
+        light.rightTurnNum -= 1;
     }
 
-    // Prikazivanje indikatora za desno skretanje ako je aktivan
-    if (light.rightTurnActive) {
-        drawCircle(light.x + 0.03f, light.y - 0.1f, 0.02f, light.rightTurn[0], light.rightTurn[1], light.rightTurn[2], VAO, VBO, vertexCount);
-    }
     return isTwo;
 }
 
@@ -616,6 +636,4 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
     // Limit the speed to be within a certain range
     if (freeSpeed < 0.00001) freeSpeed = 0.00001;  // Minimum speed
     if (freeSpeed > 0.00004) freeSpeed = 0.00004;
-    std::cout << "Current speed: " << speed << std::endl;
-    std::cout << "Current free: " << freeSpeed << std::endl;
 }
