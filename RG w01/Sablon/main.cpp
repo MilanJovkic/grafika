@@ -53,6 +53,7 @@ struct RoadSegment {
         if (congestion > 1) {
             congestion = 1;
         };
+
         getColorFromCongestion();
     }
 
@@ -104,6 +105,19 @@ struct RoadSegment {
                     }
                 }
             }
+            else {
+                RoadSegment* road = connectedRoads[0];
+                road->congestion += speed/3;
+                if (road->congestion < 0) {
+                    road->congestion = 0;
+                };
+                if (road->congestion > 1) {
+                    road->congestion = 1;
+                };
+                road->getColorFromCongestion();
+            }
+
+         
         }
     }
 };
@@ -134,7 +148,7 @@ struct TrafficLight {
         green[0] = 0.0f; green[1] = 1.0f; green[2] = 0.0f;
         rightTurn[0] = 0.0f; rightTurn[1] = 1.0f; rightTurn[2] = 0.0f;
 
-        rightTurnActive = false; // Početno isključeno
+        rightTurnActive = true; 
         color = "red";
         rightTurnNum = 30;
         nextColor = "redyellow";
@@ -485,6 +499,7 @@ void updateTrafficLight(TrafficLight& light, float deltaTime) {
             light.yellow[0] = 1.0f;
             light.remainingTime = 3.0f; // Trajanje žutog svetla
             light.color = "redyellow"; light.nextColor = "green";
+            light.rightTurnActive = true;
             return;
         }
         else if (light.color == "redyellow" && light.nextColor == "green") { // Ako je trenutno žuto
@@ -492,12 +507,14 @@ void updateTrafficLight(TrafficLight& light, float deltaTime) {
             light.remainingTime = light.timer / 2; // Polovinu vremena za zeleno
             light.color = "green"; light.nextColor = "yellow";
             light.road.lightIsGreen();
+            light.rightTurnActive = false;
             return;
         }
         else if (light.color == "green" && light.nextColor == "yellow") { // Ako je trenutno zeleno
             light.green[1] = 0.0f; light.yellow[0] = 1.0f; // Prelazak u žuto
             light.remainingTime = 3.0f; // Trajanje žutog svetla
             light.color = "yellow"; light.nextColor = "red";
+            light.rightTurnActive = true;
             return;
         }
         else if (light.color == "yellow" && light.nextColor == "red") { // Ako je trenutno zeleno
@@ -505,6 +522,7 @@ void updateTrafficLight(TrafficLight& light, float deltaTime) {
             light.remainingTime = light.timer; // Trajanje žutog svetla
             light.color = "red"; light.nextColor = "redyellow";
             light.road.lightIsRed();
+            light.rightTurnActive = true;
             return;
         }
 
