@@ -172,6 +172,9 @@ void drawArrow(float offsetX, float offsetY, float length, float width, float he
 bool drawLeftTrafficLightUp(TrafficLight& light, unsigned int& VAO, unsigned int& VBO, unsigned int& VAO1, unsigned int& VBO1, unsigned int& VAO2, unsigned int& VBO2, int& vertexCount);
 bool drawTrafficLightUp(TrafficLight& light, unsigned int& VAO, unsigned int& VBO, unsigned int& VAO1, unsigned int& VBO1, unsigned int& VAO2, unsigned int& VBO2, unsigned int& VAO3, unsigned int& VBO3, unsigned int& VAO4, unsigned int& VBO4, int& vertexCount);
 void drawArrowLeft(float offsetX, float offsetY, float length, float width, float headLength, float red, float green, float blue, unsigned int& VAO, unsigned int& VBO);
+void drawArrowDown(float offsetX, float offsetY, float length, float width, float headLength, float red, float green, float blue, unsigned int& VAO, unsigned int& VBO);
+bool drawTrafficLightLeft(TrafficLight& light, unsigned int& VAO, unsigned int& VBO, unsigned int& VAO1, unsigned int& VBO1, unsigned int& VAO2, unsigned int& VBO2, unsigned int& VAO3, unsigned int& VBO3, unsigned int& VAO4, unsigned int& VBO4, int& vertexCount);
+
 
 int main(void)
 {
@@ -281,6 +284,28 @@ int main(void)
     unsigned VBOS34;
     glGenBuffers(1, &VBOS34);
 
+
+    unsigned VAOS4;
+    glGenVertexArrays(1, &VAOS4);
+    unsigned VBOS4;
+    glGenBuffers(1, &VBOS4);
+    unsigned VAOS41;
+    glGenVertexArrays(1, &VAOS41);
+    unsigned VBOS41;
+    glGenBuffers(1, &VBOS41);
+    unsigned VAOS42;
+    glGenVertexArrays(1, &VAOS42);
+    unsigned VBOS42;
+    glGenBuffers(1, &VBOS42);
+    unsigned VAOS43;
+    glGenVertexArrays(1, &VAOS43);
+    unsigned VBOS43;
+    glGenBuffers(1, &VBOS43);
+    unsigned VAOS44;
+    glGenVertexArrays(1, &VAOS44);
+    unsigned VBOS44;
+    glGenBuffers(1, &VBOS44);
+
     double  mouseX, mouseY;
     int mouseButtonStateLeft, mouseButtonStateRight;
 
@@ -311,7 +336,7 @@ int main(void)
     };
 
 
-    RoadSegment road1(-1.0, 0.76, -0.05, 0.76, -1.0, 0.74, -0.05, 0.74, false, "kkk1", true);
+    RoadSegment road1(-1.0, 0.76, -0.05, 0.76, -1.0, 0.74, -0.05, 0.74, true, "kkk1", false);
     RoadSegment road2(-0.05, 0.76, 1.0, 0.76, -0.05, 0.74, 1.0, 0.74, false, "kkk", true);
     RoadSegment road3(0.0, 0.76, 0.0, 1.0, 0.02, 0.76, 0.02, 1.0, false, "sss", true);
     RoadSegment road4(0.0, 0.74, 0.0, 0.0, 0.02, 0.74 , 0.02, 0.0, true, "sss", false);
@@ -329,10 +354,14 @@ int main(void)
     road8.addConnectedRoad(&road2);
     road9.addConnectedRoad(&road1);
     road9.addConnectedRoad(&road7);
+    road1.addConnectedRoad(&road7);
+    road1.addConnectedRoad(&road2);
+    road1.addConnectedRoad(&road3);
     TrafficLight light1(road4, 0.08, 0.70);
     TrafficLight light2(road5, -0.05, 0.70);
     TrafficLight light3(road8, -0.05, 0.9);
     TrafficLight light4(road9, -0.15, 0.9);
+    TrafficLight light5(road1, -0.15, 0.70);
 
     road1.getColorFromCongestion();
     road2.getColorFromCongestion();
@@ -630,11 +659,13 @@ int main(void)
         updateTrafficLight(light2, deltaTime);
         updateTrafficLight(light3, deltaTime);
         updateTrafficLight(light4, deltaTime);
+        updateTrafficLight(light5, deltaTime);
         bool isTwo = false;
         isTwo = drawTrafficLight(light1, VAO, VBO, VAO2, VBO2, VAO3, VBO3, VAO4, VBO4, VAO5, VBO5, vertexCount);
         isTwo = drawLeftTrafficLight(light2, VAOS1, VBOS1, VAOS12, VBOS12, VAOS13, VBOS13, vertexCount);
         isTwo = drawLeftTrafficLightUp(light3, VAOS2, VBOS2, VAOS21, VBOS21, VAOS22, VBOS22, vertexCount);
         isTwo = drawTrafficLightUp(light4, VAOS3, VBOS3, VAOS31, VBOS31, VAOS32, VBOS32, VAOS33, VBOS33, VAOS34, VBOS34, vertexCount);
+        isTwo = drawTrafficLightLeft(light5, VAOS4, VBOS4, VAOS41, VBOS41, VAOS42, VBOS42, VAOS43, VBOS43, VAOS44, VBOS44, vertexCount);
         glBindVertexArray(VAO);
         glDrawArrays(GL_TRIANGLE_FAN, 0, vertexCount);
         glBindVertexArray(VAO2);
@@ -666,6 +697,16 @@ int main(void)
         glBindVertexArray(VAOS33);
         glDrawArrays(GL_TRIANGLE_FAN, 0, vertexCount);
         glBindVertexArray(VAOS34);
+        glDrawArrays(GL_TRIANGLE_STRIP, 0, 8);
+        glBindVertexArray(VAOS4);
+        glDrawArrays(GL_TRIANGLE_FAN, 0, vertexCount);
+        glBindVertexArray(VAOS41);
+        glDrawArrays(GL_TRIANGLE_FAN, 0, vertexCount);
+        glBindVertexArray(VAOS42);
+        glDrawArrays(GL_TRIANGLE_FAN, 0, vertexCount);
+        glBindVertexArray(VAOS43);
+        glDrawArrays(GL_TRIANGLE_FAN, 0, vertexCount);
+        glBindVertexArray(VAOS44);
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 8);
 
 
@@ -888,6 +929,71 @@ bool drawTrafficLight(TrafficLight& light, unsigned int& VAO, unsigned int& VBO,
 
 
 
+bool drawTrafficLightLeft(TrafficLight& light, unsigned int& VAO, unsigned int& VBO, unsigned int& VAO1, unsigned int& VBO1, unsigned int& VAO2, unsigned int& VBO2, unsigned int& VAO3, unsigned int& VBO3, unsigned int& VAO4, unsigned int& VBO4, int& vertexCount) {
+    // Prikazivanje crvenog svetla
+    bool isTwo = false;
+    if (light.color == "red") {
+        drawCircle(light.x, light.y, 0.02f, light.red[0], light.red[1], light.red[2], VAO, VBO, vertexCount);
+        drawCircle(light.x - 0.05f, light.y, 0.02f, 0.3, 0.3, 0.3, VAO1, VBO1, vertexCount);
+        drawCircle(light.x - 0.1f, light.y, 0.02f, 0.3, 0.3, 0.3, VAO2, VBO2, vertexCount);
+        light.rightTurn[0] = 0.0f; light.rightTurn[1] = 1.0f; light.rightTurn[2] = 0.0f;
+        drawCircle(light.x - 0.1f , light.y - 0.05f, 0.02f, 0.3, 0.3, 0.3, VAO3, VBO3, vertexCount);
+        drawArrowDown(light.x - 0.1f, light.y - 0.05f, 0.02f, 0.02f, 0.03, light.rightTurn[0], light.rightTurn[1], light.rightTurn[2], VAO4, VBO4);
+    }
+
+    // Prikazivanje žutog svetla
+    if (light.color == "yellow") {
+        drawCircle(light.x - 0.05f, light.y , 0.02f, light.yellow[0], light.yellow[1], light.yellow[2], VAO, VBO, vertexCount);
+        drawCircle(light.x, light.y, 0.02f, 0.3, 0.3, 0.3, VAO1, VBO1, vertexCount);
+        drawCircle(light.x - 0.1f, light.y, 0.02f, 0.3, 0.3, 0.3, VAO2, VBO2, vertexCount);
+        drawCircle(light.x  -0.1f, light.y - 0.05f, 0.02f, 0.3, 0.3, 0.3, VAO3, VBO3, vertexCount);
+        if (light.rightTurnNum <= 0) {
+            light.rightTurnNum = 30;
+            if (light.rightTurn[0] >= 0.2) {
+                light.rightTurn[0] = 0.0f; light.rightTurn[1] = 1.0f; light.rightTurn[2] = 0.0f;
+            }
+            else {
+                light.rightTurn[0] = 0.3f; light.rightTurn[1] = 0.3f; light.rightTurn[2] = 0.3f;
+            }
+        }
+        drawArrowDown(light.x - 0.1f, light.y - 0.05f, 0.02f, 0.02f, 0.03, light.rightTurn[0], light.rightTurn[1], light.rightTurn[2], VAO4, VBO4);
+        light.rightTurnNum -= 1;
+
+    }
+
+    // Prikazivanje zelenog svetla
+    if (light.color == "green") {
+        drawCircle(light.x - 0.1f, light.y , 0.02f, light.green[0], light.green[1], light.green[2], VAO, VBO, vertexCount);
+        drawCircle(light.x, light.y, 0.02f, 0.3, 0.3, 0.3, VAO1, VBO1, vertexCount);
+        drawCircle(light.x - 0.05f, light.y , 0.02f, 0.3, 0.3, 0.3, VAO2, VBO2, vertexCount);
+        light.rightTurn[0] = 0.3f; light.rightTurn[1] = 0.3f; light.rightTurn[2] = 0.3f;
+        drawCircle(light.x - 0.1f, light.y - 0.05f, 0.02f, light.rightTurn[0], light.rightTurn[1], light.rightTurn[2], VAO3, VBO3, vertexCount);
+        drawArrowDown(light.x - 0.1f, light.y - 0.05f, 0.02f, 0.02f, 0.03, light.rightTurn[0], light.rightTurn[1], light.rightTurn[2], VAO4, VBO4);
+    }
+    if (light.color == "redyellow") {
+        drawCircle(light.x, light.y, 0.02f, light.red[0], light.red[1], light.red[2], VAO, VBO, vertexCount);
+        drawCircle(light.x - 0.05f, light.y, 0.02f, light.yellow[0], light.yellow[1], light.yellow[2], VAO1, VBO1, vertexCount);
+        drawCircle(light.x - 0.1f, light.y, 0.02f, 0.3, 0.3, 0.3, VAO2, VBO2, vertexCount);
+        drawCircle(light.x - 0.1f, light.y - 0.05f, 0.02f, 0.3, 0.3, 0.3, VAO3, VBO3, vertexCount);
+        if (light.rightTurnNum <= 0) {
+            light.rightTurnNum = 30;
+            if (light.rightTurn[0] >= 0.2) {
+                light.rightTurn[0] = 0.0f; light.rightTurn[1] = 1.0f; light.rightTurn[2] = 0.0f;
+            }
+            else {
+                light.rightTurn[0] = 0.3f; light.rightTurn[1] = 0.3f; light.rightTurn[2] = 0.3f;
+            }
+        }
+        drawArrowDown(light.x - 0.1f, light.y - 0.05f, 0.02f, 0.02f, 0.03, light.rightTurn[0], light.rightTurn[1], light.rightTurn[2], VAO4, VBO4);
+        light.rightTurnNum -= 1;
+    }
+
+    return isTwo;
+}
+
+
+
+
 bool drawTrafficLightUp(TrafficLight& light, unsigned int& VAO, unsigned int& VBO, unsigned int& VAO1, unsigned int& VBO1, unsigned int& VAO2, unsigned int& VBO2, unsigned int& VAO3, unsigned int& VBO3, unsigned int& VAO4, unsigned int& VBO4, int& vertexCount) {
     // Prikazivanje crvenog svetla
     bool isTwo = false;
@@ -1093,6 +1199,44 @@ void drawArrowLeft(float offsetX, float offsetY, float length, float width, floa
     glEnableVertexAttribArray(1);
 }
 
+
+void drawArrowDown(float offsetX, float offsetY, float length, float width, float headLength, float red, float green, float blue, unsigned int& VAO, unsigned int& VBO) {
+    // Create vertices for the arrow
+    std::vector<float> arrowVertices;
+
+    // Shaft of the arrow
+    float halfWidth = width / 2.0f;
+    arrowVertices.insert(arrowVertices.end(), {
+        offsetX - halfWidth, offsetY, red, green, blue,                 // Top-left
+        offsetX + halfWidth, offsetY, red, green, blue,                 // Top-right
+        offsetX - halfWidth, offsetY - length + headLength, red, green, blue, // Bottom-left
+
+        offsetX + halfWidth, offsetY, red, green, blue,                 // Top-right
+        offsetX + halfWidth, offsetY - length + headLength, red, green, blue, // Bottom-right
+        offsetX - halfWidth, offsetY - length + headLength, red, green, blue  // Bottom-left
+        });
+
+    // Head of the arrow
+    arrowVertices.insert(arrowVertices.end(), {
+        offsetX - halfWidth * 2, offsetY - length + headLength, red, green, blue, // Left point
+        offsetX, offsetY - length, red, green, blue,                              // Tip of arrow
+        offsetX + halfWidth * 2, offsetY - length + headLength, red, green, blue  // Right point
+        });
+
+    // Generate and bind VAO, VBO
+    glGenVertexArrays(1, &VAO);
+    glGenBuffers(1, &VBO);
+
+    glBindVertexArray(VAO);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, arrowVertices.size() * sizeof(float), arrowVertices.data(), GL_STATIC_DRAW);
+
+    // Set up vertex attributes (position and color)
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(2 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+}
 
 
 void drawCircle(float offsetX, float offsetY, float r, float red, float green, float blue, unsigned int& VAO, unsigned int& VBO, int& vertexCount) {
