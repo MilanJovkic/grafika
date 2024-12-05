@@ -169,6 +169,7 @@ bool drawTrafficLight(TrafficLight& light, unsigned int& VAO, unsigned int& VBO,
 bool drawLeftTrafficLight(TrafficLight& light, unsigned int& VAO, unsigned int& VBO, unsigned int& VAO1, unsigned int& VBO1, unsigned int& VAO2, unsigned int& VBO2, int& vertexCount);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void drawArrow(float offsetX, float offsetY, float length, float width, float headLength, float red, float green, float blue, unsigned int& VAO, unsigned int& VBO);
+bool drawLeftTrafficLightUp(TrafficLight& light, unsigned int& VAO, unsigned int& VBO, unsigned int& VAO1, unsigned int& VBO1, unsigned int& VAO2, unsigned int& VBO2, int& vertexCount);
 
 int main(void)
 {
@@ -243,14 +244,19 @@ int main(void)
     glGenVertexArrays(1, &VAOS13);
     unsigned VBOS13;
     glGenBuffers(1, &VBOS13);
-    unsigned VAOS14;
-    glGenVertexArrays(1, &VAOS14);
-    unsigned VBOS14;
-    glGenBuffers(1, &VBOS14);
-    unsigned VAOS15;
-    glGenVertexArrays(1, &VAOS15);
-    unsigned VBOS15;
-    glGenBuffers(1, &VBOS15);
+
+    unsigned VAOS2;
+    glGenVertexArrays(1, &VAOS2);
+    unsigned VBOS2;
+    glGenBuffers(1, &VBOS2);
+    unsigned VAOS21;
+    glGenVertexArrays(1, &VAOS21);
+    unsigned VBOS21;
+    glGenBuffers(1, &VBOS21);
+    unsigned VAOS22;
+    glGenVertexArrays(1, &VAOS22);
+    unsigned VBOS22;
+    glGenBuffers(1, &VBOS22);
 
     double  mouseX, mouseY;
     int mouseButtonStateLeft, mouseButtonStateRight;
@@ -288,14 +294,19 @@ int main(void)
     RoadSegment road4(0.0, 0.76, 0.0, 0.0, 0.02, 0.76 , 0.02, 0.0, true, "sss", false);
     RoadSegment road5(-0.02, 0.76, -0.02, 0.0, 0.0, 0.76, 0.0, 0.0, false, "sss", false);
     RoadSegment road3l(-0.02, 0.76, -0.02, 1.0, 0.0, 0.76, 0.0, 1.0, false, "sss", true);
-    RoadSegment road6(-0.08, 0.76, -0.08, 0.0, -0.1, 0.76, -0.1, 0.0, false, "sss", true);
+    RoadSegment road6(-0.08, 0.76, -0.08, 0.0, -0.1, 0.76, -0.1, 0.0, false, "kkk1", true);
     RoadSegment road7(-0.1, 0.76, -0.1, 0.0, -0.12, 0.76, -0.12, 0.0, false, "sss", true);
+    RoadSegment road8(-0.08, 0.76, -0.08, 1.0, -0.1, 0.76, -0.1, 1.0, false, "kkk1", false);
+    RoadSegment road9(-0.1, 0.76, -0.1, 1.0, -0.12, 0.76, -0.12, 1.0, false, "sss", true);
     road4.addConnectedRoad(&road2);
     road4.addConnectedRoad(&road3);
     road5.addConnectedRoad(&road3l);
     road5.addConnectedRoad(&road1);
+    road8.addConnectedRoad(&road6);
+    road8.addConnectedRoad(&road2);
     TrafficLight light1(road4, 0.08, 0.70);
     TrafficLight light2(road5, -0.05, 0.70);
+    TrafficLight light3(road8, -0.05, 0.9);
 
     road1.getColorFromCongestion();
     road2.getColorFromCongestion();
@@ -305,6 +316,8 @@ int main(void)
     road3l.getColorFromCongestion();
     road6.getColorFromCongestion();
     road7.getColorFromCongestion();
+    road8.getColorFromCongestion();
+    road9.getColorFromCongestion();
 
 
 
@@ -418,7 +431,7 @@ int main(void)
         mouseButtonStateRight = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT);
 
         if (mouseButtonStateLeft == GLFW_PRESS || mouseButtonStateRight == GLFW_PRESS) {
-            vector<RoadSegment*> roads = { &road1, &road2, &road3,  &road4, &road5};
+            vector<RoadSegment*> roads = { &road1, &road2, &road3,  &road4, &road5, &road3l, &road6, &road7, &road8, &road9 };
             for (auto* road : roads) {
                 float minX = std::min({ road->x1, road->x2, road->x3, road->x4 });
                 float maxX = std::max({ road->x1, road->x2, road->x3, road->x4 });
@@ -447,7 +460,7 @@ int main(void)
         //Brisanje ekrana
         glClear(GL_COLOR_BUFFER_BIT);
 
-        vector<RoadSegment*> roads = { &road1, &road2, &road3,  &road4, &road5};
+        vector<RoadSegment*> roads = { &road1, &road2, &road3,  &road4, &road5, &road3l, &road6, &road7, &road8, &road9};
         for (auto* road : roads) {
             float minX = std::min({ road->x1, road->x2, road->x3, road->x4 });
             float maxX = std::max({ road->x1, road->x2, road->x3, road->x4 });
@@ -508,6 +521,8 @@ int main(void)
         road3l.changeCongestion();
         road6.changeCongestion();
         road7.changeCongestion();
+        road8.changeCongestion();
+        road9.changeCongestion();
         float vertices[] = {
         road1.x1, road1.y1, road1.r,road1.g, road1.b,
         road1.x2, road1.y2,road1.r, road1.g, road1.b,
@@ -548,6 +563,16 @@ int main(void)
         road7.x2, road7.y2,road7.r, road7.g, road7.b,
          road7.x3, road7.y3, road7.r,road7.g, road7.b,
         road7.x4, road7.y4,road7.r, road7.g, road7.b,
+
+        road8.x1, road8.y1, road8.r,road8.g, road8.b,
+        road8.x2, road8.y2,road8.r, road8.g, road8.b,
+         road8.x3, road8.y3, road8.r,road8.g, road8.b,
+        road8.x4, road8.y4,road8.r, road8.g, road8.b,
+
+        road9.x1, road9.y1, road9.r,road9.g, road9.b,
+        road9.x2, road9.y2,road9.r, road9.g, road9.b,
+         road9.x3, road9.y3, road9.r,road9.g, road9.b,
+        road9.x4, road9.y4,road9.r, road9.g, road9.b,
         };
 
         glBindVertexArray(VAO1);
@@ -569,15 +594,19 @@ int main(void)
         glDrawArrays(GL_TRIANGLE_STRIP, 20, 4);
         glDrawArrays(GL_TRIANGLE_STRIP, 24, 4);
         glDrawArrays(GL_TRIANGLE_STRIP, 28, 4);
+        glDrawArrays(GL_TRIANGLE_STRIP, 32, 4);
+        glDrawArrays(GL_TRIANGLE_STRIP, 36, 4);
 
 
         glUseProgram(basicShader);
         glViewport(0, 0, wWidth, wHeight);
         updateTrafficLight(light1, deltaTime);
         updateTrafficLight(light2, deltaTime);
+        updateTrafficLight(light3, deltaTime);
         bool isTwo = false;
         isTwo = drawTrafficLight(light1, VAO, VBO, VAO2, VBO2, VAO3, VBO3, VAO4, VBO4, VAO5, VBO5, vertexCount);
         isTwo = drawLeftTrafficLight(light2, VAOS1, VBOS1, VAOS12, VBOS12, VAOS13, VBOS13, vertexCount);
+        isTwo = drawLeftTrafficLightUp(light3, VAOS2, VBOS2, VAOS21, VBOS21, VAOS22, VBOS22, vertexCount);
         glBindVertexArray(VAO);
         glDrawArrays(GL_TRIANGLE_FAN, 0, vertexCount);
         glBindVertexArray(VAO2);
@@ -593,6 +622,12 @@ int main(void)
         glBindVertexArray(VAOS12);
         glDrawArrays(GL_TRIANGLE_FAN, 0, vertexCount);
         glBindVertexArray(VAOS13);
+        glDrawArrays(GL_TRIANGLE_FAN, 0, vertexCount);
+        glBindVertexArray(VAOS2);
+        glDrawArrays(GL_TRIANGLE_FAN, 0, vertexCount);
+        glBindVertexArray(VAOS21);
+        glDrawArrays(GL_TRIANGLE_FAN, 0, vertexCount);
+        glBindVertexArray(VAOS22);
         glDrawArrays(GL_TRIANGLE_FAN, 0, vertexCount);
 
 
@@ -840,6 +875,37 @@ bool drawLeftTrafficLight(TrafficLight& light, unsigned int& VAO, unsigned int& 
         drawCircle(light.x, light.y, 0.02f, light.red[0], light.red[1], light.red[2], VAO, VBO, vertexCount);
         drawCircle(light.x, light.y - 0.05f, 0.02f, light.yellow[0], light.yellow[1], light.yellow[2], VAO1, VBO1, vertexCount);
         drawCircle(light.x, light.y - 0.1f, 0.02f, 0.3, 0.3, 0.3, VAO2, VBO2, vertexCount);
+    }
+
+    return isTwo;
+}
+
+bool drawLeftTrafficLightUp(TrafficLight& light, unsigned int& VAO, unsigned int& VBO, unsigned int& VAO1, unsigned int& VBO1, unsigned int& VAO2, unsigned int& VBO2, int& vertexCount) {
+    // Prikazivanje crvenog svetla
+    bool isTwo = false;
+    if (light.color == "red") {
+        drawCircle(light.x, light.y - 0.1f, 0.02f, light.red[0], light.red[1], light.red[2], VAO, VBO, vertexCount);
+        drawCircle(light.x, light.y - 0.05f, 0.02f, 0.3, 0.3, 0.3, VAO1, VBO1, vertexCount);
+        drawCircle(light.x, light.y, 0.02f, 0.3, 0.3, 0.3, VAO2, VBO2, vertexCount);
+    }
+
+    // Prikazivanje žutog svetla
+    if (light.color == "yellow") {
+        drawCircle(light.x, light.y - 0.05f, 0.02f, light.yellow[0], light.yellow[1], light.yellow[2], VAO, VBO, vertexCount);
+        drawCircle(light.x, light.y, 0.02f, 0.3, 0.3, 0.3, VAO1, VBO1, vertexCount);
+        drawCircle(light.x, light.y - 0.1f, 0.02f, 0.3, 0.3, 0.3, VAO2, VBO2, vertexCount);
+    }
+
+    // Prikazivanje zelenog svetla
+    if (light.color == "green") {
+        drawCircle(light.x, light.y, 0.02f, light.green[0], light.green[1], light.green[2], VAO, VBO, vertexCount);
+        drawCircle(light.x, light.y - 0.1f, 0.02f, 0.3, 0.3, 0.3, VAO1, VBO1, vertexCount);
+        drawCircle(light.x, light.y - 0.05f, 0.02f, 0.3, 0.3, 0.3, VAO2, VBO2, vertexCount);
+    }
+    if (light.color == "redyellow") {
+        drawCircle(light.x, light.y - 0.1f, 0.02f, light.red[0], light.red[1], light.red[2], VAO, VBO, vertexCount);
+        drawCircle(light.x, light.y - 0.05f, 0.02f, light.yellow[0], light.yellow[1], light.yellow[2], VAO1, VBO1, vertexCount);
+        drawCircle(light.x, light.y , 0.02f, 0.3, 0.3, 0.3, VAO2, VBO2, vertexCount);
     }
 
     return isTwo;
