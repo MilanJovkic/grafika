@@ -1,15 +1,10 @@
-﻿// Autor: Nedeljko Tesanovic
-// Opis: Zestoko iskomentarisan program koji crta sareni trougao u OpenGL-u
-
-#define _CRT_SECURE_NO_WARNINGS
- //Biblioteke za stvari iz C++-a (unos, ispis, fajlovi, itd - potrebne za kompajler sejdera) 
+﻿#define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include <fstream>
 #include <sstream>
 
-//Biblioteke OpenGL-a
-#include <GL/glew.h>   //Omogucava laksu upotrebu OpenGL naredbi
-#include <GLFW/glfw3.h>//Olaksava pravljenje i otvaranje prozora (konteksta) sa OpenGL sadrzajem
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
 #include <vector>
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
@@ -32,23 +27,21 @@ struct RoadSegment {
 
     RoadSegment(float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4, bool isRight, string name, bool isOutside)
         : x1(x1), y1(y1), x2(x2), y2(y2), x3(x3), y3(y3), x4(x4), y4(y4), isRight(isRight), name(name), congestion(0.3f), isGreen(false), isOutside(isOutside) {
-        // Inicijalizacija sa vrednostima
     }
 
     void addConnectedRoad(RoadSegment* road) {
-        connectedRoads.push_back(road); // Dodavanje puta u povezane puteve
+        connectedRoads.push_back(road);
     }
 
     void getColorFromCongestion() {
-        r = congestion;      // Crvena raste s gužvom
-        g = 1.0f - congestion; // Zelena opada s gužvom
-        b = 0.0f;            // Plava je stalno 0
+        r = congestion;      
+        g = 1.0f - congestion; 
+        b = 0.0f;           
     }
 
     void lightIsGreen() {
         speed = -speed;
         isGreen = true;
-       // congestion -= 0.6;
         if (congestion < 0) {
             congestion = 0;
        };
@@ -60,7 +53,6 @@ struct RoadSegment {
     }
 
     void lightIsRed() {
-     //congestion += 0.6;
         speed = -speed;
         isGreen = false;
         if (congestion < 0) {
@@ -93,9 +85,9 @@ struct RoadSegment {
             };
             getColorFromCongestion();
             if (isGreen == true) {
-                int numConnectedRoads = connectedRoads.size(); // Get the number of connected roads
+                int numConnectedRoads = connectedRoads.size(); 
                 for (RoadSegment* road : connectedRoads) {
-                    if (road != nullptr) { // Proveri da li je pokazivač validan
+                    if (road != nullptr) { 
                         road->congestion -= speed / numConnectedRoads;
                         if (road->congestion < 0) {
                             road->congestion = 0;
@@ -144,7 +136,6 @@ struct TrafficLight {
         timer = 20 + rand() % 21; // Nasumično vreme između 20 i 40 sekundi
         remainingTime = timer;
 
-        // Definisanje boja
         red[0] = 1.0f; red[1] = 0.0f; red[2] = 0.0f;
         yellow[0] = 1.0f; yellow[1] = 1.0f; yellow[2] = 0.0f;
         green[0] = 0.0f; green[1] = 1.0f; green[2] = 0.0f;
@@ -159,8 +150,8 @@ struct TrafficLight {
 
 
 
-unsigned int compileShader(GLenum type, const char* source); //Uzima kod u fajlu na putanji "source", kompajlira ga i vraca sejder tipa "type"
-unsigned int createShader(const char* vsSource, const char* fsSource); //Pravi objedinjeni sejder program koji se sastoji od Verteks sejdera ciji je kod na putanji vsSource i Fragment sejdera na putanji fsSource
+unsigned int compileShader(GLenum type, const char* source); 
+unsigned int createShader(const char* vsSource, const char* fsSource); 
 void initTrafficLight(TrafficLight& light, float x, float y);
 void updateTrafficLight(TrafficLight& light, float deltaTime);
 void drawCircle(float offsetX, float offsetY, float r, float red, float green, float blue, unsigned int& VAO, unsigned int& VBO, int& vertexCount);
@@ -171,45 +162,34 @@ void drawArrow(float offsetX, float offsetY, float length, float width, float he
 int main(void)
 {
     srand(time(0));
-
-    // ++++++++++++++++++++++++++++++++++++++++++++++++++++++ INICIJALIZACIJA ++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-    // Pokretanje GLFW biblioteke
-    // Nju koristimo za stvaranje okvira prozora
-    if (!glfwInit()) // !0 == 1; glfwInit inicijalizuje GLFW i vrati 1 ako je inicijalizovana uspjesno, a 0 ako nije
+    if (!glfwInit()) 
     {
         std::cout<<"GLFW Biblioteka se nije ucitala! :(\n";
         return 1;
     }
-
-    //Odredjivanje OpenGL verzije i profila (3.3, programabilni pajplajn)
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-    //Stvaranje prozora
-    GLFWwindow* window; //Mjesto u memoriji za prozor
+    GLFWwindow* window;
     unsigned int wWidth = 1000;
     unsigned int wHeight = 1000;
     const char wTitle[] = "[Generic Title]";
-    window = glfwCreateWindow(wWidth, wHeight, wTitle, NULL, NULL); // Napravi novi prozor
-    // glfwCreateWindow( sirina, visina, naslov, monitor na koji ovaj prozor ide preko citavog ekrana (u tom slucaju umjesto NULL ide glfwGetPrimaryMonitor() ), i prozori sa kojima ce dijeliti resurse )
-    if (window == NULL) //Ako prozor nije napravljen
+    window = glfwCreateWindow(wWidth, wHeight, wTitle, NULL, NULL);
+    if (window == NULL) 
     {
         std::cout << "Prozor nije napravljen! :(\n";
-        glfwTerminate(); //Gasi GLFW
-        return 2; //Vrati kod za gresku
+        glfwTerminate(); 
+        return 2;
     }
-    // Postavljanje novopecenog prozora kao aktivni (sa kojim cemo da radimo)
     glfwMakeContextCurrent(window);
-
-    // Inicijalizacija GLEW biblioteke
-    if (glewInit() != GLEW_OK) //Slicno kao glfwInit. GLEW_OK je predefinisani izlazni kod za uspjesnu inicijalizaciju sadrzan unutar biblioteke
+    if (glewInit() != GLEW_OK) 
     {
         std::cout << "GLEW nije mogao da se ucita! :'(\n";
         return 3;
     }
     glfwSetScrollCallback(window, scroll_callback);
+
+
 
     unsigned int basicShader = createShader("basic.vert", "basic.frag");
     unsigned int textureShader = createShader("texture.vert", "texture.frag");
@@ -240,7 +220,31 @@ int main(void)
     unsigned VBO1;
     glGenBuffers(1, &VBO1);
 
-    float tartif[] = {
+    unsigned VAOS1;
+    glGenVertexArrays(1, &VAOS1);
+    unsigned VBOS1;
+    glGenBuffers(1, &VBOS1);
+    unsigned VAOS12;
+    glGenVertexArrays(1, &VAOS12);
+    unsigned VBOS12;
+    glGenBuffers(1, &VBOS12);
+    unsigned VAOS13;
+    glGenVertexArrays(1, &VAOS13);
+    unsigned VBOS13;
+    glGenBuffers(1, &VBOS13);
+    unsigned VAOS14;
+    glGenVertexArrays(1, &VAOS14);
+    unsigned VBOS14;
+    glGenBuffers(1, &VBOS14);
+    unsigned VAOS15;
+    glGenVertexArrays(1, &VAOS15);
+    unsigned VBOS15;
+    glGenBuffers(1, &VBOS15);
+
+    double  mouseX, mouseY;
+    int mouseButtonStateLeft, mouseButtonStateRight;
+
+    float streats[] = {
         // positions          // colors           // texture coords
          1.0, -0.75f, 0.0f,  1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right
          1.0, -1.0f,  0.0f,  0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
@@ -255,10 +259,10 @@ int main(void)
 
     float grb[] = {
         // positions          // colors           // texture coords
-         -1.0, 0.5, 0.0f,  1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right
+         -1.0, 0.8, 0.0f,  1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right
          -1.0, 1.0f,  0.0f,  0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
-         -0.75f, 1.0f,  0.0f,  0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // bottom left
-         -0.75f, 0.5, 0.0f,  1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // top left 
+         -0.8f, 1.0f,  0.0f,  0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // bottom left
+         -0.8f, 0.8, 0.0f,  1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // top left 
     };
 
     unsigned int grbIndices[] = {
@@ -267,59 +271,34 @@ int main(void)
     };
 
 
-    RoadSegment road1(-1.0, 0.76, 0.0, 0.76, -1.0, 0.74, 0.0, 0.74, true, "kkk1", false);
+    RoadSegment road1(-1.0, 0.76, 0.0, 0.76, -1.0, 0.74, 0.0, 0.74, true, "kkk1", true);
     RoadSegment road2(0.0, 0.76, 1.0, 0.76, 0.0, 0.74, 1.0, 0.74, true, "kkk", true);
     RoadSegment road3(0.0, 0.76, 0.0, 1.0, 0.02, 0.76, 0.02, 1.0, true, "sss", true);
-    road1.addConnectedRoad(&road2);
-    road1.addConnectedRoad(&road3);
-    TrafficLight light1(road1, 0.0, 0.75);
-    // Pozivamo funkciju za prigušenost
+    RoadSegment road4(0.0, 0.76, 0.0, 0.0, 0.02, 0.76 , 0.02, 0.0, true, "sss", false);
+    road4.addConnectedRoad(&road2);
+    road4.addConnectedRoad(&road3);
+    road4.addConnectedRoad(&road1);
+    TrafficLight light1(road4, 0.08, 0.70);
+
     road1.getColorFromCongestion();
     road2.getColorFromCongestion();
     road3.getColorFromCongestion();
-    float vertices[] = {
-        road1.x1, road1.y1, road1.r,road1.g, road1.b,
-        road1.x2, road1.y2,road1.r, road1.g, road1.b,
-         road1.x3, road1.y3, road1.r,road1.g, road1.b,
-        road1.x4, road1.y4,road1.r, road1.g, road1.b,
-
-        road2.x1, road2.y1, road2.r,road2.g, road2.b,
-        road2.x2, road2.y2,road2.r, road2.g, road2.b,
-         road2.x3, road2.y3, road2.r,road2.g, road2.b,
-        road2.x4, road2.y4,road2.r, road2.g, road2.b,
-
-        road3.x1, road3.y1, road3.r,road3.g, road3.b,
-        road3.x2, road3.y2,road3.r, road3.g, road3.b,
-         road3.x3, road3.y3, road3.r,road3.g, road3.b,
-        road3.x4, road3.y4,road3.r, road3.g, road3.b,
-    };
-
-    glBindVertexArray(VAO1);
-    glBindBuffer(GL_ARRAY_BUFFER, VBO1);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(2 * sizeof(float)));
-    glEnableVertexAttribArray(1);
-    // ++++++++++++++++++++++++++++++++++++++++++++++++++++++ RENDER LOOP - PETLJA ZA CRTANJE +++++++++++++++++++++++++++++++++++++++++++++++++
-
-    // Inside the main loop:
-    double  mouseX, mouseY;
-    int mouseButtonStateLeft, mouseButtonStateRight;
+    road4.getColorFromCongestion();
 
 
-    unsigned int VAO7, VBO7, EBO;
-    glGenVertexArrays(1, &VAO7);
-    glGenBuffers(1, &VBO7);
-    glGenBuffers(1, &EBO);
 
-    glBindVertexArray(VAO7);
+    //tekstura za ulice
+    unsigned int VAOU, VBOU, EBOU;
+    glGenVertexArrays(1, &VAOU);
+    glGenBuffers(1, &VBOU);
+    glGenBuffers(1, &EBOU);
 
-    glBindBuffer(GL_ARRAY_BUFFER, VBO7);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(tartif), tartif, GL_STATIC_DRAW);
+    glBindVertexArray(VAOU);
 
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBindBuffer(GL_ARRAY_BUFFER, VBOU);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(streats), streats, GL_STATIC_DRAW);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBOU);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
@@ -332,7 +311,6 @@ int main(void)
     glEnableVertexAttribArray(2);
 
 
-    // Učitavanje teksture
     unsigned int texture;
     glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_2D, texture);
@@ -341,13 +319,12 @@ int main(void)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-    // Učitavanje slike
     int width, height, nrChannels;
+    
 
 
 
-
+    //tektura za grb
     unsigned int VAOG, VBOG, EBOG;
     glGenVertexArrays(1, &VAOG);
     glGenBuffers(1, &VBOG);
@@ -370,7 +347,6 @@ int main(void)
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
     glEnableVertexAttribArray(2);
 
-    // Učitavanje teksture
     unsigned int textureGRB;
     glGenTextures(1, &textureGRB);
     glBindTexture(GL_TEXTURE_2D, textureGRB);
@@ -380,19 +356,14 @@ int main(void)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-    // Učitavanje slike
     int widthg, heightg, nrChannelsg;
 
     stbi_set_flip_vertically_on_load(true);
     unsigned char* data = stbi_load("COA_Odzaci.png", &widthg, &heightg, &nrChannelsg, 0);
     if (data) {
-        std::cout << "Texture loaded successfully! Width: " << widthg << ", Height: " << heightg
-            << ", Channels: " << nrChannelsg << std::endl;
-        // Ako je broj kanala 3 (RGB)
         if (nrChannelsg == 3) {
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, widthg, heightg, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
         }
-        // Ako je broj kanala 4 (RGBA)
         else if (nrChannelsg == 4) {
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, widthg, heightg, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
         }
@@ -404,12 +375,13 @@ int main(void)
     stbi_image_free(data);
 
 
-    glClearColor(1.0, 1.0, 1.0, 1.0); //Podesavanje boje pozadine: RGBA (R - Crvena, G - Zelena, B - Plava, A = neprovidno; Opseg od 0 do 1, gdje je 0 crno a 1 svijetlo)
+
+
+    glClearColor(1.0, 1.0, 1.0, 1.0);
     float lastTime = 0.0f;
     int i = 0;
-    while (!glfwWindowShouldClose(window)) //Beskonacna petlja iz koje izlazimo tek kada prozor treba da se zatvori
+    while (!glfwWindowShouldClose(window))
     {
-        //Unos od korisnika bez callback funckcije. GLFW_PRESS = Dugme je trenutno pritisnuto. GLFW_RELEASE = Dugme trenutno nije pritisnuto
         if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         {
             glfwSetWindowShouldClose(window, GL_TRUE);
@@ -417,18 +389,15 @@ int main(void)
 
         glfwGetCursorPos(window, &mouseX, &mouseY);
 
-        // Convert mouse position from screen coordinates to OpenGL coordinates
         float xPos = (2.0f * mouseX) / wWidth - 1.0f;
         float yPos = 1.0f - (2.0f * mouseY) / wHeight;
         std::string hoveredRoadName = "";
 
-        // Check if the left or right mouse button is pressed
         mouseButtonStateLeft = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
         mouseButtonStateRight = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT);
 
-        // Only proceed if either mouse button is pressed
         if (mouseButtonStateLeft == GLFW_PRESS || mouseButtonStateRight == GLFW_PRESS) {
-            vector<RoadSegment*> roads = { &road1, &road2, &road3 };
+            vector<RoadSegment*> roads = { &road1, &road2, &road3,  &road4 };
             for (auto* road : roads) {
                 float minX = std::min({ road->x1, road->x2, road->x3, road->x4 });
                 float maxX = std::max({ road->x1, road->x2, road->x3, road->x4 });
@@ -452,12 +421,12 @@ int main(void)
 
         float currentTime = glfwGetTime();
         float deltaTime = currentTime - lastTime;
-        lastTime = currentTime;// Pronađite vreme proteklo između frejmova
-        glfwPollEvents(); // Obrađivanje događaja
+        lastTime = currentTime;
+        glfwPollEvents();
         //Brisanje ekrana
         glClear(GL_COLOR_BUFFER_BIT);
 
-        vector<RoadSegment*> roads = { &road1, &road2, &road3 };
+        vector<RoadSegment*> roads = { &road1, &road2, &road3,  &road4 };
         for (auto* road : roads) {
             float minX = std::min({ road->x1, road->x2, road->x3, road->x4 });
             float maxX = std::max({ road->x1, road->x2, road->x3, road->x4 });
@@ -470,18 +439,13 @@ int main(void)
             }
         }
         if (hoveredRoadName != "") {
-            std::cout << "Hovered Road: " << hoveredRoadName << std::endl;
             stbi_set_flip_vertically_on_load(true);
             string name = hoveredRoadName + ".png";
             unsigned char* data = stbi_load(name.c_str(), &width, &height, &nrChannels, 0);
             if (data) {
-                std::cout << "Texture loaded successfully! Width: " << width << ", Height: " << height
-                    << ", Channels: " << nrChannels << std::endl;
-                // Ako je broj kanala 3 (RGB)
                 if (nrChannels == 3) {
                     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
                 }
-                // Ako je broj kanala 4 (RGBA)
                 else if (nrChannels == 4) {
                     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
                 }
@@ -494,17 +458,13 @@ int main(void)
         }
         else {
             if (i != 0) {
-                std::cout << "Hovered Road: " << hoveredRoadName << std::endl;
                 stbi_set_flip_vertically_on_load(true);
                 unsigned char* data = stbi_load("sss.png", &width, &height, &nrChannels, 0);
                 if (data) {
-                    std::cout << "Texture loaded successfully! Width: " << width << ", Height: " << height
-                        << ", Channels: " << nrChannels << std::endl;
-                    // Ako je broj kanala 3 (RGB)
+
                     if (nrChannels == 3) {
                         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
                     }
-                    // Ako je broj kanala 4 (RGBA)
                     else if (nrChannels == 4) {
                         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
                     }
@@ -516,13 +476,13 @@ int main(void)
                 stbi_image_free(data);
             }
         }
- 
         i += 1;
 
        
         road1.changeCongestion();
         road2.changeCongestion();
         road3.changeCongestion();
+        road4.changeCongestion();
         float vertices[] = {
         road1.x1, road1.y1, road1.r,road1.g, road1.b,
         road1.x2, road1.y2,road1.r, road1.g, road1.b,
@@ -538,6 +498,11 @@ int main(void)
         road3.x2, road3.y2,road3.r, road3.g, road3.b,
          road3.x3, road3.y3, road3.r,road3.g, road3.b,
         road3.x4, road3.y4,road3.r, road3.g, road3.b,
+
+        road4.x1, road4.y1, road4.r,road4.g, road4.b,
+        road4.x2, road4.y2,road4.r, road4.g, road4.b,
+         road4.x3, road4.y3, road4.r,road4.g, road4.b,
+        road4.x4, road4.y4,road4.r, road4.g, road4.b,
         };
 
         glBindVertexArray(VAO1);
@@ -548,66 +513,56 @@ int main(void)
         glEnableVertexAttribArray(0);
         glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(2 * sizeof(float)));
         glEnableVertexAttribArray(1);
-        glViewport(0, 0, wWidth, wHeight); // Da crtamo na lijevoj polovini ekrana
+        glViewport(0, 0, wWidth, wHeight);
         glUseProgram(basicShader);
         glBindVertexArray(VAO1);
-        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);   // Horizontalna 1
+        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);  
         glDrawArrays(GL_TRIANGLE_STRIP, 4, 4);
         glDrawArrays(GL_TRIANGLE_STRIP, 8, 4);
+        glDrawArrays(GL_TRIANGLE_STRIP, 12, 4);
 
 
         glUseProgram(basicShader);
         glViewport(0, 0, wWidth, wHeight);
-       // for (int i = 0; i < 3; i++) {
-            updateTrafficLight(light1, deltaTime);
-            bool isTwo = false;
-            isTwo = drawTrafficLight(light1, VAO, VBO, VAO2, VBO2, VAO3, VBO3, VAO4, VBO4, VAO5, VBO5, vertexCount);
-            glBindVertexArray(VAO);
-            glDrawArrays(GL_TRIANGLE_FAN, 0, vertexCount);
-            glBindVertexArray(VAO2);
-            glDrawArrays(GL_TRIANGLE_FAN, 0, vertexCount);
-            glBindVertexArray(VAO3);
-            glDrawArrays(GL_TRIANGLE_FAN, 0, vertexCount);
-            glBindVertexArray(VAO4);
-            glDrawArrays(GL_TRIANGLE_FAN, 0, vertexCount);
-            glBindVertexArray(VAO5);
-            glDrawArrays(GL_TRIANGLE_STRIP, 0, 8);
+        updateTrafficLight(light1, deltaTime);
+        bool isTwo = false;
+        isTwo = drawTrafficLight(light1, VAO, VBO, VAO2, VBO2, VAO3, VBO3, VAO4, VBO4, VAO5, VBO5, vertexCount);
+        glBindVertexArray(VAO);
+        glDrawArrays(GL_TRIANGLE_FAN, 0, vertexCount);
+        glBindVertexArray(VAO2);
+        glDrawArrays(GL_TRIANGLE_FAN, 0, vertexCount);
+        glBindVertexArray(VAO3);
+        glDrawArrays(GL_TRIANGLE_FAN, 0, vertexCount);
+        glBindVertexArray(VAO4);
+        glDrawArrays(GL_TRIANGLE_FAN, 0, vertexCount);
+        glBindVertexArray(VAO5);
+        glDrawArrays(GL_TRIANGLE_STRIP, 0, 8);
 
 
 
-            glUseProgram(textureShader);
-            glBindVertexArray(VAOG);
-            glUniform1i(glGetUniformLocation(textureShader, "texture2"), 0);
-            glActiveTexture(GL_TEXTURE0); // Activate texture unit 0
-            glBindTexture(GL_TEXTURE_2D, textureGRB); // Bind your texture
+        glUseProgram(textureShader);
+        glBindVertexArray(VAOG);
+        glUniform1i(glGetUniformLocation(textureShader, "texture2"), 0);
+        glActiveTexture(GL_TEXTURE0); 
+        glBindTexture(GL_TEXTURE_2D, textureGRB); 
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
-            // Set the sampler uniform to use the first texture unit
-            // Iscrtavanje
-            glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-      //  }
-            glUseProgram(textureShader);
-            glBindVertexArray(VAO7);
-            glUniform1i(glGetUniformLocation(textureShader, "texture1"), 0);
-            glActiveTexture(GL_TEXTURE0); // Activate texture unit 0
-            glBindTexture(GL_TEXTURE_2D, texture); // Bind your texture
-
-            // Set the sampler uniform to use the first texture unit
-            // Iscrtavanje
-            glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        glUseProgram(textureShader);
+        glBindVertexArray(VAOU);
+        glUniform1i(glGetUniformLocation(textureShader, "texture1"), 0);
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, texture); 
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 
 
 
-        //Zamjena vidljivog bafera sa pozadinskim
+
         glfwSwapBuffers(window);
 
-        //Hvatanje dogadjaja koji se ticu okvira prozora (promjena velicine, pomjeranje itd)
         glfwPollEvents();
     }
 
-    // ++++++++++++++++++++++++++++++++++++++++++++++++++++++ POSPREMANJE +++++++++++++++++++++++++++++++++++++++++++++++++
-
-    //Sve OK - batali program
     glfwTerminate();
     return 0;
 }
