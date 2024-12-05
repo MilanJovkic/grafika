@@ -40,7 +40,7 @@ struct RoadSegment {
     }
 
     void lightIsGreen() {
-        speed = -speed;
+       // speed = -speed;
         isGreen = true;
         if (congestion < 0) {
             congestion = 0;
@@ -53,7 +53,7 @@ struct RoadSegment {
     }
 
     void lightIsRed() {
-        speed = -speed;
+      // speed = -speed;
         isGreen = false;
         if (congestion < 0) {
             congestion = 0;
@@ -76,19 +76,19 @@ struct RoadSegment {
             getColorFromCongestion();
         }
         else {
-            congestion += speed;
-            if (congestion < 0) {
-                congestion = 0;
-            };
-            if (congestion > 1) {
-                congestion = 1;
-            };
             getColorFromCongestion();
             if (isGreen == true) {
+                congestion -= speed;
+                if (congestion < 0) {
+                    congestion = 0;
+                };
+                if (congestion > 1) {
+                    congestion = 1;
+                };
                 int numConnectedRoads = connectedRoads.size(); 
                 for (RoadSegment* road : connectedRoads) {
                     if (road != nullptr) { 
-                        road->congestion -= speed / numConnectedRoads;
+                        road->congestion += speed / numConnectedRoads;
                         if (road->congestion < 0) {
                             road->congestion = 0;
                         };
@@ -100,15 +100,25 @@ struct RoadSegment {
                 }
             }
             else {
-                RoadSegment* road = connectedRoads[0];
-                road->congestion += speed/3;
-                if (road->congestion < 0) {
-                    road->congestion = 0;
+                congestion += speed;
+                if (isRight == true) {
+                    congestion -= speed / 3;
+                    RoadSegment* road = connectedRoads[0];
+                    road->congestion += speed / 3;
+                    if (road->congestion < 0) {
+                        road->congestion = 0;
+                    };
+                    if (road->congestion > 1) {
+                        road->congestion = 1;
+                    };
+                    road->getColorFromCongestion();
+                }
+                if (congestion < 0) {
+                    congestion = 0;
                 };
-                if (road->congestion > 1) {
-                    road->congestion = 1;
+                if (congestion > 1) {
+                    congestion = 1;
                 };
-                road->getColorFromCongestion();
             }
 
          
@@ -156,6 +166,7 @@ void initTrafficLight(TrafficLight& light, float x, float y);
 void updateTrafficLight(TrafficLight& light, float deltaTime);
 void drawCircle(float offsetX, float offsetY, float r, float red, float green, float blue, unsigned int& VAO, unsigned int& VBO, int& vertexCount);
 bool drawTrafficLight(TrafficLight& light, unsigned int& VAO, unsigned int& VBO, unsigned int& VAO1, unsigned int& VBO1, unsigned int& VAO2, unsigned int& VBO2, unsigned int& VAO3, unsigned int& VBO3, unsigned int& VAO4, unsigned int& VBO4, int& vertexCount);
+bool drawLeftTrafficLight(TrafficLight& light, unsigned int& VAO, unsigned int& VBO, unsigned int& VAO1, unsigned int& VBO1, unsigned int& VAO2, unsigned int& VBO2, int& vertexCount);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void drawArrow(float offsetX, float offsetY, float length, float width, float headLength, float red, float green, float blue, unsigned int& VAO, unsigned int& VBO);
 
@@ -271,19 +282,29 @@ int main(void)
     };
 
 
-    RoadSegment road1(-1.0, 0.76, 0.0, 0.76, -1.0, 0.74, 0.0, 0.74, true, "kkk1", true);
-    RoadSegment road2(0.0, 0.76, 1.0, 0.76, 0.0, 0.74, 1.0, 0.74, true, "kkk", true);
-    RoadSegment road3(0.0, 0.76, 0.0, 1.0, 0.02, 0.76, 0.02, 1.0, true, "sss", true);
+    RoadSegment road1(-1.0, 0.76, -0.05, 0.76, -1.0, 0.74, -0.05, 0.74, false, "kkk1", true);
+    RoadSegment road2(-0.05, 0.76, 1.0, 0.76, -0.05, 0.74, 1.0, 0.74, false, "kkk", true);
+    RoadSegment road3(0.0, 0.76, 0.0, 1.0, 0.02, 0.76, 0.02, 1.0, false, "sss", true);
     RoadSegment road4(0.0, 0.76, 0.0, 0.0, 0.02, 0.76 , 0.02, 0.0, true, "sss", false);
+    RoadSegment road5(-0.02, 0.76, -0.02, 0.0, 0.0, 0.76, 0.0, 0.0, false, "sss", false);
+    RoadSegment road3l(-0.02, 0.76, -0.02, 1.0, 0.0, 0.76, 0.0, 1.0, false, "sss", true);
+    RoadSegment road6(-0.08, 0.76, -0.08, 0.0, -0.1, 0.76, -0.1, 0.0, false, "sss", true);
+    RoadSegment road7(-0.1, 0.76, -0.1, 0.0, -0.12, 0.76, -0.12, 0.0, false, "sss", true);
     road4.addConnectedRoad(&road2);
     road4.addConnectedRoad(&road3);
-    road4.addConnectedRoad(&road1);
+    road5.addConnectedRoad(&road3l);
+    road5.addConnectedRoad(&road1);
     TrafficLight light1(road4, 0.08, 0.70);
+    TrafficLight light2(road5, -0.05, 0.70);
 
     road1.getColorFromCongestion();
     road2.getColorFromCongestion();
     road3.getColorFromCongestion();
     road4.getColorFromCongestion();
+    road5.getColorFromCongestion();
+    road3l.getColorFromCongestion();
+    road6.getColorFromCongestion();
+    road7.getColorFromCongestion();
 
 
 
@@ -397,7 +418,7 @@ int main(void)
         mouseButtonStateRight = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT);
 
         if (mouseButtonStateLeft == GLFW_PRESS || mouseButtonStateRight == GLFW_PRESS) {
-            vector<RoadSegment*> roads = { &road1, &road2, &road3,  &road4 };
+            vector<RoadSegment*> roads = { &road1, &road2, &road3,  &road4, &road5};
             for (auto* road : roads) {
                 float minX = std::min({ road->x1, road->x2, road->x3, road->x4 });
                 float maxX = std::max({ road->x1, road->x2, road->x3, road->x4 });
@@ -426,7 +447,7 @@ int main(void)
         //Brisanje ekrana
         glClear(GL_COLOR_BUFFER_BIT);
 
-        vector<RoadSegment*> roads = { &road1, &road2, &road3,  &road4 };
+        vector<RoadSegment*> roads = { &road1, &road2, &road3,  &road4, &road5};
         for (auto* road : roads) {
             float minX = std::min({ road->x1, road->x2, road->x3, road->x4 });
             float maxX = std::max({ road->x1, road->x2, road->x3, road->x4 });
@@ -483,6 +504,10 @@ int main(void)
         road2.changeCongestion();
         road3.changeCongestion();
         road4.changeCongestion();
+        road5.changeCongestion();
+        road3l.changeCongestion();
+        road6.changeCongestion();
+        road7.changeCongestion();
         float vertices[] = {
         road1.x1, road1.y1, road1.r,road1.g, road1.b,
         road1.x2, road1.y2,road1.r, road1.g, road1.b,
@@ -503,6 +528,26 @@ int main(void)
         road4.x2, road4.y2,road4.r, road4.g, road4.b,
          road4.x3, road4.y3, road4.r,road4.g, road4.b,
         road4.x4, road4.y4,road4.r, road4.g, road4.b,
+
+         road5.x1, road5.y1, road5.r,road5.g, road5.b,
+        road5.x2, road5.y2,road5.r, road5.g, road5.b,
+         road5.x3, road5.y3, road5.r,road5.g, road5.b,
+        road5.x4, road5.y4,road5.r, road5.g, road5.b,
+
+        road3l.x1, road3l.y1, road3l.r,road3l.g, road3l.b,
+        road3l.x2, road3l.y2,road3l.r, road3l.g, road3l.b,
+         road3l.x3, road3l.y3, road3l.r,road3l.g, road3l.b,
+        road3l.x4, road3l.y4,road3l.r, road3l.g, road3l.b,
+
+        road6.x1, road6.y1, road6.r,road6.g, road6.b,
+        road6.x2, road6.y2,road6.r, road6.g, road6.b,
+         road6.x3, road6.y3, road6.r,road6.g, road6.b,
+        road6.x4, road6.y4,road6.r, road6.g, road6.b,
+
+        road7.x1, road7.y1, road7.r,road7.g, road7.b,
+        road7.x2, road7.y2,road7.r, road7.g, road7.b,
+         road7.x3, road7.y3, road7.r,road7.g, road7.b,
+        road7.x4, road7.y4,road7.r, road7.g, road7.b,
         };
 
         glBindVertexArray(VAO1);
@@ -520,13 +565,19 @@ int main(void)
         glDrawArrays(GL_TRIANGLE_STRIP, 4, 4);
         glDrawArrays(GL_TRIANGLE_STRIP, 8, 4);
         glDrawArrays(GL_TRIANGLE_STRIP, 12, 4);
+        glDrawArrays(GL_TRIANGLE_STRIP, 16, 4);
+        glDrawArrays(GL_TRIANGLE_STRIP, 20, 4);
+        glDrawArrays(GL_TRIANGLE_STRIP, 24, 4);
+        glDrawArrays(GL_TRIANGLE_STRIP, 28, 4);
 
 
         glUseProgram(basicShader);
         glViewport(0, 0, wWidth, wHeight);
         updateTrafficLight(light1, deltaTime);
+        updateTrafficLight(light2, deltaTime);
         bool isTwo = false;
         isTwo = drawTrafficLight(light1, VAO, VBO, VAO2, VBO2, VAO3, VBO3, VAO4, VBO4, VAO5, VBO5, vertexCount);
+        isTwo = drawLeftTrafficLight(light2, VAOS1, VBOS1, VAOS12, VBOS12, VAOS13, VBOS13, vertexCount);
         glBindVertexArray(VAO);
         glDrawArrays(GL_TRIANGLE_FAN, 0, vertexCount);
         glBindVertexArray(VAO2);
@@ -537,7 +588,12 @@ int main(void)
         glDrawArrays(GL_TRIANGLE_FAN, 0, vertexCount);
         glBindVertexArray(VAO5);
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 8);
-
+        glBindVertexArray(VAOS1);
+        glDrawArrays(GL_TRIANGLE_FAN, 0, vertexCount);
+        glBindVertexArray(VAOS12);
+        glDrawArrays(GL_TRIANGLE_FAN, 0, vertexCount);
+        glBindVertexArray(VAOS13);
+        glDrawArrays(GL_TRIANGLE_FAN, 0, vertexCount);
 
 
         glUseProgram(textureShader);
@@ -752,6 +808,38 @@ bool drawTrafficLight(TrafficLight& light, unsigned int& VAO, unsigned int& VBO,
         }
         drawArrow(light.x + 0.05f, light.y - 0.1f, 0.015f, 0.02f, 0.02f, light.rightTurn[0], light.rightTurn[1], light.rightTurn[2], VAO4, VBO4);
         light.rightTurnNum -= 1;
+    }
+
+    return isTwo;
+}
+
+
+bool drawLeftTrafficLight(TrafficLight& light, unsigned int& VAO, unsigned int& VBO, unsigned int& VAO1, unsigned int& VBO1, unsigned int& VAO2, unsigned int& VBO2, int& vertexCount) {
+    // Prikazivanje crvenog svetla
+    bool isTwo = false;
+    if (light.color == "red") {
+        drawCircle(light.x, light.y, 0.02f, light.red[0], light.red[1], light.red[2], VAO, VBO, vertexCount);
+        drawCircle(light.x, light.y - 0.05f, 0.02f, 0.3, 0.3, 0.3, VAO1, VBO1, vertexCount);
+        drawCircle(light.x, light.y - 0.1f, 0.02f, 0.3, 0.3, 0.3, VAO2, VBO2, vertexCount);
+    }
+
+    // Prikazivanje žutog svetla
+    if (light.color == "yellow") {
+        drawCircle(light.x, light.y - 0.05f, 0.02f, light.yellow[0], light.yellow[1], light.yellow[2], VAO, VBO, vertexCount);
+        drawCircle(light.x, light.y, 0.02f, 0.3, 0.3, 0.3, VAO1, VBO1, vertexCount);
+        drawCircle(light.x, light.y - 0.1f, 0.02f, 0.3, 0.3, 0.3, VAO2, VBO2, vertexCount);
+    }
+
+    // Prikazivanje zelenog svetla
+    if (light.color == "green") {
+        drawCircle(light.x, light.y - 0.1f, 0.02f, light.green[0], light.green[1], light.green[2], VAO, VBO, vertexCount);
+        drawCircle(light.x, light.y, 0.02f, 0.3, 0.3, 0.3, VAO1, VBO1, vertexCount);
+        drawCircle(light.x, light.y - 0.05f, 0.02f, 0.3, 0.3, 0.3, VAO2, VBO2, vertexCount);
+    }
+    if (light.color == "redyellow") {
+        drawCircle(light.x, light.y, 0.02f, light.red[0], light.red[1], light.red[2], VAO, VBO, vertexCount);
+        drawCircle(light.x, light.y - 0.05f, 0.02f, light.yellow[0], light.yellow[1], light.yellow[2], VAO1, VBO1, vertexCount);
+        drawCircle(light.x, light.y - 0.1f, 0.02f, 0.3, 0.3, 0.3, VAO2, VBO2, vertexCount);
     }
 
     return isTwo;
