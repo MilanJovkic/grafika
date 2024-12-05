@@ -358,6 +358,19 @@ int main(void)
         1, 2, 3  // Second Triangle
     };
 
+    float index[] = {
+        // positions          // colors           // texture coords
+         -0.8f, 0.8f, 0.0f,  1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right
+         -0.8f, 1.0f,  0.0f,  0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
+         -0.35f, 1.0f,  0.0f,  0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // bottom left
+         -0.35f, 0.8f, 0.0f,  1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // top left
+    };
+
+    unsigned int indexIndices[] = {
+        0, 1, 3, // First Triangle
+        1, 2, 3  // Second Triangle
+    };
+
 
     RoadSegment road1(-1.0, 0.76, -0.05, 0.76, -1.0, 0.74, -0.05, 0.74, true, "kkk1", false);
     RoadSegment road2(-0.05, 0.76, 1.0, 0.76, -0.05, 0.74, 1.0, 0.74, true, "kkk", false);
@@ -492,6 +505,58 @@ int main(void)
 
 
 
+    //tekstura za index
+    unsigned int VAOI, VBOI, EBOI;
+    glGenVertexArrays(1, &VAOI);
+    glGenBuffers(1, &VBOI);
+    glGenBuffers(1, &EBOI);
+
+    glBindVertexArray(VAOI);
+
+    glBindBuffer(GL_ARRAY_BUFFER, VBOI);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(index), index, GL_STATIC_DRAW);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBOI);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indexIndices), indexIndices, GL_STATIC_DRAW);
+
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+
+
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+    glEnableVertexAttribArray(2);
+
+    unsigned int textureInx;
+    glGenTextures(1, &textureInx);
+    glBindTexture(GL_TEXTURE_2D, textureInx);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    int widthi, heighti, nrChannelsi;
+
+    stbi_set_flip_vertically_on_load(true);
+    unsigned char* data2 = stbi_load("index.png", &widthi, &heighti, &nrChannelsi, 0);
+    if (data2) {
+        if (nrChannelsi == 3) {
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, widthi, heighti, 0, GL_RGB, GL_UNSIGNED_BYTE, data2);
+        }
+        else if (nrChannelsi == 4) {
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, widthi, heighti, 0, GL_RGBA, GL_UNSIGNED_BYTE, data2);
+        }
+        glGenerateMipmap(GL_TEXTURE_2D);
+    }
+    else {
+        std::cerr << "Failed to load texture" << std::endl;
+    }
+    stbi_image_free(data2);
+
+
+
 
     glClearColor(1.0, 1.0, 1.0, 1.0);
     float lastTime = 0.0f;
@@ -557,39 +622,39 @@ int main(void)
         if (hoveredRoadName != "") {
             stbi_set_flip_vertically_on_load(true);
             string name = hoveredRoadName + ".png";
-            unsigned char* data = stbi_load(name.c_str(), &width, &height, &nrChannels, 0);
-            if (data) {
+            unsigned char* data1 = stbi_load(name.c_str(), &width, &height, &nrChannels, 0);
+            if (data1) {
                 if (nrChannels == 3) {
-                    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+                    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data1);
                 }
                 else if (nrChannels == 4) {
-                    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+                    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data1);
                 }
                 glGenerateMipmap(GL_TEXTURE_2D);
             }
             else {
                 std::cerr << "Failed to load texture" << std::endl;
             }
-            stbi_image_free(data);
+            stbi_image_free(data1);
         }
         else {
             if (i != 0) {
                 stbi_set_flip_vertically_on_load(true);
-                unsigned char* data = stbi_load("sss.png", &width, &height, &nrChannels, 0);
-                if (data) {
+                unsigned char* data1 = stbi_load("sss.png", &width, &height, &nrChannels, 0);
+                if (data1) {
 
                     if (nrChannels == 3) {
-                        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+                        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data1);
                     }
                     else if (nrChannels == 4) {
-                        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+                        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data1);
                     }
                     glGenerateMipmap(GL_TEXTURE_2D);
                 }
                 else {
                     std::cerr << "Failed to load texture" << std::endl;
                 }
-                stbi_image_free(data);
+                stbi_image_free(data1);
             }
         }
         i += 1;
@@ -754,6 +819,13 @@ int main(void)
         glUniform1i(glGetUniformLocation(textureShader, "texture2"), 0);
         glActiveTexture(GL_TEXTURE0); 
         glBindTexture(GL_TEXTURE_2D, textureGRB); 
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+        glUseProgram(textureShader);
+        glBindVertexArray(VAOI);
+        glUniform1i(glGetUniformLocation(textureShader, "texture3"), 0);
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, textureInx);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
         glUseProgram(textureShader);
