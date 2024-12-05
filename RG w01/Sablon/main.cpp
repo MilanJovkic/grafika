@@ -11,6 +11,8 @@
 #include <GL/glew.h>   //Omogucava laksu upotrebu OpenGL naredbi
 #include <GLFW/glfw3.h>//Olaksava pravljenje i otvaranje prozora (konteksta) sa OpenGL sadrzajem
 #include <vector>
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb_image.h>
 using namespace std;
 float speed = 0.0001;
 float freeSpeed = 0.00002;
@@ -210,6 +212,7 @@ int main(void)
     glfwSetScrollCallback(window, scroll_callback);
 
     unsigned int basicShader = createShader("basic.vert", "basic.frag");
+    unsigned int textureShader = createShader("texture.vert", "texture.frag");
 
     unsigned VAO;
     glGenVertexArrays(1, &VAO);
@@ -236,6 +239,19 @@ int main(void)
     glGenVertexArrays(1, &VAO1);
     unsigned VBO1;
     glGenBuffers(1, &VBO1);
+
+    float tartif[] = {
+        // positions          // colors           // texture coords
+         0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right
+         0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
+        -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // bottom left
+        -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // top left 
+    };
+
+    unsigned int indices[] = {
+        0, 1, 3, // First Triangle
+        1, 2, 3  // Second Triangle
+    };
 
 
     RoadSegment road1(-1.0, 0.76, 0.0, 0.76, -1.0, 0.74, 0.0, 0.74, true, "Main Street", false);
@@ -279,6 +295,61 @@ int main(void)
     double  mouseX, mouseY;
     int mouseButtonStateLeft, mouseButtonStateRight;
 
+
+    unsigned int VAO7, VBO7, EBO;
+    glGenVertexArrays(1, &VAO7);
+    glGenBuffers(1, &VBO7);
+    glGenBuffers(1, &EBO);
+
+    glBindVertexArray(VAO7);
+
+    glBindBuffer(GL_ARRAY_BUFFER, VBO7);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(tartif), tartif, GL_STATIC_DRAW);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+
+
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+    glEnableVertexAttribArray(2);
+
+
+    // Učitavanje teksture
+    unsigned int texture;
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    // Učitavanje slike
+    int width, height, nrChannels;
+    stbi_set_flip_vertically_on_load(true);
+    unsigned char* data = stbi_load("kkk.png", &width, &height, &nrChannels, 0);
+    if (data) {
+        std::cout << "Texture loaded successfully! Width: " << width << ", Height: " << height
+            << ", Channels: " << nrChannels << std::endl;
+        // Ako je broj kanala 3 (RGB)
+        if (nrChannels == 3) {
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+        }
+        // Ako je broj kanala 4 (RGBA)
+        else if (nrChannels == 4) {
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+        }
+        glGenerateMipmap(GL_TEXTURE_2D);
+    }
+    else {
+        std::cerr << "Failed to load texture" << std::endl;
+    }
+    stbi_image_free(data);
 
 
     glClearColor(0.5, 0.5, 0.5, 1.0); //Podesavanje boje pozadine: RGBA (R - Crvena, G - Zelena, B - Plava, A = neprovidno; Opseg od 0 do 1, gdje je 0 crno a 1 svijetlo)
@@ -387,7 +458,16 @@ int main(void)
 
 
       //  }
+          glViewport(0, 0, wWidth, wHeight);
+            glUseProgram(textureShader);
+            glUniform1i(glGetUniformLocation(textureShader, "texture1"), 0);
+            glActiveTexture(GL_TEXTURE0); // Activate texture unit 0
+            glBindTexture(GL_TEXTURE_2D, texture); // Bind your texture
 
+            // Set the sampler uniform to use the first texture unit
+            glBindVertexArray(VAO7);
+            // Iscrtavanje
+            glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
         //Zamjena vidljivog bafera sa pozadinskim
         glfwSwapBuffers(window);

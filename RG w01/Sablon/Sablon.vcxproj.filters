@@ -26,5 +26,12 @@
     <None Include="packages.config" />
     <None Include="basic.frag" />
     <None Include="basic.vert" />
+    <None Include="texture.frag" />
+    <None Include="texture.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stb_image.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
