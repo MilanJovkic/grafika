@@ -406,6 +406,7 @@ int main(void)
 
     glClearColor(1.0, 1.0, 1.0, 1.0); //Podesavanje boje pozadine: RGBA (R - Crvena, G - Zelena, B - Plava, A = neprovidno; Opseg od 0 do 1, gdje je 0 crno a 1 svijetlo)
     float lastTime = 0.0f;
+    int i = 0;
     while (!glfwWindowShouldClose(window)) //Beskonacna petlja iz koje izlazimo tek kada prozor treba da se zatvori
     {
         //Unos od korisnika bez callback funckcije. GLFW_PRESS = Dugme je trenutno pritisnuto. GLFW_RELEASE = Dugme trenutno nije pritisnuto
@@ -449,6 +450,13 @@ int main(void)
             }
         }
 
+        float currentTime = glfwGetTime();
+        float deltaTime = currentTime - lastTime;
+        lastTime = currentTime;// Pronađite vreme proteklo između frejmova
+        glfwPollEvents(); // Obrađivanje događaja
+        //Brisanje ekrana
+        glClear(GL_COLOR_BUFFER_BIT);
+
         vector<RoadSegment*> roads = { &road1, &road2, &road3 };
         for (auto* road : roads) {
             float minX = std::min({ road->x1, road->x2, road->x3, road->x4 });
@@ -485,16 +493,32 @@ int main(void)
             stbi_image_free(data);
         }
         else {
-
+            if (i != 0) {
+                std::cout << "Hovered Road: " << hoveredRoadName << std::endl;
+                stbi_set_flip_vertically_on_load(true);
+                unsigned char* data = stbi_load("sss.png", &width, &height, &nrChannels, 0);
+                if (data) {
+                    std::cout << "Texture loaded successfully! Width: " << width << ", Height: " << height
+                        << ", Channels: " << nrChannels << std::endl;
+                    // Ako je broj kanala 3 (RGB)
+                    if (nrChannels == 3) {
+                        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+                    }
+                    // Ako je broj kanala 4 (RGBA)
+                    else if (nrChannels == 4) {
+                        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+                    }
+                    glGenerateMipmap(GL_TEXTURE_2D);
+                }
+                else {
+                    std::cerr << "Failed to load texture" << std::endl;
+                }
+                stbi_image_free(data);
+            }
         }
  
+        i += 1;
 
-        float currentTime = glfwGetTime();
-        float deltaTime = currentTime - lastTime;
-        lastTime = currentTime;// Pronađite vreme proteklo između frejmova
-        glfwPollEvents(); // Obrađivanje događaja
-        //Brisanje ekrana
-        glClear(GL_COLOR_BUFFER_BIT);
        
         road1.changeCongestion();
         road2.changeCongestion();
@@ -561,7 +585,6 @@ int main(void)
             // Iscrtavanje
             glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
       //  }
-          glViewport(0, 0, wWidth, wHeight);
             glUseProgram(textureShader);
             glBindVertexArray(VAO7);
             glUniform1i(glGetUniformLocation(textureShader, "texture1"), 0);
