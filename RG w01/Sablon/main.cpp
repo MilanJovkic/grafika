@@ -329,6 +329,27 @@ int main(void)
     unsigned VBOS54;
     glGenBuffers(1, &VBOS54);
 
+    unsigned VAOS6;
+    glGenVertexArrays(1, &VAOS6);
+    unsigned VBOS6;
+    glGenBuffers(1, &VBOS6);
+    unsigned VAOS61;
+    glGenVertexArrays(1, &VAOS61);
+    unsigned VBOS61;
+    glGenBuffers(1, &VBOS61);
+    unsigned VAOS62;
+    glGenVertexArrays(1, &VAOS62);
+    unsigned VBOS62;
+    glGenBuffers(1, &VBOS62);
+    unsigned VAOS63;
+    glGenVertexArrays(1, &VAOS63);
+    unsigned VBOS63;
+    glGenBuffers(1, &VBOS63);
+    unsigned VAOS64;
+    glGenVertexArrays(1, &VAOS64);
+    unsigned VBOS64;
+    glGenBuffers(1, &VBOS64);
+
     double  mouseX, mouseY;
     int mouseButtonStateLeft, mouseButtonStateRight;
 
@@ -375,13 +396,19 @@ int main(void)
     RoadSegment road1(-1.0, 0.76, -0.05, 0.76, -1.0, 0.74, -0.05, 0.74, true, "kkk1", false);
     RoadSegment road2(-0.05, 0.76, 1.0, 0.76, -0.05, 0.74, 1.0, 0.74, true, "kkk", false);
     RoadSegment road3(0.0, 0.76, 0.0, 1.0, 0.02, 0.76, 0.02, 1.0, false, "sss", true);
-    RoadSegment road4(0.0, 0.74, 0.0, 0.0, 0.02, 0.74 , 0.02, 0.0, true, "sss", false);
+    RoadSegment road4(0.0, 0.74, 0.0, 0.0, 0.02, 0.74 , 0.02, 0.0, true, "index", false);
     RoadSegment road5(-0.02, 0.74, -0.02, 0.0, 0.0, 0.74, 0.0, 0.0, false, "sss", false);
     RoadSegment road3l(-0.02, 0.76, -0.02, 1.0, 0.0, 0.76, 0.0, 1.0, false, "sss", true);
     RoadSegment road6(-0.08, 0.74, -0.08, 0.0, -0.1, 0.74, -0.1, 0.0, false, "kkk1", true);
     RoadSegment road7(-0.1, 0.74, -0.1, 0.0, -0.12, 0.74, -0.12, 0.0, false, "sss", true);
     RoadSegment road8(-0.08, 0.76, -0.08, 1.0, -0.1, 0.76, -0.1, 1.0, false, "kkk1", false);
     RoadSegment road9(-0.1, 0.76, -0.1, 1.0, -0.12, 0.76, -0.12, 1.0, true, "sss", false);
+    RoadSegment road10(-1.0, 0.02, -0.05, 0.02, -1.0, 0.00, -0.05, 0.0, false, "index", true);
+    RoadSegment road11(1.0, 0.02, -0.05, 0.02, 1.0, 0.00, -0.05, 0.0, true, "index", false);
+    RoadSegment road12(0.0, 0.00, 0.0, -1.0, 0.02, 0.0, 0.02, -1.0, false, "sss", true);
+    RoadSegment road13(-0.02, 0.00, -0.02, -1.0, 0.00, 0.0, 0.00, -1.0, false, "sss", true);
+    RoadSegment road14(-0.08, 0.00, -0.08, -1.0, -0.1, 0.0, -0.1, -1.0, false, "sss", true);
+    RoadSegment road15(-0.1, 0.00, -0.1, -1.0, -0.12, 0.0, -0.12, -1.0, false, "sss", true);
     road4.addConnectedRoad(&road2);
     road4.addConnectedRoad(&road3);
     road5.addConnectedRoad(&road3l);
@@ -396,12 +423,16 @@ int main(void)
     road2.addConnectedRoad(&road3);
     road2.addConnectedRoad(&road8);
     road2.addConnectedRoad(&road1);
+    road11.addConnectedRoad(&road4);
+    road11.addConnectedRoad(&road10);
+    road11.addConnectedRoad(&road14);
     TrafficLight light1(road4, 0.05, 0.70);
     TrafficLight light2(road5, -0.05, 0.70);
     TrafficLight light3(road8, -0.05, 0.9);
     TrafficLight light4(road9, -0.15, 0.9);
     TrafficLight light5(road1, -0.15, 0.70);
     TrafficLight light6(road2, 0.15, 0.8);
+    TrafficLight light7(road11, 0.15, 0.05);
 
     road1.getColorFromCongestion();
     road2.getColorFromCongestion();
@@ -413,7 +444,12 @@ int main(void)
     road7.getColorFromCongestion();
     road8.getColorFromCongestion();
     road9.getColorFromCongestion();
-
+    road10.getColorFromCongestion();
+    road11.getColorFromCongestion();
+    road12.getColorFromCongestion();
+    road13.getColorFromCongestion();
+    road14.getColorFromCongestion();
+    road15.getColorFromCongestion();
 
 
     //tekstura za ulice
@@ -578,7 +614,7 @@ int main(void)
         mouseButtonStateRight = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT);
 
         if (mouseButtonStateLeft == GLFW_PRESS || mouseButtonStateRight == GLFW_PRESS) {
-            vector<RoadSegment*> roads = { &road1, &road2, &road3,  &road4, &road5, &road3l, &road6, &road7, &road8, &road9 };
+            vector<RoadSegment*> roads = { &road1, &road2, &road3,  &road4, &road5, &road3l, &road6, &road7, &road8, &road9 , &road10, &road11, &road12, &road13,  &road14 , &road15 };
             for (auto* road : roads) {
                 float minX = std::min({ road->x1, road->x2, road->x3, road->x4 });
                 float maxX = std::max({ road->x1, road->x2, road->x3, road->x4 });
@@ -586,12 +622,12 @@ int main(void)
                 float maxY = std::max({ road->y1, road->y2, road->y3, road->y4 });
                 if (xPos >= minX && xPos <= maxX && yPos >= minY && yPos <= maxY) {
                     if (mouseButtonStateLeft == GLFW_PRESS) {
-                        road->congestion += 0.0003;
+                        road->congestion += 0.001;
                         if (road->congestion > 1.0f) road->congestion = 1.0f;
                         road->getColorFromCongestion();
                     }
                     else if (mouseButtonStateRight == GLFW_PRESS) {
-                        road->congestion -= 0.0003;
+                        road->congestion -= 0.001;
                         if (road->congestion < 0.0f) road->congestion = 0.0f;
                         road->getColorFromCongestion();
                     }
@@ -607,7 +643,7 @@ int main(void)
         //Brisanje ekrana
         glClear(GL_COLOR_BUFFER_BIT);
 
-        vector<RoadSegment*> roads = { &road1, &road2, &road3,  &road4, &road5, &road3l, &road6, &road7, &road8, &road9};
+        vector<RoadSegment*> roads = { &road1, &road2, &road3,  &road4, &road5, &road3l, &road6, &road7, &road8, &road9, &road10, &road11, &road12, &road13,  &road14 , &road15 };
         for (auto* road : roads) {
             float minX = std::min({ road->x1, road->x2, road->x3, road->x4 });
             float maxX = std::max({ road->x1, road->x2, road->x3, road->x4 });
@@ -670,6 +706,12 @@ int main(void)
         road7.changeCongestion();
         road8.changeCongestion();
         road9.changeCongestion();
+        road10.changeCongestion();
+        road11.changeCongestion();
+        road12.changeCongestion();
+        road13.changeCongestion();
+        road14.changeCongestion();
+        road15.changeCongestion();
         float vertices[] = {
         road1.x1, road1.y1, road1.r,road1.g, road1.b,
         road1.x2, road1.y2,road1.r, road1.g, road1.b,
@@ -720,6 +762,36 @@ int main(void)
         road9.x2, road9.y2,road9.r, road9.g, road9.b,
          road9.x3, road9.y3, road9.r,road9.g, road9.b,
         road9.x4, road9.y4,road9.r, road9.g, road9.b,
+
+        road10.x1, road10.y1, road10.r,road10.g, road10.b,
+        road10.x2, road10.y2,road10.r, road10.g, road10.b,
+         road10.x3, road10.y3, road10.r,road10.g, road10.b,
+        road10.x4, road10.y4,road10.r, road10.g, road10.b,
+
+        road11.x1, road11.y1, road11.r,road11.g, road11.b,
+        road11.x2, road11.y2,road11.r, road11.g, road11.b,
+         road11.x3, road11.y3, road11.r,road11.g, road11.b,
+        road11.x4, road11.y4,road11.r, road11.g, road11.b,
+
+        road12.x1, road12.y1, road12.r,road12.g, road12.b,
+        road12.x2, road12.y2,road12.r, road12.g, road12.b,
+         road12.x3, road12.y3, road12.r,road12.g, road12.b,
+        road12.x4, road12.y4,road12.r, road12.g, road12.b,
+
+        road13.x1, road13.y1, road13.r,road13.g, road13.b,
+        road13.x2, road13.y2,road13.r, road13.g, road13.b,
+         road13.x3, road13.y3, road13.r,road13.g, road13.b,
+        road13.x4, road13.y4,road13.r, road13.g, road13.b,
+
+        road14.x1, road14.y1, road14.r,road14.g, road14.b,
+        road14.x2, road14.y2,road14.r, road14.g, road14.b,
+         road14.x3, road14.y3, road14.r,road14.g, road14.b,
+        road14.x4, road14.y4,road14.r, road14.g, road14.b,
+
+        road15.x1, road15.y1, road15.r,road15.g, road15.b,
+        road15.x2, road15.y2,road15.r, road15.g, road15.b,
+         road15.x3, road15.y3, road15.r,road15.g, road15.b,
+        road15.x4, road15.y4,road15.r, road15.g, road15.b,
         };
 
         glBindVertexArray(VAO1);
@@ -743,6 +815,12 @@ int main(void)
         glDrawArrays(GL_TRIANGLE_STRIP, 28, 4);
         glDrawArrays(GL_TRIANGLE_STRIP, 32, 4);
         glDrawArrays(GL_TRIANGLE_STRIP, 36, 4);
+        glDrawArrays(GL_TRIANGLE_STRIP, 40, 4);
+        glDrawArrays(GL_TRIANGLE_STRIP, 44, 4);
+        glDrawArrays(GL_TRIANGLE_STRIP, 48, 4);
+        glDrawArrays(GL_TRIANGLE_STRIP, 52, 4);
+        glDrawArrays(GL_TRIANGLE_STRIP, 56, 4);
+        glDrawArrays(GL_TRIANGLE_STRIP, 60, 4);
 
 
         glUseProgram(basicShader);
@@ -753,6 +831,7 @@ int main(void)
         updateTrafficLight(light4, deltaTime);
         updateTrafficLight(light5, deltaTime);
         updateTrafficLight(light6, deltaTime);
+        updateTrafficLight(light7, deltaTime);
         bool isTwo = false;
         isTwo = drawTrafficLight(light1, VAO, VBO, VAO2, VBO2, VAO3, VBO3, VAO4, VBO4, VAO5, VBO5, vertexCount);
         isTwo = drawLeftTrafficLight(light2, VAOS1, VBOS1, VAOS12, VBOS12, VAOS13, VBOS13, vertexCount);
@@ -760,6 +839,7 @@ int main(void)
         isTwo = drawTrafficLightUp(light4, VAOS3, VBOS3, VAOS31, VBOS31, VAOS32, VBOS32, VAOS33, VBOS33, VAOS34, VBOS34, vertexCount);
         isTwo = drawTrafficLightLeft(light5, VAOS4, VBOS4, VAOS41, VBOS41, VAOS42, VBOS42, VAOS43, VBOS43, VAOS44, VBOS44, vertexCount);
         isTwo = drawTrafficLightRight(light6, VAOS5, VBOS5, VAOS51, VBOS51, VAOS52, VBOS52, VAOS53, VBOS53, VAOS54, VBOS54, vertexCount);
+        isTwo = drawTrafficLightRight(light7, VAOS6, VBOS6, VAOS61, VBOS61, VAOS62, VBOS62, VAOS63, VBOS63, VAOS64, VBOS64, vertexCount);
         glBindVertexArray(VAO);
         glDrawArrays(GL_TRIANGLE_FAN, 0, vertexCount);
         glBindVertexArray(VAO2);
@@ -811,6 +891,16 @@ int main(void)
         glBindVertexArray(VAOS53);
         glDrawArrays(GL_TRIANGLE_FAN, 0, vertexCount);
         glBindVertexArray(VAOS54);
+        glDrawArrays(GL_TRIANGLE_STRIP, 0, 8);
+        glBindVertexArray(VAOS6);
+        glDrawArrays(GL_TRIANGLE_FAN, 0, vertexCount);
+        glBindVertexArray(VAOS61);
+        glDrawArrays(GL_TRIANGLE_FAN, 0, vertexCount);
+        glBindVertexArray(VAOS62);
+        glDrawArrays(GL_TRIANGLE_FAN, 0, vertexCount);
+        glBindVertexArray(VAOS63);
+        glDrawArrays(GL_TRIANGLE_FAN, 0, vertexCount);
+        glBindVertexArray(VAOS64);
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 8);
 
 
