@@ -242,10 +242,10 @@ int main(void)
 
     float tartif[] = {
         // positions          // colors           // texture coords
-         0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right
-         0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
-        -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // bottom left
-        -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // top left 
+         1.0, -0.75f, 0.0f,  1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right
+         1.0, -1.0f,  0.0f,  0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
+         0.50f, -1.0f,  0.0f,  0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // bottom left
+         0.50f, -0.75f, 0.0f,  1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // top left 
     };
 
     unsigned int indices[] = {
@@ -253,10 +253,23 @@ int main(void)
         1, 2, 3  // Second Triangle
     };
 
+    float grb[] = {
+        // positions          // colors           // texture coords
+         -1.0, 0.5, 0.0f,  1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right
+         -1.0, 1.0f,  0.0f,  0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
+         -0.75f, 1.0f,  0.0f,  0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // bottom left
+         -0.75f, 0.5, 0.0f,  1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // top left 
+    };
 
-    RoadSegment road1(-1.0, 0.76, 0.0, 0.76, -1.0, 0.74, 0.0, 0.74, true, "Main Street", false);
-    RoadSegment road2(0.0, 0.76, 1.0, 0.76, 0.0, 0.74, 1.0, 0.74, true, "Main Street", true);
-    RoadSegment road3(0.0, 0.76, 0.0, 1.0, 0.02, 0.76, 0.02, 1.0, true, "Main Street", true);
+    unsigned int grbIndices[] = {
+        0, 1, 3, // First Triangle
+        1, 2, 3  // Second Triangle
+    };
+
+
+    RoadSegment road1(-1.0, 0.76, 0.0, 0.76, -1.0, 0.74, 0.0, 0.74, true, "kkk1", false);
+    RoadSegment road2(0.0, 0.76, 1.0, 0.76, 0.0, 0.74, 1.0, 0.74, true, "kkk", true);
+    RoadSegment road3(0.0, 0.76, 0.0, 1.0, 0.02, 0.76, 0.02, 1.0, true, "sss", true);
     road1.addConnectedRoad(&road2);
     road1.addConnectedRoad(&road3);
     TrafficLight light1(road1, 0.0, 0.75);
@@ -331,18 +344,57 @@ int main(void)
 
     // Učitavanje slike
     int width, height, nrChannels;
+
+
+
+
+    unsigned int VAOG, VBOG, EBOG;
+    glGenVertexArrays(1, &VAOG);
+    glGenBuffers(1, &VBOG);
+    glGenBuffers(1, &EBOG);
+
+    glBindVertexArray(VAOG);
+
+    glBindBuffer(GL_ARRAY_BUFFER, VBOG);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(grb), grb, GL_STATIC_DRAW);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBOG);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(grbIndices), grbIndices, GL_STATIC_DRAW);
+
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+
+
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+    glEnableVertexAttribArray(2);
+
+    // Učitavanje teksture
+    unsigned int textureGRB;
+    glGenTextures(1, &textureGRB);
+    glBindTexture(GL_TEXTURE_2D, textureGRB);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    // Učitavanje slike
+    int widthg, heightg, nrChannelsg;
+
     stbi_set_flip_vertically_on_load(true);
-    unsigned char* data = stbi_load("kkk.png", &width, &height, &nrChannels, 0);
+    unsigned char* data = stbi_load("COA_Odzaci.png", &widthg, &heightg, &nrChannelsg, 0);
     if (data) {
-        std::cout << "Texture loaded successfully! Width: " << width << ", Height: " << height
-            << ", Channels: " << nrChannels << std::endl;
+        std::cout << "Texture loaded successfully! Width: " << widthg << ", Height: " << heightg
+            << ", Channels: " << nrChannelsg << std::endl;
         // Ako je broj kanala 3 (RGB)
-        if (nrChannels == 3) {
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+        if (nrChannelsg == 3) {
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, widthg, heightg, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
         }
         // Ako je broj kanala 4 (RGBA)
-        else if (nrChannels == 4) {
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+        else if (nrChannelsg == 4) {
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, widthg, heightg, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
         }
         glGenerateMipmap(GL_TEXTURE_2D);
     }
@@ -352,7 +404,7 @@ int main(void)
     stbi_image_free(data);
 
 
-    glClearColor(0.5, 0.5, 0.5, 1.0); //Podesavanje boje pozadine: RGBA (R - Crvena, G - Zelena, B - Plava, A = neprovidno; Opseg od 0 do 1, gdje je 0 crno a 1 svijetlo)
+    glClearColor(1.0, 1.0, 1.0, 1.0); //Podesavanje boje pozadine: RGBA (R - Crvena, G - Zelena, B - Plava, A = neprovidno; Opseg od 0 do 1, gdje je 0 crno a 1 svijetlo)
     float lastTime = 0.0f;
     while (!glfwWindowShouldClose(window)) //Beskonacna petlja iz koje izlazimo tek kada prozor treba da se zatvori
     {
@@ -367,6 +419,7 @@ int main(void)
         // Convert mouse position from screen coordinates to OpenGL coordinates
         float xPos = (2.0f * mouseX) / wWidth - 1.0f;
         float yPos = 1.0f - (2.0f * mouseY) / wHeight;
+        std::string hoveredRoadName = "";
 
         // Check if the left or right mouse button is pressed
         mouseButtonStateLeft = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
@@ -395,6 +448,46 @@ int main(void)
 
             }
         }
+
+        vector<RoadSegment*> roads = { &road1, &road2, &road3 };
+        for (auto* road : roads) {
+            float minX = std::min({ road->x1, road->x2, road->x3, road->x4 });
+            float maxX = std::max({ road->x1, road->x2, road->x3, road->x4 });
+            float minY = std::min({ road->y1, road->y2, road->y3, road->y4 });
+            float maxY = std::max({ road->y1, road->y2, road->y3, road->y4 });
+
+            if (xPos >= minX && xPos <= maxX && yPos >= minY && yPos <= maxY) {
+                hoveredRoadName = road->name;
+                break;
+            }
+        }
+        if (hoveredRoadName != "") {
+            std::cout << "Hovered Road: " << hoveredRoadName << std::endl;
+            stbi_set_flip_vertically_on_load(true);
+            string name = hoveredRoadName + ".png";
+            unsigned char* data = stbi_load(name.c_str(), &width, &height, &nrChannels, 0);
+            if (data) {
+                std::cout << "Texture loaded successfully! Width: " << width << ", Height: " << height
+                    << ", Channels: " << nrChannels << std::endl;
+                // Ako je broj kanala 3 (RGB)
+                if (nrChannels == 3) {
+                    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+                }
+                // Ako je broj kanala 4 (RGBA)
+                else if (nrChannels == 4) {
+                    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+                }
+                glGenerateMipmap(GL_TEXTURE_2D);
+            }
+            else {
+                std::cerr << "Failed to load texture" << std::endl;
+            }
+            stbi_image_free(data);
+        }
+        else {
+
+        }
+ 
 
         float currentTime = glfwGetTime();
         float deltaTime = currentTime - lastTime;
@@ -457,17 +550,30 @@ int main(void)
             glDrawArrays(GL_TRIANGLE_STRIP, 0, 8);
 
 
+
+            glUseProgram(textureShader);
+            glBindVertexArray(VAOG);
+            glUniform1i(glGetUniformLocation(textureShader, "texture2"), 0);
+            glActiveTexture(GL_TEXTURE0); // Activate texture unit 0
+            glBindTexture(GL_TEXTURE_2D, textureGRB); // Bind your texture
+
+            // Set the sampler uniform to use the first texture unit
+            // Iscrtavanje
+            glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
       //  }
           glViewport(0, 0, wWidth, wHeight);
             glUseProgram(textureShader);
+            glBindVertexArray(VAO7);
             glUniform1i(glGetUniformLocation(textureShader, "texture1"), 0);
             glActiveTexture(GL_TEXTURE0); // Activate texture unit 0
             glBindTexture(GL_TEXTURE_2D, texture); // Bind your texture
 
             // Set the sampler uniform to use the first texture unit
-            glBindVertexArray(VAO7);
             // Iscrtavanje
             glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+
+
 
         //Zamjena vidljivog bafera sa pozadinskim
         glfwSwapBuffers(window);
