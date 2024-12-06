@@ -9,8 +9,8 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 using namespace std;
-float speed = 0.0001;
-float freeSpeed = 0.00002;
+float speed = 0.0005;
+float freeSpeed = 0.00004;
 
 struct RoadSegment {
     float x1, y1, x2, y2, x3, y3, x4, y4;
@@ -23,10 +23,11 @@ struct RoadSegment {
     vector<RoadSegment*> connectedRoads;
     bool isGreen;
     bool isOutside;
+    bool isImportant;
     
 
-    RoadSegment(float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4, bool isRight, string name, bool isOutside)
-        : x1(x1), y1(y1), x2(x2), y2(y2), x3(x3), y3(y3), x4(x4), y4(y4), isRight(isRight), name(name), congestion(0.3f), isGreen(false), isOutside(isOutside) {
+    RoadSegment(float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4, bool isRight, string name, bool isOutside, bool isImportant)
+        : x1(x1), y1(y1), x2(x2), y2(y2), x3(x3), y3(y3), x4(x4), y4(y4), isRight(isRight), name(name), congestion(0.3f), isGreen(false), isOutside(isOutside), isImportant(isImportant) {
     }
 
     void addConnectedRoad(RoadSegment* road) {
@@ -75,7 +76,7 @@ struct RoadSegment {
             };
             getColorFromCongestion();
         }
-        else {
+        if (isImportant == true) {
             getColorFromCongestion();
             if (isGreen == true) {
                 congestion -= speed;
@@ -485,22 +486,27 @@ int main(void)
     };
 
 
-    RoadSegment gornjiLevi(-1.0, 0.76, -0.05, 0.76, -1.0, 0.74, -0.05, 0.74, true, "kosovska", false);
-    RoadSegment gornjiDesni(-0.05, 0.76, 1.0, 0.76, -0.05, 0.74, 1.0, 0.74, true, "somborska", false);
-    RoadSegment gornjiGornji2(0.0, 0.76, 0.0, 1.0, 0.02, 0.76, 0.02, 1.0, false, "bulevar", true);
-    RoadSegment gornjiGornji2l(-0.02, 0.76, -0.02, 1.0, 0.0, 0.76, 0.0, 1.0, false, "bulevar", true);
-    RoadSegment gornji2(0.0, 0.74, 0.0, 0.0, 0.02, 0.74 , 0.02, 0.0, true, "bulevar", false);
-    RoadSegment gornji2l(-0.02, 0.74, -0.02, 0.0, 0.0, 0.74, 0.0, 0.0, false, "bulevar", false);
-    RoadSegment gornji1(-0.08, 0.74, -0.08, 0.0, -0.1, 0.74, -0.1, 0.0, false, "bulevar", false);
-    RoadSegment gornji1l(-0.1, 0.74, -0.1, 0.0, -0.12, 0.74, -0.12, 0.0, true, "bulevar", false);
-    RoadSegment gornjiGornji1(-0.08, 0.76, -0.08, 1.0, -0.1, 0.76, -0.1, 1.0, false, "bulevar", false);
-    RoadSegment gornjiGornji1l(-0.1, 0.76, -0.1, 1.0, -0.12, 0.76, -0.12, 1.0, true, "bulevar", false);
-    RoadSegment donjiLevi(-1.0, 0.02, -0.05, 0.02, -1.0, 0.00, -0.05, 0.0, true, "knezMihajlova", false);
-    RoadSegment donjiDesni(1.0, 0.02, -0.05, 0.02, 1.0, 0.00, -0.05, 0.0, true, "knezMihajlova", false);
-    RoadSegment donji2(0.0, 0.00, 0.0, -1.0, 0.02, 0.0, 0.02, -1.0, true, "bulevar", false);
-    RoadSegment donji2l(-0.02, 0.00, -0.02, -1.0, 0.00, 0.0, 0.00, -1.0, false, "bulevar", false);
-    RoadSegment donji1(-0.08, 0.00, -0.08, -1.0, -0.1, 0.0, -0.1, -1.0, false, "bulevar", true);
-    RoadSegment donji1l(-0.1, 0.00, -0.1, -1.0, -0.12, 0.0, -0.12, -1.0, false, "bulevar", true);
+    RoadSegment gornjiLevi(-1.0, 0.76, -0.05, 0.76, -1.0, 0.74, -0.05, 0.74, true, "kosovska", true, true);
+    RoadSegment gornjiDesni(-0.05, 0.76, 1.0, 0.76, -0.05, 0.74, 1.0, 0.74, true, "somborska", true, true);
+    RoadSegment gornjiGornji2(0.0, 0.76, 0.0, 1.0, 0.02, 0.76, 0.02, 1.0, false, "bulevar", true, false);
+    RoadSegment gornjiGornji2l(-0.02, 0.76, -0.02, 1.0, 0.0, 0.76, 0.0, 1.0, false, "bulevar", true, false);
+    RoadSegment gornji2(0.0, 0.74, 0.0, 0.0, 0.02, 0.74 , 0.02, 0.0, true, "bulevar", false, true);
+    RoadSegment gornji2l(-0.02, 0.74, -0.02, 0.0, 0.0, 0.74, 0.0, 0.0, false, "bulevar", false, true);
+    RoadSegment gornji1(-0.08, 0.74, -0.08, 0.0, -0.1, 0.74, -0.1, 0.0, false, "bulevar", false, true);
+    RoadSegment gornji1l(-0.1, 0.74, -0.1, 0.0, -0.12, 0.74, -0.12, 0.0, true, "bulevar", false, true);
+    RoadSegment gornjiGornji1(-0.08, 0.76, -0.08, 1.0, -0.1, 0.76, -0.1, 1.0, false, "bulevar", false, true);
+    RoadSegment gornjiGornji1l(-0.1, 0.76, -0.1, 1.0, -0.12, 0.76, -0.12, 1.0, true, "bulevar", false, true);
+    RoadSegment donjiLevi(-1.0, 0.02, -0.05, 0.02, -1.0, 0.00, -0.05, 0.0, true, "knezMihajlova", true, true);
+    RoadSegment donjiDesni(1.0, 0.02, -0.05, 0.02, 1.0, 0.00, -0.05, 0.0, true, "knezMihajlova", true, true);
+    RoadSegment donji2(0.0, 0.00, 0.0, -1.0, 0.02, 0.0, 0.02, -1.0, true, "bulevar", false, true);
+    RoadSegment donji2l(-0.02, 0.00, -0.02, -1.0, 0.00, 0.0, 0.00, -1.0, false, "bulevar", false, true);
+    RoadSegment donji1(-0.08, 0.00, -0.08, -1.0, -0.1, 0.0, -0.1, -1.0, false, "bulevar", true, false);
+    RoadSegment donji1l(-0.1, 0.00, -0.1, -1.0, -0.12, 0.0, -0.12, -1.0, false, "bulevar", true, false);
+    RoadSegment desniVeliki(0.3, 1.0, 0.32, 1.0, 0.3, -1.0, 0.32, -1.0, false, "backa", true, false);
+    RoadSegment leviMali(-0.5, 0.00, -0.52, 0.00, -0.5, -1.0, -0.52, -1.0, false, "vidovdanska", true, false);
+    RoadSegment leviVeliki(-0.75, 0.74, -0.77, 0.74, -0.75, -1.0, -0.77, -1.0, false, "zeleznicka", true, false);
+    RoadSegment desniKosi(0.75, 0.0, 0.77, 0.0, 1.0, -0.52, 1.0, -0.57, false, "mostonga", true, false);
+    RoadSegment desniMali(0.75, 0.0, 0.77, 0.0, 0.75, 1.0, 0.77, 1.0, false, "skolska", true, false);
     gornji2.addConnectedRoad(&gornjiDesni);
     gornji2.addConnectedRoad(&gornjiGornji2);
     gornji2l.addConnectedRoad(&gornjiGornji2l);
@@ -560,7 +566,11 @@ int main(void)
     donji2l.getColorFromCongestion();
     donji1.getColorFromCongestion();
     donji1l.getColorFromCongestion();
-
+    desniVeliki.getColorFromCongestion();
+    leviMali.getColorFromCongestion();
+    leviVeliki.getColorFromCongestion();
+    desniKosi.getColorFromCongestion();
+    desniMali.getColorFromCongestion();
 
     //tekstura za ulice
     unsigned int VAOU, VBOU, EBOU;
@@ -724,7 +734,7 @@ int main(void)
         mouseButtonStateRight = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT);
 
         if (mouseButtonStateLeft == GLFW_PRESS || mouseButtonStateRight == GLFW_PRESS) {
-            vector<RoadSegment*> roads = { &gornjiLevi, &gornjiDesni, &gornjiGornji2,  &gornji2, &gornji2l, &gornjiGornji2l, &gornji1, &gornji1l, &gornjiGornji1, &gornjiGornji1l , &donjiLevi, &donjiDesni, &donji2, &donji2l,  &donji1 , &donji1l };
+            vector<RoadSegment*> roads = { &gornjiLevi, &gornjiDesni, &gornjiGornji2,  &gornji2, &gornji2l, &gornjiGornji2l, &gornji1, &gornji1l, &gornjiGornji1, &gornjiGornji1l , &donjiLevi, &donjiDesni, &donji2, &donji2l,  &donji1 , &donji1l, &desniVeliki, &desniMali, &leviMali, &leviVeliki, &desniKosi };
             for (auto* road : roads) {
                 float minX = std::min({ road->x1, road->x2, road->x3, road->x4 });
                 float maxX = std::max({ road->x1, road->x2, road->x3, road->x4 });
@@ -753,7 +763,7 @@ int main(void)
         //Brisanje ekrana
         glClear(GL_COLOR_BUFFER_BIT);
 
-        vector<RoadSegment*> roads = { &gornjiLevi, &gornjiDesni, &gornjiGornji2,  &gornji2, &gornji2l, &gornjiGornji2l, &gornji1, &gornji1l, &gornjiGornji1, &gornjiGornji1l, &donjiLevi, &donjiDesni, &donji2, &donji2l,  &donji1 , &donji1l };
+        vector<RoadSegment*> roads = { &gornjiLevi, &gornjiDesni, &gornjiGornji2,  &gornji2, &gornji2l, &gornjiGornji2l, &gornji1, &gornji1l, &gornjiGornji1, &gornjiGornji1l, &donjiLevi, &donjiDesni, &donji2, &donji2l,  &donji1 , &donji1l , &desniVeliki, &desniMali, &leviMali, &leviVeliki, &desniKosi};
         for (auto* road : roads) {
             float minX = std::min({ road->x1, road->x2, road->x3, road->x4 });
             float maxX = std::max({ road->x1, road->x2, road->x3, road->x4 });
@@ -822,7 +832,37 @@ int main(void)
         donji2l.changeCongestion();
         donji1.changeCongestion();
         donji1l.changeCongestion();
+        desniVeliki.changeCongestion();
+        leviMali.changeCongestion();
+        leviVeliki.changeCongestion();
+        desniKosi.changeCongestion();
+        desniMali.changeCongestion();
         float vertices[] = {
+        desniVeliki.x1, desniVeliki.y1, desniVeliki.r,desniVeliki.g, desniVeliki.b,
+        desniVeliki.x2, desniVeliki.y2,desniVeliki.r, desniVeliki.g, desniVeliki.b,
+         desniVeliki.x3, desniVeliki.y3, desniVeliki.r,desniVeliki.g, desniVeliki.b,
+        desniVeliki.x4, desniVeliki.y4,desniVeliki.r, desniVeliki.g, desniVeliki.b,
+
+         desniMali.x1, desniMali.y1, desniMali.r,desniMali.g, desniMali.b,
+        desniMali.x2, desniMali.y2,desniMali.r, desniMali.g, desniMali.b,
+         desniMali.x3, desniMali.y3, desniMali.r,desniMali.g, desniMali.b,
+        desniMali.x4, desniMali.y4,desniMali.r, desniMali.g, desniMali.b,
+
+         desniKosi.x1, desniKosi.y1, desniKosi.r,desniKosi.g, desniKosi.b,
+        desniKosi.x2, desniKosi.y2,desniKosi.r, desniKosi.g, desniKosi.b,
+         desniKosi.x3, desniKosi.y3, desniKosi.r,desniKosi.g, desniKosi.b,
+        desniKosi.x4, desniKosi.y4,desniKosi.r, desniKosi.g, desniKosi.b,
+
+        leviVeliki.x1, leviVeliki.y1, leviVeliki.r,leviVeliki.g, leviVeliki.b,
+        leviVeliki.x2, leviVeliki.y2,leviVeliki.r, leviVeliki.g, leviVeliki.b,
+         leviVeliki.x3, leviVeliki.y3, leviVeliki.r,leviVeliki.g, leviVeliki.b,
+        leviVeliki.x4, leviVeliki.y4,leviVeliki.r, leviVeliki.g, leviVeliki.b,
+
+        leviMali.x1, leviMali.y1, leviMali.r,leviMali.g, leviMali.b,
+        leviMali.x2, leviMali.y2,leviMali.r, leviMali.g, leviMali.b,
+         leviMali.x3, leviMali.y3, leviMali.r,leviMali.g, leviMali.b,
+        leviMali.x4, leviMali.y4,leviMali.r, leviMali.g, leviMali.b,
+
         gornjiLevi.x1, gornjiLevi.y1, gornjiLevi.r,gornjiLevi.g, gornjiLevi.b,
         gornjiLevi.x2, gornjiLevi.y2,gornjiLevi.r, gornjiLevi.g, gornjiLevi.b,
          gornjiLevi.x3, gornjiLevi.y3, gornjiLevi.r,gornjiLevi.g, gornjiLevi.b,
@@ -931,7 +971,11 @@ int main(void)
         glDrawArrays(GL_TRIANGLE_STRIP, 52, 4);
         glDrawArrays(GL_TRIANGLE_STRIP, 56, 4);
         glDrawArrays(GL_TRIANGLE_STRIP, 60, 4);
-
+        glDrawArrays(GL_TRIANGLE_STRIP, 64, 4);
+        glDrawArrays(GL_TRIANGLE_STRIP, 68, 4);
+        glDrawArrays(GL_TRIANGLE_STRIP, 72, 4);
+        glDrawArrays(GL_TRIANGLE_STRIP, 76, 4);
+        glDrawArrays(GL_TRIANGLE_STRIP, 80, 4);
 
         glUseProgram(basicShader);
         glViewport(0, 0, wWidth, wHeight);
@@ -1756,19 +1800,19 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
         speed += yoffset * 0.00005;  // Adjust this multiplier for desired sensitivity
 
         // Limit the speed to be within a certain range
-        if (speed < 0.00005) speed = 0.00005;  // Minimum speed
+        if (speed < 0.0001) speed = 0.0001;  // Minimum speed
         if (speed > 0.002) speed = 0.002;      // Maximum speed
     }
     else {
         speed -= yoffset * 0.00005;  // Adjust this multiplier for desired sensitivity
 
         // Limit the speed to be within a certain range
-        if (speed > -0.00005) speed = -0.00005;  // Minimum speed
+        if (speed > -0.0001) speed = -0.0001;  // Minimum speed
         if (speed < -0.002) speed = -0.002;
     }
     freeSpeed += yoffset * 0.00001;  // Adjust this multiplier for desired sensitivity
 
     // Limit the speed to be within a certain range
     if (freeSpeed < 0.00001) freeSpeed = 0.00001;  // Minimum speed
-    if (freeSpeed > 0.00004) freeSpeed = 0.00004;
+    if (freeSpeed > 0.00007) freeSpeed = 0.00007;
 }
