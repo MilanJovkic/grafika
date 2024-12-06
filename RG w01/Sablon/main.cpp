@@ -482,8 +482,8 @@ int main(void)
     };
 
 
-    RoadSegment gornjiLevi(-1.0, 0.76, -0.05, 0.76, -1.0, 0.74, -0.05, 0.74, true, "kosovska", true, true, false);
-    RoadSegment gornjiDesni(-0.05, 0.76, 1.0, 0.76, -0.05, 0.74, 1.0, 0.74, true, "somborska", true, true, false);
+    RoadSegment gornjiLevi(-1.0, 0.76, -0.05, 0.76, -1.0, 0.74, -0.05, 0.74, false, "kosovska", true, true, false);
+    RoadSegment gornjiDesni(-0.05, 0.76, 1.0, 0.76, -0.05, 0.74, 1.0, 0.74, false, "somborska", true, true, false);
     RoadSegment gornjiGornji2(0.0, 0.76, 0.0, 1.0, 0.02, 0.76, 0.02, 1.0, false, "bulevar", true, false, false);
     RoadSegment gornjiGornji2l(-0.02, 0.76, -0.02, 1.0, 0.0, 0.76, 0.0, 1.0, false, "bulevar", true, false, false);
     RoadSegment gornji2(0.0, 0.74, 0.0, 0.0, 0.02, 0.74 , 0.02, 0.0, true, "bulevar", false, true, true);
@@ -492,8 +492,8 @@ int main(void)
     RoadSegment gornji1l(-0.1, 0.74, -0.1, 0.0, -0.12, 0.74, -0.12, 0.0, true, "bulevar", false, true, true);
     RoadSegment gornjiGornji1(-0.08, 0.76, -0.08, 1.0, -0.1, 0.76, -0.1, 1.0, false, "bulevar", false, true, true);
     RoadSegment gornjiGornji1l(-0.1, 0.76, -0.1, 1.0, -0.12, 0.76, -0.12, 1.0, true, "bulevar", false, true, true);
-    RoadSegment donjiLevi(-1.0, 0.02, -0.05, 0.02, -1.0, 0.00, -0.05, 0.0, true, "knezMihajlova", true, true, false);
-    RoadSegment donjiDesni(1.0, 0.02, -0.05, 0.02, 1.0, 0.00, -0.05, 0.0, true, "knezMihajlova", true, true, false);
+    RoadSegment donjiLevi(-1.0, 0.02, -0.05, 0.02, -1.0, 0.00, -0.05, 0.0, false, "knezMihajlova", true, true, false);
+    RoadSegment donjiDesni(1.0, 0.02, -0.05, 0.02, 1.0, 0.00, -0.05, 0.0, false, "knezMihajlova", true, true, false);
     RoadSegment donji2(0.0, 0.00, 0.0, -1.0, 0.02, 0.0, 0.02, -1.0, true, "bulevar", false, true, true);
     RoadSegment donji2l(-0.02, 0.00, -0.02, -1.0, 0.00, 0.0, 0.00, -1.0, false, "bulevar", false, true, true);
     RoadSegment donji1(-0.08, 0.00, -0.08, -1.0, -0.1, 0.0, -0.1, -1.0, false, "bulevar", true, false, false);
@@ -1364,9 +1364,6 @@ bool drawTrafficLightLeft(TrafficLight& light, unsigned int& VAO, unsigned int& 
         drawCircle(light.x, light.y, 0.02f, light.red[0], light.red[1], light.red[2], VAO, VBO, vertexCount);
         drawCircle(light.x - 0.05f, light.y, 0.02f, 0.3, 0.3, 0.3, VAO1, VBO1, vertexCount);
         drawCircle(light.x - 0.1f, light.y, 0.02f, 0.3, 0.3, 0.3, VAO2, VBO2, vertexCount);
-        light.rightTurn[0] = 0.0f; light.rightTurn[1] = 1.0f; light.rightTurn[2] = 0.0f;
-        drawCircle(light.x - 0.1f , light.y - 0.05f, 0.02f, 0.3, 0.3, 0.3, VAO3, VBO3, vertexCount);
-        drawArrowDown(light.x - 0.1f, light.y - 0.05f, 0.02f, 0.02f, 0.03, light.rightTurn[0], light.rightTurn[1], light.rightTurn[2], VAO4, VBO4);
     }
 
     // Prikazivanje žutog svetla
@@ -1374,18 +1371,7 @@ bool drawTrafficLightLeft(TrafficLight& light, unsigned int& VAO, unsigned int& 
         drawCircle(light.x - 0.05f, light.y , 0.02f, light.yellow[0], light.yellow[1], light.yellow[2], VAO, VBO, vertexCount);
         drawCircle(light.x, light.y, 0.02f, 0.3, 0.3, 0.3, VAO1, VBO1, vertexCount);
         drawCircle(light.x - 0.1f, light.y, 0.02f, 0.3, 0.3, 0.3, VAO2, VBO2, vertexCount);
-        drawCircle(light.x  -0.1f, light.y - 0.05f, 0.02f, 0.3, 0.3, 0.3, VAO3, VBO3, vertexCount);
-        if (light.rightTurnNum <= 0) {
-            light.rightTurnNum = 30;
-            if (light.rightTurn[0] >= 0.2) {
-                light.rightTurn[0] = 0.0f; light.rightTurn[1] = 1.0f; light.rightTurn[2] = 0.0f;
-            }
-            else {
-                light.rightTurn[0] = 0.3f; light.rightTurn[1] = 0.3f; light.rightTurn[2] = 0.3f;
-            }
-        }
-        drawArrowDown(light.x - 0.1f, light.y - 0.05f, 0.02f, 0.02f, 0.03, light.rightTurn[0], light.rightTurn[1], light.rightTurn[2], VAO4, VBO4);
-        light.rightTurnNum -= 1;
+
 
     }
 
@@ -1394,26 +1380,12 @@ bool drawTrafficLightLeft(TrafficLight& light, unsigned int& VAO, unsigned int& 
         drawCircle(light.x - 0.1f, light.y , 0.02f, light.green[0], light.green[1], light.green[2], VAO, VBO, vertexCount);
         drawCircle(light.x, light.y, 0.02f, 0.3, 0.3, 0.3, VAO1, VBO1, vertexCount);
         drawCircle(light.x - 0.05f, light.y , 0.02f, 0.3, 0.3, 0.3, VAO2, VBO2, vertexCount);
-        light.rightTurn[0] = 0.3f; light.rightTurn[1] = 0.3f; light.rightTurn[2] = 0.3f;
-        drawCircle(light.x - 0.1f, light.y - 0.05f, 0.02f, light.rightTurn[0], light.rightTurn[1], light.rightTurn[2], VAO3, VBO3, vertexCount);
-        drawArrowDown(light.x - 0.1f, light.y - 0.05f, 0.02f, 0.02f, 0.03, light.rightTurn[0], light.rightTurn[1], light.rightTurn[2], VAO4, VBO4);
+
     }
     if (light.color == "redyellow") {
         drawCircle(light.x, light.y, 0.02f, light.red[0], light.red[1], light.red[2], VAO, VBO, vertexCount);
         drawCircle(light.x - 0.05f, light.y, 0.02f, light.yellow[0], light.yellow[1], light.yellow[2], VAO1, VBO1, vertexCount);
         drawCircle(light.x - 0.1f, light.y, 0.02f, 0.3, 0.3, 0.3, VAO2, VBO2, vertexCount);
-        drawCircle(light.x - 0.1f, light.y - 0.05f, 0.02f, 0.3, 0.3, 0.3, VAO3, VBO3, vertexCount);
-        if (light.rightTurnNum <= 0) {
-            light.rightTurnNum = 30;
-            if (light.rightTurn[0] >= 0.2) {
-                light.rightTurn[0] = 0.0f; light.rightTurn[1] = 1.0f; light.rightTurn[2] = 0.0f;
-            }
-            else {
-                light.rightTurn[0] = 0.3f; light.rightTurn[1] = 0.3f; light.rightTurn[2] = 0.3f;
-            }
-        }
-        drawArrowDown(light.x - 0.1f, light.y - 0.05f, 0.02f, 0.02f, 0.03, light.rightTurn[0], light.rightTurn[1], light.rightTurn[2], VAO4, VBO4);
-        light.rightTurnNum -= 1;
     }
 
     return isTwo;
@@ -1427,9 +1399,6 @@ bool drawTrafficLightRight(TrafficLight& light, unsigned int& VAO, unsigned int&
         drawCircle(light.x - 0.1f, light.y, 0.02f, light.red[0], light.red[1], light.red[2], VAO, VBO, vertexCount);
         drawCircle(light.x - 0.05f, light.y, 0.02f, 0.3, 0.3, 0.3, VAO1, VBO1, vertexCount);
         drawCircle(light.x , light.y, 0.02f, 0.3, 0.3, 0.3, VAO2, VBO2, vertexCount);
-        light.rightTurn[0] = 0.0f; light.rightTurn[1] = 1.0f; light.rightTurn[2] = 0.0f;
-        drawCircle(light.x, light.y + 0.05f, 0.02f, 0.3, 0.3, 0.3, VAO3, VBO3, vertexCount);
-        drawArrowUp(light.x , light.y + 0.05f, 0.02f, 0.02f, 0.03, light.rightTurn[0], light.rightTurn[1], light.rightTurn[2], VAO4, VBO4);
     }
 
     // Prikazivanje žutog svetla
@@ -1437,18 +1406,7 @@ bool drawTrafficLightRight(TrafficLight& light, unsigned int& VAO, unsigned int&
         drawCircle(light.x - 0.05f, light.y, 0.02f, light.yellow[0], light.yellow[1], light.yellow[2], VAO, VBO, vertexCount);
         drawCircle(light.x, light.y, 0.02f, 0.3, 0.3, 0.3, VAO1, VBO1, vertexCount);
         drawCircle(light.x - 0.1f, light.y, 0.02f, 0.3, 0.3, 0.3, VAO2, VBO2, vertexCount);
-        drawCircle(light.x , light.y + 0.05f, 0.02f, 0.3, 0.3, 0.3, VAO3, VBO3, vertexCount);
-        if (light.rightTurnNum <= 0) {
-            light.rightTurnNum = 30;
-            if (light.rightTurn[0] >= 0.2) {
-                light.rightTurn[0] = 0.0f; light.rightTurn[1] = 1.0f; light.rightTurn[2] = 0.0f;
-            }
-            else {
-                light.rightTurn[0] = 0.3f; light.rightTurn[1] = 0.3f; light.rightTurn[2] = 0.3f;
-            }
-        }
-        drawArrowUp(light.x, light.y + 0.05f, 0.02f, 0.02f, 0.03, light.rightTurn[0], light.rightTurn[1], light.rightTurn[2], VAO4, VBO4);
-        light.rightTurnNum -= 1;
+
 
     }
 
@@ -1457,26 +1415,12 @@ bool drawTrafficLightRight(TrafficLight& light, unsigned int& VAO, unsigned int&
         drawCircle(light.x , light.y, 0.02f, light.green[0], light.green[1], light.green[2], VAO, VBO, vertexCount);
         drawCircle(light.x - 0.1f, light.y, 0.02f, 0.3, 0.3, 0.3, VAO1, VBO1, vertexCount);
         drawCircle(light.x - 0.05f, light.y, 0.02f, 0.3, 0.3, 0.3, VAO2, VBO2, vertexCount);
-        light.rightTurn[0] = 0.3f; light.rightTurn[1] = 0.3f; light.rightTurn[2] = 0.3f;
-        drawCircle(light.x , light.y + 0.05f, 0.02f, light.rightTurn[0], light.rightTurn[1], light.rightTurn[2], VAO3, VBO3, vertexCount);
-        drawArrowUp(light.x, light.y + 0.05f, 0.02f, 0.02f, 0.03, light.rightTurn[0], light.rightTurn[1], light.rightTurn[2], VAO4, VBO4);
+
     }
     if (light.color == "redyellow") {
         drawCircle(light.x - 0.1f, light.y, 0.02f, light.red[0], light.red[1], light.red[2], VAO, VBO, vertexCount);
         drawCircle(light.x - 0.05f, light.y, 0.02f, light.yellow[0], light.yellow[1], light.yellow[2], VAO1, VBO1, vertexCount);
         drawCircle(light.x, light.y, 0.02f, 0.3, 0.3, 0.3, VAO2, VBO2, vertexCount);
-        drawCircle(light.x, light.y + 0.05f, 0.02f, 0.3, 0.3, 0.3, VAO3, VBO3, vertexCount);
-        if (light.rightTurnNum <= 0) {
-            light.rightTurnNum = 30;
-            if (light.rightTurn[0] >= 0.2) {
-                light.rightTurn[0] = 0.0f; light.rightTurn[1] = 1.0f; light.rightTurn[2] = 0.0f;
-            }
-            else {
-                light.rightTurn[0] = 0.3f; light.rightTurn[1] = 0.3f; light.rightTurn[2] = 0.3f;
-            }
-        }
-        drawArrowUp(light.x, light.y +0.05f, 0.02f, 0.02f, 0.03, light.rightTurn[0], light.rightTurn[1], light.rightTurn[2], VAO4, VBO4);
-        light.rightTurnNum -= 1;
     }
 
     return isTwo;
