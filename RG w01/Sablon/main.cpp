@@ -10,7 +10,7 @@
 #include <stb_image.h>
 using namespace std;
 float speed = 0.0005;
-float freeSpeed = 0.00004;
+float freeSpeed = 0.00007;
 
 struct RoadSegment {
     float x1, y1, x2, y2, x3, y3, x4, y4;
@@ -26,8 +26,8 @@ struct RoadSegment {
     bool isImportant;
     
 
-    RoadSegment(float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4, bool isRight, string name, bool isOutside, bool isImportant)
-        : x1(x1), y1(y1), x2(x2), y2(y2), x3(x3), y3(y3), x4(x4), y4(y4), isRight(isRight), name(name), congestion(0.3f), isGreen(false), isOutside(isOutside), isImportant(isImportant) {
+    RoadSegment(float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4, bool isRight, string name, bool isOutside, bool isImportant, bool isGreen)
+        : x1(x1), y1(y1), x2(x2), y2(y2), x3(x3), y3(y3), x4(x4), y4(y4), isRight(isRight), name(name), congestion(0.3f), isGreen(isGreen), isOutside(isOutside), isImportant(isImportant) {
     }
 
     void addConnectedRoad(RoadSegment* road) {
@@ -142,8 +142,8 @@ struct TrafficLight {
     string nextColor;
     RoadSegment& road;
 
-    TrafficLight(RoadSegment& road1, float x1, float y1) 
-        : road(road1), x(x1), y(y1){
+    TrafficLight(RoadSegment& road1, float x1, float y1, string color, string nextColor, bool rightTurnActive) 
+        : road(road1), x(x1), y(y1), color(color), nextColor(nextColor), rightTurnActive(rightTurnActive){
         timer = 20 + rand() % 21; // Nasumično vreme između 20 i 40 sekundi
         remainingTime = timer;
 
@@ -151,11 +151,7 @@ struct TrafficLight {
         yellow[0] = 1.0f; yellow[1] = 1.0f; yellow[2] = 0.0f;
         green[0] = 0.0f; green[1] = 1.0f; green[2] = 0.0f;
         rightTurn[0] = 0.0f; rightTurn[1] = 1.0f; rightTurn[2] = 0.0f;
-
-        rightTurnActive = true; 
-        color = "red";
         rightTurnNum = 30;
-        nextColor = "redyellow";
     }
 };
 
@@ -486,27 +482,27 @@ int main(void)
     };
 
 
-    RoadSegment gornjiLevi(-1.0, 0.76, -0.05, 0.76, -1.0, 0.74, -0.05, 0.74, true, "kosovska", true, true);
-    RoadSegment gornjiDesni(-0.05, 0.76, 1.0, 0.76, -0.05, 0.74, 1.0, 0.74, true, "somborska", true, true);
-    RoadSegment gornjiGornji2(0.0, 0.76, 0.0, 1.0, 0.02, 0.76, 0.02, 1.0, false, "bulevar", true, false);
-    RoadSegment gornjiGornji2l(-0.02, 0.76, -0.02, 1.0, 0.0, 0.76, 0.0, 1.0, false, "bulevar", true, false);
-    RoadSegment gornji2(0.0, 0.74, 0.0, 0.0, 0.02, 0.74 , 0.02, 0.0, true, "bulevar", false, true);
-    RoadSegment gornji2l(-0.02, 0.74, -0.02, 0.0, 0.0, 0.74, 0.0, 0.0, false, "bulevar", false, true);
-    RoadSegment gornji1(-0.08, 0.74, -0.08, 0.0, -0.1, 0.74, -0.1, 0.0, false, "bulevar", false, true);
-    RoadSegment gornji1l(-0.1, 0.74, -0.1, 0.0, -0.12, 0.74, -0.12, 0.0, true, "bulevar", false, true);
-    RoadSegment gornjiGornji1(-0.08, 0.76, -0.08, 1.0, -0.1, 0.76, -0.1, 1.0, false, "bulevar", false, true);
-    RoadSegment gornjiGornji1l(-0.1, 0.76, -0.1, 1.0, -0.12, 0.76, -0.12, 1.0, true, "bulevar", false, true);
-    RoadSegment donjiLevi(-1.0, 0.02, -0.05, 0.02, -1.0, 0.00, -0.05, 0.0, true, "knezMihajlova", true, true);
-    RoadSegment donjiDesni(1.0, 0.02, -0.05, 0.02, 1.0, 0.00, -0.05, 0.0, true, "knezMihajlova", true, true);
-    RoadSegment donji2(0.0, 0.00, 0.0, -1.0, 0.02, 0.0, 0.02, -1.0, true, "bulevar", false, true);
-    RoadSegment donji2l(-0.02, 0.00, -0.02, -1.0, 0.00, 0.0, 0.00, -1.0, false, "bulevar", false, true);
-    RoadSegment donji1(-0.08, 0.00, -0.08, -1.0, -0.1, 0.0, -0.1, -1.0, false, "bulevar", true, false);
-    RoadSegment donji1l(-0.1, 0.00, -0.1, -1.0, -0.12, 0.0, -0.12, -1.0, false, "bulevar", true, false);
-    RoadSegment desniVeliki(0.3, 1.0, 0.32, 1.0, 0.3, -1.0, 0.32, -1.0, false, "backa", true, false);
-    RoadSegment leviMali(-0.5, 0.00, -0.52, 0.00, -0.5, -1.0, -0.52, -1.0, false, "vidovdanska", true, false);
-    RoadSegment leviVeliki(-0.75, 0.74, -0.77, 0.74, -0.75, -1.0, -0.77, -1.0, false, "zeleznicka", true, false);
-    RoadSegment desniKosi(0.75, 0.0, 0.77, 0.0, 1.0, -0.52, 1.0, -0.57, false, "mostonga", true, false);
-    RoadSegment desniMali(0.75, 0.0, 0.77, 0.0, 0.75, 1.0, 0.77, 1.0, false, "skolska", true, false);
+    RoadSegment gornjiLevi(-1.0, 0.76, -0.05, 0.76, -1.0, 0.74, -0.05, 0.74, true, "kosovska", true, true, false);
+    RoadSegment gornjiDesni(-0.05, 0.76, 1.0, 0.76, -0.05, 0.74, 1.0, 0.74, true, "somborska", true, true, false);
+    RoadSegment gornjiGornji2(0.0, 0.76, 0.0, 1.0, 0.02, 0.76, 0.02, 1.0, false, "bulevar", true, false, false);
+    RoadSegment gornjiGornji2l(-0.02, 0.76, -0.02, 1.0, 0.0, 0.76, 0.0, 1.0, false, "bulevar", true, false, false);
+    RoadSegment gornji2(0.0, 0.74, 0.0, 0.0, 0.02, 0.74 , 0.02, 0.0, true, "bulevar", false, true, true);
+    RoadSegment gornji2l(-0.02, 0.74, -0.02, 0.0, 0.0, 0.74, 0.0, 0.0, false, "bulevar", false, true, true);
+    RoadSegment gornji1(-0.08, 0.74, -0.08, 0.0, -0.1, 0.74, -0.1, 0.0, false, "bulevar", false, true, true);
+    RoadSegment gornji1l(-0.1, 0.74, -0.1, 0.0, -0.12, 0.74, -0.12, 0.0, true, "bulevar", false, true, true);
+    RoadSegment gornjiGornji1(-0.08, 0.76, -0.08, 1.0, -0.1, 0.76, -0.1, 1.0, false, "bulevar", false, true, true);
+    RoadSegment gornjiGornji1l(-0.1, 0.76, -0.1, 1.0, -0.12, 0.76, -0.12, 1.0, true, "bulevar", false, true, true);
+    RoadSegment donjiLevi(-1.0, 0.02, -0.05, 0.02, -1.0, 0.00, -0.05, 0.0, true, "knezMihajlova", true, true, false);
+    RoadSegment donjiDesni(1.0, 0.02, -0.05, 0.02, 1.0, 0.00, -0.05, 0.0, true, "knezMihajlova", true, true, false);
+    RoadSegment donji2(0.0, 0.00, 0.0, -1.0, 0.02, 0.0, 0.02, -1.0, true, "bulevar", false, true, true);
+    RoadSegment donji2l(-0.02, 0.00, -0.02, -1.0, 0.00, 0.0, 0.00, -1.0, false, "bulevar", false, true, true);
+    RoadSegment donji1(-0.08, 0.00, -0.08, -1.0, -0.1, 0.0, -0.1, -1.0, false, "bulevar", true, false, false);
+    RoadSegment donji1l(-0.1, 0.00, -0.1, -1.0, -0.12, 0.0, -0.12, -1.0, false, "bulevar", true, false, false);
+    RoadSegment desniVeliki(0.3, 1.0, 0.32, 1.0, 0.3, -1.0, 0.32, -1.0, false, "backa", true, false, false);
+    RoadSegment leviMali(-0.5, 0.00, -0.52, 0.00, -0.5, -1.0, -0.52, -1.0, false, "vidovdanska", true, false, false);
+    RoadSegment leviVeliki(-0.75, 0.74, -0.77, 0.74, -0.75, -1.0, -0.77, -1.0, false, "zeleznicka", true, false, false);
+    RoadSegment desniKosi(0.75, 0.0, 0.77, 0.0, 1.0, -0.52, 1.0, -0.57, false, "mostonga", true, false, false);
+    RoadSegment desniMali(0.75, 0.0, 0.77, 0.0, 0.75, 1.0, 0.77, 1.0, false, "skolska", true, false, false);
     gornji2.addConnectedRoad(&gornjiDesni);
     gornji2.addConnectedRoad(&gornjiGornji2);
     gornji2l.addConnectedRoad(&gornjiGornji2l);
@@ -537,18 +533,18 @@ int main(void)
     donjiLevi.addConnectedRoad(&donji1l);
     donjiLevi.addConnectedRoad(&donjiDesni);
     donjiLevi.addConnectedRoad(&gornji2l);
-    TrafficLight light1(gornji2, 0.05, 0.70);
-    TrafficLight light2(gornji2l, -0.05, 0.70);
-    TrafficLight light3(gornjiGornji1, -0.05, 0.9);
-    TrafficLight light4(gornjiGornji1l, -0.15, 0.9);
-    TrafficLight light5(gornjiLevi, -0.15, 0.70);
-    TrafficLight light6(gornjiDesni, 0.15, 0.8);
-    TrafficLight light7(donjiDesni, 0.15, 0.05);
-    TrafficLight light8(donji2, 0.05, -0.05);
-    TrafficLight light9(donji2l, -0.05, -0.05);
-    TrafficLight light10(gornji1l, -0.15, 0.15);
-    TrafficLight light11(gornji1, -0.05, 0.15);
-    TrafficLight light12(donjiLevi, -0.15, -0.05);
+    TrafficLight light1(gornji2, 0.05, 0.70, "green", "yellow", false);
+    TrafficLight light2(gornji2l, -0.05, 0.70, "green", "yellow", false);
+    TrafficLight light3(gornjiGornji1, -0.05, 0.9, "green", "yellow", false);
+    TrafficLight light4(gornjiGornji1l, -0.15, 0.9, "green", "yellow", false);
+    TrafficLight light5(gornjiLevi, -0.15, 0.70, "red", "redyellow", true);
+    TrafficLight light6(gornjiDesni, 0.15, 0.8, "red", "redyellow", true);
+    TrafficLight light7(donjiDesni, 0.15, 0.05, "red", "redyellow", true);
+    TrafficLight light8(donji2, 0.05, -0.05, "green", "yellow", false);
+    TrafficLight light9(donji2l, -0.05, -0.05, "green", "yellow", false);
+    TrafficLight light10(gornji1l, -0.15, 0.15, "green", "yellow", false);
+    TrafficLight light11(gornji1, -0.05, 0.15, "green", "yellow", false);
+    TrafficLight light12(donjiLevi, -0.15, -0.05, "red", "redyellow", true);
 
     gornjiLevi.getColorFromCongestion();
     gornjiDesni.getColorFromCongestion();
@@ -1138,6 +1134,32 @@ int main(void)
 
         glfwPollEvents();
     }
+
+
+    unsigned int vaos[] = {
+        VAO, VAO2, VAO3, VAO4, VAO5, VAO1, VAOS1, VAOS12, VAOS13, VAOS2, VAOS21, VAOS22,
+        VAOS3, VAOS31, VAOS32, VAOS33, VAOS34, VAOS4, VAOS41, VAOS42, VAOS43, VAOS44,
+        VAOS5, VAOS51, VAOS52, VAOS53, VAOS54, VAOS6, VAOS61, VAOS62, VAOS63, VAOS64,
+        VAOS7, VAOS71, VAOS72, VAOS73, VAOS74, VAOS8, VAOS81, VAOS82, VAOS83, VAOS9,
+        VAOS91, VAOS92, VAOS93, VAOS94, VAOS10, VAOS101, VAOS102, VAOS125, VAOS121,
+        VAOS122, VAOS123, VAOS124, VAOU, VAOG, VAOI
+    };
+    glDeleteVertexArrays(sizeof(vaos) / sizeof(unsigned int), vaos);
+    unsigned int vbos[] = {
+       VBO, VBO2, VBO3, VBO4, VBO5, VBO1, VBOS1, VBOS12, VBOS13, VBOS2, VBOS21, VBOS22,
+       VBOS3, VBOS31, VBOS32, VBOS33, VBOS34, VBOS4, VBOS41, VBOS42, VBOS43, VBOS44,
+       VBOS5, VBOS51, VBOS52, VBOS53, VBOS54, VBOS6, VBOS61, VBOS62, VBOS63, VBOS64,
+       VBOS7, VBOS71, VBOS72, VBOS73, VBOS74, VBOS8, VBOS81, VBOS82, VBOS9, VBOS91,
+       VBOS92, VBOS93, VBOS94, VBOS10, VBOS101, VBOS102, VBOS125, VBOS121, VBOS122,
+       VBOS123, VBOS124, VBOU, VBOG, VBOI
+    };
+    glDeleteBuffers(sizeof(vbos) / sizeof(unsigned int), vbos);
+
+    unsigned int ebos[] = { EBOU, EBOG, EBOI };
+    glDeleteBuffers(sizeof(ebos) / sizeof(unsigned int), ebos);
+
+    glDeleteProgram(basicShader);
+    glDeleteProgram(textureShader);
 
     glfwTerminate();
     return 0;
@@ -1814,5 +1836,6 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
 
     // Limit the speed to be within a certain range
     if (freeSpeed < 0.00001) freeSpeed = 0.00001;  // Minimum speed
-    if (freeSpeed > 0.00007) freeSpeed = 0.00007;
+    if (freeSpeed > 0.00007) freeSpeed = 0.0001;
 }
+
