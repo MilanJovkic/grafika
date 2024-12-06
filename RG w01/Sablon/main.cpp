@@ -350,6 +350,98 @@ int main(void)
     unsigned VBOS64;
     glGenBuffers(1, &VBOS64);
 
+    unsigned VAOS7;
+    glGenVertexArrays(1, &VAOS7);
+    unsigned VBOS7;
+    glGenBuffers(1, &VBOS7);
+    unsigned VAOS71;
+    glGenVertexArrays(1, &VAOS71);
+    unsigned VBOS71;
+    glGenBuffers(1, &VBOS71);
+    unsigned VAOS72;
+    glGenVertexArrays(1, &VAOS72);
+    unsigned VBOS72;
+    glGenBuffers(1, &VBOS72);
+    unsigned VAOS73;
+    glGenVertexArrays(1, &VAOS73);
+    unsigned VBOS73;
+    glGenBuffers(1, &VBOS73);
+    unsigned VAOS74;
+    glGenVertexArrays(1, &VAOS74);
+    unsigned VBOS74;
+    glGenBuffers(1, &VBOS74);
+
+    unsigned VAOS8;
+    glGenVertexArrays(1, &VAOS8);
+    unsigned VBOS8;
+    glGenBuffers(1, &VBOS8);
+    unsigned VAOS81;
+    glGenVertexArrays(1, &VAOS81);
+    unsigned VBOS81;
+    glGenBuffers(1, &VBOS81);
+    unsigned VAOS82;
+    glGenVertexArrays(1, &VAOS82);
+    unsigned VBOS82;
+    glGenBuffers(1, &VBOS82);
+    unsigned VAOS83;
+    glGenVertexArrays(1, &VAOS83);
+
+    unsigned VAOS9;
+    glGenVertexArrays(1, &VAOS9);
+    unsigned VBOS9;
+    glGenBuffers(1, &VBOS9);
+    unsigned VAOS91;
+    glGenVertexArrays(1, &VAOS91);
+    unsigned VBOS91;
+    glGenBuffers(1, &VBOS91);
+    unsigned VAOS92;
+    glGenVertexArrays(1, &VAOS92);
+    unsigned VBOS92;
+    glGenBuffers(1, &VBOS92);
+    unsigned VAOS93;
+    glGenVertexArrays(1, &VAOS93);
+    unsigned VBOS93;
+    glGenBuffers(1, &VBOS93);
+    unsigned VAOS94;
+    glGenVertexArrays(1, &VAOS94);
+    unsigned VBOS94;
+    glGenBuffers(1, &VBOS94);
+
+    unsigned VAOS10;
+    glGenVertexArrays(1, &VAOS10);
+    unsigned VBOS10;
+    glGenBuffers(1, &VBOS10);
+    unsigned VAOS101;
+    glGenVertexArrays(1, &VAOS101);
+    unsigned VBOS101;
+    glGenBuffers(1, &VBOS101);
+    unsigned VAOS102;
+    glGenVertexArrays(1, &VAOS102);
+    unsigned VBOS102;
+    glGenBuffers(1, &VBOS102);
+
+    unsigned VAOS125;
+    glGenVertexArrays(1, &VAOS125);
+    unsigned VBOS125;
+    glGenBuffers(1, &VBOS125);
+    unsigned VAOS121;
+    glGenVertexArrays(1, &VAOS121);
+    unsigned VBOS121;
+    glGenBuffers(1, &VBOS121);
+    unsigned VAOS122;
+    glGenVertexArrays(1, &VAOS122);
+    unsigned VBOS122;
+    glGenBuffers(1, &VBOS122);
+    unsigned VAOS123;
+    glGenVertexArrays(1, &VAOS123);
+    unsigned VBOS123;
+    glGenBuffers(1, &VBOS123);
+    unsigned VAOS124;
+    glGenVertexArrays(1, &VAOS124);
+    unsigned VBOS124;
+    glGenBuffers(1, &VBOS124);
+
+
     double  mouseX, mouseY;
     int mouseButtonStateLeft, mouseButtonStateRight;
 
@@ -393,63 +485,81 @@ int main(void)
     };
 
 
-    RoadSegment road1(-1.0, 0.76, -0.05, 0.76, -1.0, 0.74, -0.05, 0.74, true, "kkk1", false);
-    RoadSegment road2(-0.05, 0.76, 1.0, 0.76, -0.05, 0.74, 1.0, 0.74, true, "kkk", false);
-    RoadSegment road3(0.0, 0.76, 0.0, 1.0, 0.02, 0.76, 0.02, 1.0, false, "sss", true);
-    RoadSegment road4(0.0, 0.74, 0.0, 0.0, 0.02, 0.74 , 0.02, 0.0, true, "index", false);
-    RoadSegment road5(-0.02, 0.74, -0.02, 0.0, 0.0, 0.74, 0.0, 0.0, false, "sss", false);
-    RoadSegment road3l(-0.02, 0.76, -0.02, 1.0, 0.0, 0.76, 0.0, 1.0, false, "sss", true);
-    RoadSegment road6(-0.08, 0.74, -0.08, 0.0, -0.1, 0.74, -0.1, 0.0, false, "kkk1", true);
-    RoadSegment road7(-0.1, 0.74, -0.1, 0.0, -0.12, 0.74, -0.12, 0.0, false, "sss", true);
-    RoadSegment road8(-0.08, 0.76, -0.08, 1.0, -0.1, 0.76, -0.1, 1.0, false, "kkk1", false);
-    RoadSegment road9(-0.1, 0.76, -0.1, 1.0, -0.12, 0.76, -0.12, 1.0, true, "sss", false);
-    RoadSegment road10(-1.0, 0.02, -0.05, 0.02, -1.0, 0.00, -0.05, 0.0, false, "index", true);
-    RoadSegment road11(1.0, 0.02, -0.05, 0.02, 1.0, 0.00, -0.05, 0.0, true, "index", false);
-    RoadSegment road12(0.0, 0.00, 0.0, -1.0, 0.02, 0.0, 0.02, -1.0, false, "sss", true);
-    RoadSegment road13(-0.02, 0.00, -0.02, -1.0, 0.00, 0.0, 0.00, -1.0, false, "sss", true);
-    RoadSegment road14(-0.08, 0.00, -0.08, -1.0, -0.1, 0.0, -0.1, -1.0, false, "sss", true);
-    RoadSegment road15(-0.1, 0.00, -0.1, -1.0, -0.12, 0.0, -0.12, -1.0, false, "sss", true);
-    road4.addConnectedRoad(&road2);
-    road4.addConnectedRoad(&road3);
-    road5.addConnectedRoad(&road3l);
-    road5.addConnectedRoad(&road1);
-    road8.addConnectedRoad(&road6);
-    road8.addConnectedRoad(&road2);
-    road9.addConnectedRoad(&road1);
-    road9.addConnectedRoad(&road7);
-    road1.addConnectedRoad(&road7);
-    road1.addConnectedRoad(&road2);
-    road1.addConnectedRoad(&road3);
-    road2.addConnectedRoad(&road3);
-    road2.addConnectedRoad(&road8);
-    road2.addConnectedRoad(&road1);
-    road11.addConnectedRoad(&road4);
-    road11.addConnectedRoad(&road10);
-    road11.addConnectedRoad(&road14);
-    TrafficLight light1(road4, 0.05, 0.70);
-    TrafficLight light2(road5, -0.05, 0.70);
-    TrafficLight light3(road8, -0.05, 0.9);
-    TrafficLight light4(road9, -0.15, 0.9);
-    TrafficLight light5(road1, -0.15, 0.70);
-    TrafficLight light6(road2, 0.15, 0.8);
-    TrafficLight light7(road11, 0.15, 0.05);
+    RoadSegment gornjiLevi(-1.0, 0.76, -0.05, 0.76, -1.0, 0.74, -0.05, 0.74, true, "kosovska", false);
+    RoadSegment gornjiDesni(-0.05, 0.76, 1.0, 0.76, -0.05, 0.74, 1.0, 0.74, true, "somborska", false);
+    RoadSegment gornjiGornji2(0.0, 0.76, 0.0, 1.0, 0.02, 0.76, 0.02, 1.0, false, "bulevar", true);
+    RoadSegment gornjiGornji2l(-0.02, 0.76, -0.02, 1.0, 0.0, 0.76, 0.0, 1.0, false, "bulevar", true);
+    RoadSegment gornji2(0.0, 0.74, 0.0, 0.0, 0.02, 0.74 , 0.02, 0.0, true, "bulevar", false);
+    RoadSegment gornji2l(-0.02, 0.74, -0.02, 0.0, 0.0, 0.74, 0.0, 0.0, false, "bulevar", false);
+    RoadSegment gornji1(-0.08, 0.74, -0.08, 0.0, -0.1, 0.74, -0.1, 0.0, false, "bulevar", false);
+    RoadSegment gornji1l(-0.1, 0.74, -0.1, 0.0, -0.12, 0.74, -0.12, 0.0, true, "bulevar", false);
+    RoadSegment gornjiGornji1(-0.08, 0.76, -0.08, 1.0, -0.1, 0.76, -0.1, 1.0, false, "bulevar", false);
+    RoadSegment gornjiGornji1l(-0.1, 0.76, -0.1, 1.0, -0.12, 0.76, -0.12, 1.0, true, "bulevar", false);
+    RoadSegment donjiLevi(-1.0, 0.02, -0.05, 0.02, -1.0, 0.00, -0.05, 0.0, true, "knezMihajlova", false);
+    RoadSegment donjiDesni(1.0, 0.02, -0.05, 0.02, 1.0, 0.00, -0.05, 0.0, true, "knezMihajlova", false);
+    RoadSegment donji2(0.0, 0.00, 0.0, -1.0, 0.02, 0.0, 0.02, -1.0, true, "bulevar", false);
+    RoadSegment donji2l(-0.02, 0.00, -0.02, -1.0, 0.00, 0.0, 0.00, -1.0, false, "bulevar", false);
+    RoadSegment donji1(-0.08, 0.00, -0.08, -1.0, -0.1, 0.0, -0.1, -1.0, false, "bulevar", true);
+    RoadSegment donji1l(-0.1, 0.00, -0.1, -1.0, -0.12, 0.0, -0.12, -1.0, false, "bulevar", true);
+    gornji2.addConnectedRoad(&gornjiDesni);
+    gornji2.addConnectedRoad(&gornjiGornji2);
+    gornji2l.addConnectedRoad(&gornjiGornji2l);
+    gornji2l.addConnectedRoad(&gornjiLevi);
+    gornjiGornji1.addConnectedRoad(&gornji1);
+    gornjiGornji1.addConnectedRoad(&gornjiDesni);
+    gornjiGornji1l.addConnectedRoad(&gornjiLevi);
+    gornjiGornji1l.addConnectedRoad(&gornji1l);
+    gornjiLevi.addConnectedRoad(&gornji1l);
+    gornjiLevi.addConnectedRoad(&gornjiDesni);
+    gornjiLevi.addConnectedRoad(&gornjiGornji2l);
+    gornjiDesni.addConnectedRoad(&gornjiGornji2);
+    gornjiDesni.addConnectedRoad(&gornji1);
+    gornjiDesni.addConnectedRoad(&gornjiLevi);
 
-    road1.getColorFromCongestion();
-    road2.getColorFromCongestion();
-    road3.getColorFromCongestion();
-    road4.getColorFromCongestion();
-    road5.getColorFromCongestion();
-    road3l.getColorFromCongestion();
-    road6.getColorFromCongestion();
-    road7.getColorFromCongestion();
-    road8.getColorFromCongestion();
-    road9.getColorFromCongestion();
-    road10.getColorFromCongestion();
-    road11.getColorFromCongestion();
-    road12.getColorFromCongestion();
-    road13.getColorFromCongestion();
-    road14.getColorFromCongestion();
-    road15.getColorFromCongestion();
+    donjiDesni.addConnectedRoad(&gornji2);
+    donjiDesni.addConnectedRoad(&donjiLevi);
+    donjiDesni.addConnectedRoad(&donji1);
+    donji2.addConnectedRoad(&donjiDesni);
+    donji2.addConnectedRoad(&gornji2);
+    donji2l.addConnectedRoad(&donjiLevi);
+    donji2l.addConnectedRoad(&gornji2l);
+
+    gornji1l.addConnectedRoad(&donjiLevi);
+    gornji1l.addConnectedRoad(&donji1l);
+    gornji1.addConnectedRoad(&donjiDesni);
+    gornji1.addConnectedRoad(&donji1);
+    donjiLevi.addConnectedRoad(&donji1l);
+    donjiLevi.addConnectedRoad(&donjiDesni);
+    donjiLevi.addConnectedRoad(&gornji2l);
+    TrafficLight light1(gornji2, 0.05, 0.70);
+    TrafficLight light2(gornji2l, -0.05, 0.70);
+    TrafficLight light3(gornjiGornji1, -0.05, 0.9);
+    TrafficLight light4(gornjiGornji1l, -0.15, 0.9);
+    TrafficLight light5(gornjiLevi, -0.15, 0.70);
+    TrafficLight light6(gornjiDesni, 0.15, 0.8);
+    TrafficLight light7(donjiDesni, 0.15, 0.05);
+    TrafficLight light8(donji2, 0.05, -0.05);
+    TrafficLight light9(donji2l, -0.05, -0.05);
+    TrafficLight light10(gornji1l, -0.15, 0.15);
+    TrafficLight light11(gornji1, -0.05, 0.15);
+    TrafficLight light12(donjiLevi, -0.15, -0.05);
+
+    gornjiLevi.getColorFromCongestion();
+    gornjiDesni.getColorFromCongestion();
+    gornjiGornji2.getColorFromCongestion();
+    gornji2.getColorFromCongestion();
+    gornji2l.getColorFromCongestion();
+    gornjiGornji2l.getColorFromCongestion();
+    gornji1.getColorFromCongestion();
+    gornji1l.getColorFromCongestion();
+    gornjiGornji1.getColorFromCongestion();
+    gornjiGornji1l.getColorFromCongestion();
+    donjiLevi.getColorFromCongestion();
+    donjiDesni.getColorFromCongestion();
+    donji2.getColorFromCongestion();
+    donji2l.getColorFromCongestion();
+    donji1.getColorFromCongestion();
+    donji1l.getColorFromCongestion();
 
 
     //tekstura za ulice
@@ -614,7 +724,7 @@ int main(void)
         mouseButtonStateRight = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT);
 
         if (mouseButtonStateLeft == GLFW_PRESS || mouseButtonStateRight == GLFW_PRESS) {
-            vector<RoadSegment*> roads = { &road1, &road2, &road3,  &road4, &road5, &road3l, &road6, &road7, &road8, &road9 , &road10, &road11, &road12, &road13,  &road14 , &road15 };
+            vector<RoadSegment*> roads = { &gornjiLevi, &gornjiDesni, &gornjiGornji2,  &gornji2, &gornji2l, &gornjiGornji2l, &gornji1, &gornji1l, &gornjiGornji1, &gornjiGornji1l , &donjiLevi, &donjiDesni, &donji2, &donji2l,  &donji1 , &donji1l };
             for (auto* road : roads) {
                 float minX = std::min({ road->x1, road->x2, road->x3, road->x4 });
                 float maxX = std::max({ road->x1, road->x2, road->x3, road->x4 });
@@ -643,7 +753,7 @@ int main(void)
         //Brisanje ekrana
         glClear(GL_COLOR_BUFFER_BIT);
 
-        vector<RoadSegment*> roads = { &road1, &road2, &road3,  &road4, &road5, &road3l, &road6, &road7, &road8, &road9, &road10, &road11, &road12, &road13,  &road14 , &road15 };
+        vector<RoadSegment*> roads = { &gornjiLevi, &gornjiDesni, &gornjiGornji2,  &gornji2, &gornji2l, &gornjiGornji2l, &gornji1, &gornji1l, &gornjiGornji1, &gornjiGornji1l, &donjiLevi, &donjiDesni, &donji2, &donji2l,  &donji1 , &donji1l };
         for (auto* road : roads) {
             float minX = std::min({ road->x1, road->x2, road->x3, road->x4 });
             float maxX = std::max({ road->x1, road->x2, road->x3, road->x4 });
@@ -674,9 +784,9 @@ int main(void)
             stbi_image_free(data1);
         }
         else {
-            if (i != 0) {
+            if (i > 5) {
                 stbi_set_flip_vertically_on_load(true);
-                unsigned char* data1 = stbi_load("sss.png", &width, &height, &nrChannels, 0);
+                unsigned char* data1 = stbi_load("bela.png", &width, &height, &nrChannels, 0);
                 if (data1) {
 
                     if (nrChannels == 3) {
@@ -696,102 +806,102 @@ int main(void)
         i += 1;
 
        
-        road1.changeCongestion();
-        road2.changeCongestion();
-        road3.changeCongestion();
-        road4.changeCongestion();
-        road5.changeCongestion();
-        road3l.changeCongestion();
-        road6.changeCongestion();
-        road7.changeCongestion();
-        road8.changeCongestion();
-        road9.changeCongestion();
-        road10.changeCongestion();
-        road11.changeCongestion();
-        road12.changeCongestion();
-        road13.changeCongestion();
-        road14.changeCongestion();
-        road15.changeCongestion();
+        gornjiLevi.changeCongestion();
+        gornjiDesni.changeCongestion();
+        gornjiGornji2.changeCongestion();
+        gornji2.changeCongestion();
+        gornji2l.changeCongestion();
+        gornjiGornji2l.changeCongestion();
+        gornji1.changeCongestion();
+        gornji1l.changeCongestion();
+        gornjiGornji1.changeCongestion();
+        gornjiGornji1l.changeCongestion();
+        donjiLevi.changeCongestion();
+        donjiDesni.changeCongestion();
+        donji2.changeCongestion();
+        donji2l.changeCongestion();
+        donji1.changeCongestion();
+        donji1l.changeCongestion();
         float vertices[] = {
-        road1.x1, road1.y1, road1.r,road1.g, road1.b,
-        road1.x2, road1.y2,road1.r, road1.g, road1.b,
-         road1.x3, road1.y3, road1.r,road1.g, road1.b,
-        road1.x4, road1.y4,road1.r, road1.g, road1.b,
+        gornjiLevi.x1, gornjiLevi.y1, gornjiLevi.r,gornjiLevi.g, gornjiLevi.b,
+        gornjiLevi.x2, gornjiLevi.y2,gornjiLevi.r, gornjiLevi.g, gornjiLevi.b,
+         gornjiLevi.x3, gornjiLevi.y3, gornjiLevi.r,gornjiLevi.g, gornjiLevi.b,
+        gornjiLevi.x4, gornjiLevi.y4,gornjiLevi.r, gornjiLevi.g, gornjiLevi.b,
 
-        road2.x1, road2.y1, road2.r,road2.g, road2.b,
-        road2.x2, road2.y2,road2.r, road2.g, road2.b,
-         road2.x3, road2.y3, road2.r,road2.g, road2.b,
-        road2.x4, road2.y4,road2.r, road2.g, road2.b,
+        gornjiDesni.x1, gornjiDesni.y1, gornjiDesni.r,gornjiDesni.g, gornjiDesni.b,
+        gornjiDesni.x2, gornjiDesni.y2,gornjiDesni.r, gornjiDesni.g, gornjiDesni.b,
+         gornjiDesni.x3, gornjiDesni.y3, gornjiDesni.r,gornjiDesni.g, gornjiDesni.b,
+        gornjiDesni.x4, gornjiDesni.y4,gornjiDesni.r, gornjiDesni.g, gornjiDesni.b,
 
-        road3.x1, road3.y1, road3.r,road3.g, road3.b,
-        road3.x2, road3.y2,road3.r, road3.g, road3.b,
-         road3.x3, road3.y3, road3.r,road3.g, road3.b,
-        road3.x4, road3.y4,road3.r, road3.g, road3.b,
+        gornjiGornji2.x1, gornjiGornji2.y1, gornjiGornji2.r,gornjiGornji2.g, gornjiGornji2.b,
+        gornjiGornji2.x2, gornjiGornji2.y2,gornjiGornji2.r, gornjiGornji2.g, gornjiGornji2.b,
+         gornjiGornji2.x3, gornjiGornji2.y3, gornjiGornji2.r,gornjiGornji2.g, gornjiGornji2.b,
+        gornjiGornji2.x4, gornjiGornji2.y4,gornjiGornji2.r, gornjiGornji2.g, gornjiGornji2.b,
 
-        road4.x1, road4.y1, road4.r,road4.g, road4.b,
-        road4.x2, road4.y2,road4.r, road4.g, road4.b,
-         road4.x3, road4.y3, road4.r,road4.g, road4.b,
-        road4.x4, road4.y4,road4.r, road4.g, road4.b,
+        gornji2.x1, gornji2.y1, gornji2.r,gornji2.g, gornji2.b,
+        gornji2.x2, gornji2.y2,gornji2.r, gornji2.g, gornji2.b,
+         gornji2.x3, gornji2.y3, gornji2.r,gornji2.g, gornji2.b,
+        gornji2.x4, gornji2.y4,gornji2.r, gornji2.g, gornji2.b,
 
-         road5.x1, road5.y1, road5.r,road5.g, road5.b,
-        road5.x2, road5.y2,road5.r, road5.g, road5.b,
-         road5.x3, road5.y3, road5.r,road5.g, road5.b,
-        road5.x4, road5.y4,road5.r, road5.g, road5.b,
+         gornji2l.x1, gornji2l.y1, gornji2l.r,gornji2l.g, gornji2l.b,
+        gornji2l.x2, gornji2l.y2,gornji2l.r, gornji2l.g, gornji2l.b,
+         gornji2l.x3, gornji2l.y3, gornji2l.r,gornji2l.g, gornji2l.b,
+        gornji2l.x4, gornji2l.y4,gornji2l.r, gornji2l.g, gornji2l.b,
 
-        road3l.x1, road3l.y1, road3l.r,road3l.g, road3l.b,
-        road3l.x2, road3l.y2,road3l.r, road3l.g, road3l.b,
-         road3l.x3, road3l.y3, road3l.r,road3l.g, road3l.b,
-        road3l.x4, road3l.y4,road3l.r, road3l.g, road3l.b,
+        gornjiGornji2l.x1, gornjiGornji2l.y1, gornjiGornji2l.r,gornjiGornji2l.g, gornjiGornji2l.b,
+        gornjiGornji2l.x2, gornjiGornji2l.y2,gornjiGornji2l.r, gornjiGornji2l.g, gornjiGornji2l.b,
+         gornjiGornji2l.x3, gornjiGornji2l.y3, gornjiGornji2l.r,gornjiGornji2l.g, gornjiGornji2l.b,
+        gornjiGornji2l.x4, gornjiGornji2l.y4,gornjiGornji2l.r, gornjiGornji2l.g, gornjiGornji2l.b,
 
-        road6.x1, road6.y1, road6.r,road6.g, road6.b,
-        road6.x2, road6.y2,road6.r, road6.g, road6.b,
-         road6.x3, road6.y3, road6.r,road6.g, road6.b,
-        road6.x4, road6.y4,road6.r, road6.g, road6.b,
+        gornji1.x1, gornji1.y1, gornji1.r,gornji1.g, gornji1.b,
+        gornji1.x2, gornji1.y2,gornji1.r, gornji1.g, gornji1.b,
+         gornji1.x3, gornji1.y3, gornji1.r,gornji1.g, gornji1.b,
+        gornji1.x4, gornji1.y4,gornji1.r, gornji1.g, gornji1.b,
 
-        road7.x1, road7.y1, road7.r,road7.g, road7.b,
-        road7.x2, road7.y2,road7.r, road7.g, road7.b,
-         road7.x3, road7.y3, road7.r,road7.g, road7.b,
-        road7.x4, road7.y4,road7.r, road7.g, road7.b,
+        gornji1l.x1, gornji1l.y1, gornji1l.r,gornji1l.g, gornji1l.b,
+        gornji1l.x2, gornji1l.y2,gornji1l.r, gornji1l.g, gornji1l.b,
+         gornji1l.x3, gornji1l.y3, gornji1l.r,gornji1l.g, gornji1l.b,
+        gornji1l.x4, gornji1l.y4,gornji1l.r, gornji1l.g, gornji1l.b,
 
-        road8.x1, road8.y1, road8.r,road8.g, road8.b,
-        road8.x2, road8.y2,road8.r, road8.g, road8.b,
-         road8.x3, road8.y3, road8.r,road8.g, road8.b,
-        road8.x4, road8.y4,road8.r, road8.g, road8.b,
+        gornjiGornji1.x1, gornjiGornji1.y1, gornjiGornji1.r,gornjiGornji1.g, gornjiGornji1.b,
+        gornjiGornji1.x2, gornjiGornji1.y2,gornjiGornji1.r, gornjiGornji1.g, gornjiGornji1.b,
+         gornjiGornji1.x3, gornjiGornji1.y3, gornjiGornji1.r,gornjiGornji1.g, gornjiGornji1.b,
+        gornjiGornji1.x4, gornjiGornji1.y4,gornjiGornji1.r, gornjiGornji1.g, gornjiGornji1.b,
 
-        road9.x1, road9.y1, road9.r,road9.g, road9.b,
-        road9.x2, road9.y2,road9.r, road9.g, road9.b,
-         road9.x3, road9.y3, road9.r,road9.g, road9.b,
-        road9.x4, road9.y4,road9.r, road9.g, road9.b,
+        gornjiGornji1l.x1, gornjiGornji1l.y1, gornjiGornji1l.r,gornjiGornji1l.g, gornjiGornji1l.b,
+        gornjiGornji1l.x2, gornjiGornji1l.y2,gornjiGornji1l.r, gornjiGornji1l.g, gornjiGornji1l.b,
+         gornjiGornji1l.x3, gornjiGornji1l.y3, gornjiGornji1l.r,gornjiGornji1l.g, gornjiGornji1l.b,
+        gornjiGornji1l.x4, gornjiGornji1l.y4,gornjiGornji1l.r, gornjiGornji1l.g, gornjiGornji1l.b,
 
-        road10.x1, road10.y1, road10.r,road10.g, road10.b,
-        road10.x2, road10.y2,road10.r, road10.g, road10.b,
-         road10.x3, road10.y3, road10.r,road10.g, road10.b,
-        road10.x4, road10.y4,road10.r, road10.g, road10.b,
+        donjiLevi.x1, donjiLevi.y1, donjiLevi.r,donjiLevi.g, donjiLevi.b,
+        donjiLevi.x2, donjiLevi.y2,donjiLevi.r, donjiLevi.g, donjiLevi.b,
+         donjiLevi.x3, donjiLevi.y3, donjiLevi.r,donjiLevi.g, donjiLevi.b,
+        donjiLevi.x4, donjiLevi.y4,donjiLevi.r, donjiLevi.g, donjiLevi.b,
 
-        road11.x1, road11.y1, road11.r,road11.g, road11.b,
-        road11.x2, road11.y2,road11.r, road11.g, road11.b,
-         road11.x3, road11.y3, road11.r,road11.g, road11.b,
-        road11.x4, road11.y4,road11.r, road11.g, road11.b,
+        donjiDesni.x1, donjiDesni.y1, donjiDesni.r,donjiDesni.g, donjiDesni.b,
+        donjiDesni.x2, donjiDesni.y2,donjiDesni.r, donjiDesni.g, donjiDesni.b,
+         donjiDesni.x3, donjiDesni.y3, donjiDesni.r,donjiDesni.g, donjiDesni.b,
+        donjiDesni.x4, donjiDesni.y4,donjiDesni.r, donjiDesni.g, donjiDesni.b,
 
-        road12.x1, road12.y1, road12.r,road12.g, road12.b,
-        road12.x2, road12.y2,road12.r, road12.g, road12.b,
-         road12.x3, road12.y3, road12.r,road12.g, road12.b,
-        road12.x4, road12.y4,road12.r, road12.g, road12.b,
+        donji2.x1, donji2.y1, donji2.r,donji2.g, donji2.b,
+        donji2.x2, donji2.y2,donji2.r, donji2.g, donji2.b,
+         donji2.x3, donji2.y3, donji2.r,donji2.g, donji2.b,
+        donji2.x4, donji2.y4,donji2.r, donji2.g, donji2.b,
 
-        road13.x1, road13.y1, road13.r,road13.g, road13.b,
-        road13.x2, road13.y2,road13.r, road13.g, road13.b,
-         road13.x3, road13.y3, road13.r,road13.g, road13.b,
-        road13.x4, road13.y4,road13.r, road13.g, road13.b,
+        donji2l.x1, donji2l.y1, donji2l.r,donji2l.g, donji2l.b,
+        donji2l.x2, donji2l.y2,donji2l.r, donji2l.g, donji2l.b,
+         donji2l.x3, donji2l.y3, donji2l.r,donji2l.g, donji2l.b,
+        donji2l.x4, donji2l.y4,donji2l.r, donji2l.g, donji2l.b,
 
-        road14.x1, road14.y1, road14.r,road14.g, road14.b,
-        road14.x2, road14.y2,road14.r, road14.g, road14.b,
-         road14.x3, road14.y3, road14.r,road14.g, road14.b,
-        road14.x4, road14.y4,road14.r, road14.g, road14.b,
+        donji1.x1, donji1.y1, donji1.r,donji1.g, donji1.b,
+        donji1.x2, donji1.y2,donji1.r, donji1.g, donji1.b,
+         donji1.x3, donji1.y3, donji1.r,donji1.g, donji1.b,
+        donji1.x4, donji1.y4,donji1.r, donji1.g, donji1.b,
 
-        road15.x1, road15.y1, road15.r,road15.g, road15.b,
-        road15.x2, road15.y2,road15.r, road15.g, road15.b,
-         road15.x3, road15.y3, road15.r,road15.g, road15.b,
-        road15.x4, road15.y4,road15.r, road15.g, road15.b,
+        donji1l.x1, donji1l.y1, donji1l.r,donji1l.g, donji1l.b,
+        donji1l.x2, donji1l.y2,donji1l.r, donji1l.g, donji1l.b,
+         donji1l.x3, donji1l.y3, donji1l.r,donji1l.g, donji1l.b,
+        donji1l.x4, donji1l.y4,donji1l.r, donji1l.g, donji1l.b,
         };
 
         glBindVertexArray(VAO1);
@@ -832,6 +942,11 @@ int main(void)
         updateTrafficLight(light5, deltaTime);
         updateTrafficLight(light6, deltaTime);
         updateTrafficLight(light7, deltaTime);
+        updateTrafficLight(light8, deltaTime);
+        updateTrafficLight(light9, deltaTime);
+        updateTrafficLight(light10, deltaTime);
+        updateTrafficLight(light11, deltaTime);
+        updateTrafficLight(light12, deltaTime);
         bool isTwo = false;
         isTwo = drawTrafficLight(light1, VAO, VBO, VAO2, VBO2, VAO3, VBO3, VAO4, VBO4, VAO5, VBO5, vertexCount);
         isTwo = drawLeftTrafficLight(light2, VAOS1, VBOS1, VAOS12, VBOS12, VAOS13, VBOS13, vertexCount);
@@ -840,6 +955,11 @@ int main(void)
         isTwo = drawTrafficLightLeft(light5, VAOS4, VBOS4, VAOS41, VBOS41, VAOS42, VBOS42, VAOS43, VBOS43, VAOS44, VBOS44, vertexCount);
         isTwo = drawTrafficLightRight(light6, VAOS5, VBOS5, VAOS51, VBOS51, VAOS52, VBOS52, VAOS53, VBOS53, VAOS54, VBOS54, vertexCount);
         isTwo = drawTrafficLightRight(light7, VAOS6, VBOS6, VAOS61, VBOS61, VAOS62, VBOS62, VAOS63, VBOS63, VAOS64, VBOS64, vertexCount);
+        isTwo = drawTrafficLight(light8, VAOS7, VBOS7, VAOS71, VBOS71, VAOS72, VBOS72, VAOS73, VBOS73, VAOS74, VBOS74, vertexCount);
+        isTwo = drawLeftTrafficLight(light9, VAOS8, VBOS8, VAOS81, VBOS81, VAOS82, VBOS82,vertexCount);
+        isTwo = drawTrafficLightUp(light10, VAOS9, VBOS9, VAOS91, VBOS91, VAOS92, VBOS92, VAOS93, VBOS93, VAOS94, VBOS94, vertexCount);
+        isTwo = drawLeftTrafficLightUp(light11, VAOS10, VBOS10, VAOS101, VBOS101, VAOS102, VBOS102, vertexCount);
+        isTwo = drawTrafficLightLeft(light12, VAOS125, VBOS125, VAOS121, VBOS121, VAOS122, VBOS122, VAOS123, VBOS123, VAOS124, VBOS124, vertexCount);
         glBindVertexArray(VAO);
         glDrawArrays(GL_TRIANGLE_FAN, 0, vertexCount);
         glBindVertexArray(VAO2);
@@ -902,7 +1022,48 @@ int main(void)
         glDrawArrays(GL_TRIANGLE_FAN, 0, vertexCount);
         glBindVertexArray(VAOS64);
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 8);
-
+        glBindVertexArray(VAOS7);
+        glDrawArrays(GL_TRIANGLE_FAN, 0, vertexCount);
+        glBindVertexArray(VAOS71);
+        glDrawArrays(GL_TRIANGLE_FAN, 0, vertexCount);
+        glBindVertexArray(VAOS72);
+        glDrawArrays(GL_TRIANGLE_FAN, 0, vertexCount);
+        glBindVertexArray(VAOS73);
+        glDrawArrays(GL_TRIANGLE_FAN, 0, vertexCount);
+        glBindVertexArray(VAOS74);
+        glDrawArrays(GL_TRIANGLE_STRIP, 0, 8);
+        glBindVertexArray(VAOS8);
+        glDrawArrays(GL_TRIANGLE_FAN, 0, vertexCount);
+        glBindVertexArray(VAOS81);
+        glDrawArrays(GL_TRIANGLE_FAN, 0, vertexCount);
+        glBindVertexArray(VAOS82);
+        glDrawArrays(GL_TRIANGLE_FAN, 0, vertexCount);
+        glBindVertexArray(VAOS9);
+        glDrawArrays(GL_TRIANGLE_FAN, 0, vertexCount);
+        glBindVertexArray(VAOS91);
+        glDrawArrays(GL_TRIANGLE_FAN, 0, vertexCount);
+        glBindVertexArray(VAOS92);
+        glDrawArrays(GL_TRIANGLE_FAN, 0, vertexCount);
+        glBindVertexArray(VAOS93);
+        glDrawArrays(GL_TRIANGLE_FAN, 0, vertexCount);
+        glBindVertexArray(VAOS94);
+        glDrawArrays(GL_TRIANGLE_STRIP, 0, 8);
+        glBindVertexArray(VAOS10);
+        glDrawArrays(GL_TRIANGLE_FAN, 0, vertexCount);
+        glBindVertexArray(VAOS101);
+        glDrawArrays(GL_TRIANGLE_FAN, 0, vertexCount);
+        glBindVertexArray(VAOS102);
+        glDrawArrays(GL_TRIANGLE_FAN, 0, vertexCount);
+        glBindVertexArray(VAOS125);
+        glDrawArrays(GL_TRIANGLE_FAN, 0, vertexCount);
+        glBindVertexArray(VAOS121);
+        glDrawArrays(GL_TRIANGLE_FAN, 0, vertexCount);
+        glBindVertexArray(VAOS122);
+        glDrawArrays(GL_TRIANGLE_FAN, 0, vertexCount);
+        glBindVertexArray(VAOS123);
+        glDrawArrays(GL_TRIANGLE_FAN, 0, vertexCount);
+        glBindVertexArray(VAOS124);
+        glDrawArrays(GL_TRIANGLE_STRIP, 0, 8);
 
         glUseProgram(textureShader);
         glBindVertexArray(VAOG);
