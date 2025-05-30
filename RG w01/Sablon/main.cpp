@@ -86,7 +86,7 @@ struct RoadSegment {
                 if (congestion > 1) {
                     congestion = 1;
                 };
-                int numConnectedRoads = connectedRoads.size(); 
+               int numConnectedRoads = connectedRoads.size();
                 for (RoadSegment* road : connectedRoads) {
                     if (road != nullptr) { 
                         road->congestion += speed / numConnectedRoads;
@@ -101,7 +101,7 @@ struct RoadSegment {
                 }
             }
             else {
-                congestion += speed;
+               // congestion += speed;
                 if (isRight == true) {
                     congestion -= speed / 3;
                     RoadSegment* road = connectedRoads[0];
@@ -204,7 +204,7 @@ int main(void)
     }
     glfwSetScrollCallback(window, scroll_callback);
 
-
+    glfwSwapInterval(1);
 
     unsigned int basicShader = createShader("basic.vert", "basic.frag");
     unsigned int textureShader = createShader("texture.vert", "texture.frag");
@@ -738,12 +738,12 @@ int main(void)
                 float maxY = std::max({ road->y1, road->y2, road->y3, road->y4 });
                 if (xPos >= minX && xPos <= maxX && yPos >= minY && yPos <= maxY) {
                     if (mouseButtonStateLeft == GLFW_PRESS) {
-                        road->congestion += 0.001;
+                        road->congestion += 0.01;
                         if (road->congestion > 1.0f) road->congestion = 1.0f;
                         road->getColorFromCongestion();
                     }
                     else if (mouseButtonStateRight == GLFW_PRESS) {
-                        road->congestion -= 0.001;
+                        road->congestion -= 0.01;
                         if (road->congestion < 0.0f) road->congestion = 0.0f;
                         road->getColorFromCongestion();
                     }
