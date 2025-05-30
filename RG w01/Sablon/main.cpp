@@ -176,6 +176,9 @@ bool drawTrafficLightLeft(TrafficLight& light, unsigned int& VAO, unsigned int& 
 void drawArrowUp(float offsetX, float offsetY, float length, float width, float headLength, float red, float green, float blue, unsigned int& VAO, unsigned int& VBO);
 bool drawTrafficLightRight(TrafficLight& light, unsigned int& VAO, unsigned int& VBO, unsigned int& VAO1, unsigned int& VBO1, unsigned int& VAO2, unsigned int& VBO2, unsigned int& VAO3, unsigned int& VBO3, unsigned int& VAO4, unsigned int& VBO4, int& vertexCount);
 void connectRoads(RoadSegment& from, std::initializer_list<RoadSegment*> targets);
+std::vector<float> toVertices(const RoadSegment* seg);
+std::vector<float> buildVertices(const std::vector<RoadSegment*> segments);
+
 
 int main(void)
 {
@@ -797,116 +800,10 @@ int main(void)
             road->changeCongestion();
         }
 
-        float vertices[] = {
-        desniVeliki.x1, desniVeliki.y1, desniVeliki.r,desniVeliki.g, desniVeliki.b,
-        desniVeliki.x2, desniVeliki.y2,desniVeliki.r, desniVeliki.g, desniVeliki.b,
-         desniVeliki.x3, desniVeliki.y3, desniVeliki.r,desniVeliki.g, desniVeliki.b,
-        desniVeliki.x4, desniVeliki.y4,desniVeliki.r, desniVeliki.g, desniVeliki.b,
-
-         desniMali.x1, desniMali.y1, desniMali.r,desniMali.g, desniMali.b,
-        desniMali.x2, desniMali.y2,desniMali.r, desniMali.g, desniMali.b,
-         desniMali.x3, desniMali.y3, desniMali.r,desniMali.g, desniMali.b,
-        desniMali.x4, desniMali.y4,desniMali.r, desniMali.g, desniMali.b,
-
-         desniKosi.x1, desniKosi.y1, desniKosi.r,desniKosi.g, desniKosi.b,
-        desniKosi.x2, desniKosi.y2,desniKosi.r, desniKosi.g, desniKosi.b,
-         desniKosi.x3, desniKosi.y3, desniKosi.r,desniKosi.g, desniKosi.b,
-        desniKosi.x4, desniKosi.y4,desniKosi.r, desniKosi.g, desniKosi.b,
-
-        leviVeliki.x1, leviVeliki.y1, leviVeliki.r,leviVeliki.g, leviVeliki.b,
-        leviVeliki.x2, leviVeliki.y2,leviVeliki.r, leviVeliki.g, leviVeliki.b,
-         leviVeliki.x3, leviVeliki.y3, leviVeliki.r,leviVeliki.g, leviVeliki.b,
-        leviVeliki.x4, leviVeliki.y4,leviVeliki.r, leviVeliki.g, leviVeliki.b,
-
-        leviMali.x1, leviMali.y1, leviMali.r,leviMali.g, leviMali.b,
-        leviMali.x2, leviMali.y2,leviMali.r, leviMali.g, leviMali.b,
-         leviMali.x3, leviMali.y3, leviMali.r,leviMali.g, leviMali.b,
-        leviMali.x4, leviMali.y4,leviMali.r, leviMali.g, leviMali.b,
-
-        gornjiLevi.x1, gornjiLevi.y1, gornjiLevi.r,gornjiLevi.g, gornjiLevi.b,
-        gornjiLevi.x2, gornjiLevi.y2,gornjiLevi.r, gornjiLevi.g, gornjiLevi.b,
-         gornjiLevi.x3, gornjiLevi.y3, gornjiLevi.r,gornjiLevi.g, gornjiLevi.b,
-        gornjiLevi.x4, gornjiLevi.y4,gornjiLevi.r, gornjiLevi.g, gornjiLevi.b,
-
-        gornjiDesni.x1, gornjiDesni.y1, gornjiDesni.r,gornjiDesni.g, gornjiDesni.b,
-        gornjiDesni.x2, gornjiDesni.y2,gornjiDesni.r, gornjiDesni.g, gornjiDesni.b,
-         gornjiDesni.x3, gornjiDesni.y3, gornjiDesni.r,gornjiDesni.g, gornjiDesni.b,
-        gornjiDesni.x4, gornjiDesni.y4,gornjiDesni.r, gornjiDesni.g, gornjiDesni.b,
-
-        gornjiGornji2.x1, gornjiGornji2.y1, gornjiGornji2.r,gornjiGornji2.g, gornjiGornji2.b,
-        gornjiGornji2.x2, gornjiGornji2.y2,gornjiGornji2.r, gornjiGornji2.g, gornjiGornji2.b,
-         gornjiGornji2.x3, gornjiGornji2.y3, gornjiGornji2.r,gornjiGornji2.g, gornjiGornji2.b,
-        gornjiGornji2.x4, gornjiGornji2.y4,gornjiGornji2.r, gornjiGornji2.g, gornjiGornji2.b,
-
-        gornji2.x1, gornji2.y1, gornji2.r,gornji2.g, gornji2.b,
-        gornji2.x2, gornji2.y2,gornji2.r, gornji2.g, gornji2.b,
-         gornji2.x3, gornji2.y3, gornji2.r,gornji2.g, gornji2.b,
-        gornji2.x4, gornji2.y4,gornji2.r, gornji2.g, gornji2.b,
-
-         gornji2l.x1, gornji2l.y1, gornji2l.r,gornji2l.g, gornji2l.b,
-        gornji2l.x2, gornji2l.y2,gornji2l.r, gornji2l.g, gornji2l.b,
-         gornji2l.x3, gornji2l.y3, gornji2l.r,gornji2l.g, gornji2l.b,
-        gornji2l.x4, gornji2l.y4,gornji2l.r, gornji2l.g, gornji2l.b,
-
-        gornjiGornji2l.x1, gornjiGornji2l.y1, gornjiGornji2l.r,gornjiGornji2l.g, gornjiGornji2l.b,
-        gornjiGornji2l.x2, gornjiGornji2l.y2,gornjiGornji2l.r, gornjiGornji2l.g, gornjiGornji2l.b,
-         gornjiGornji2l.x3, gornjiGornji2l.y3, gornjiGornji2l.r,gornjiGornji2l.g, gornjiGornji2l.b,
-        gornjiGornji2l.x4, gornjiGornji2l.y4,gornjiGornji2l.r, gornjiGornji2l.g, gornjiGornji2l.b,
-
-        gornji1.x1, gornji1.y1, gornji1.r,gornji1.g, gornji1.b,
-        gornji1.x2, gornji1.y2,gornji1.r, gornji1.g, gornji1.b,
-         gornji1.x3, gornji1.y3, gornji1.r,gornji1.g, gornji1.b,
-        gornji1.x4, gornji1.y4,gornji1.r, gornji1.g, gornji1.b,
-
-        gornji1l.x1, gornji1l.y1, gornji1l.r,gornji1l.g, gornji1l.b,
-        gornji1l.x2, gornji1l.y2,gornji1l.r, gornji1l.g, gornji1l.b,
-         gornji1l.x3, gornji1l.y3, gornji1l.r,gornji1l.g, gornji1l.b,
-        gornji1l.x4, gornji1l.y4,gornji1l.r, gornji1l.g, gornji1l.b,
-
-        gornjiGornji1.x1, gornjiGornji1.y1, gornjiGornji1.r,gornjiGornji1.g, gornjiGornji1.b,
-        gornjiGornji1.x2, gornjiGornji1.y2,gornjiGornji1.r, gornjiGornji1.g, gornjiGornji1.b,
-         gornjiGornji1.x3, gornjiGornji1.y3, gornjiGornji1.r,gornjiGornji1.g, gornjiGornji1.b,
-        gornjiGornji1.x4, gornjiGornji1.y4,gornjiGornji1.r, gornjiGornji1.g, gornjiGornji1.b,
-
-        gornjiGornji1l.x1, gornjiGornji1l.y1, gornjiGornji1l.r,gornjiGornji1l.g, gornjiGornji1l.b,
-        gornjiGornji1l.x2, gornjiGornji1l.y2,gornjiGornji1l.r, gornjiGornji1l.g, gornjiGornji1l.b,
-         gornjiGornji1l.x3, gornjiGornji1l.y3, gornjiGornji1l.r,gornjiGornji1l.g, gornjiGornji1l.b,
-        gornjiGornji1l.x4, gornjiGornji1l.y4,gornjiGornji1l.r, gornjiGornji1l.g, gornjiGornji1l.b,
-
-        donjiLevi.x1, donjiLevi.y1, donjiLevi.r,donjiLevi.g, donjiLevi.b,
-        donjiLevi.x2, donjiLevi.y2,donjiLevi.r, donjiLevi.g, donjiLevi.b,
-         donjiLevi.x3, donjiLevi.y3, donjiLevi.r,donjiLevi.g, donjiLevi.b,
-        donjiLevi.x4, donjiLevi.y4,donjiLevi.r, donjiLevi.g, donjiLevi.b,
-
-        donjiDesni.x1, donjiDesni.y1, donjiDesni.r,donjiDesni.g, donjiDesni.b,
-        donjiDesni.x2, donjiDesni.y2,donjiDesni.r, donjiDesni.g, donjiDesni.b,
-         donjiDesni.x3, donjiDesni.y3, donjiDesni.r,donjiDesni.g, donjiDesni.b,
-        donjiDesni.x4, donjiDesni.y4,donjiDesni.r, donjiDesni.g, donjiDesni.b,
-
-        donji2.x1, donji2.y1, donji2.r,donji2.g, donji2.b,
-        donji2.x2, donji2.y2,donji2.r, donji2.g, donji2.b,
-         donji2.x3, donji2.y3, donji2.r,donji2.g, donji2.b,
-        donji2.x4, donji2.y4,donji2.r, donji2.g, donji2.b,
-
-        donji2l.x1, donji2l.y1, donji2l.r,donji2l.g, donji2l.b,
-        donji2l.x2, donji2l.y2,donji2l.r, donji2l.g, donji2l.b,
-         donji2l.x3, donji2l.y3, donji2l.r,donji2l.g, donji2l.b,
-        donji2l.x4, donji2l.y4,donji2l.r, donji2l.g, donji2l.b,
-
-        donji1.x1, donji1.y1, donji1.r,donji1.g, donji1.b,
-        donji1.x2, donji1.y2,donji1.r, donji1.g, donji1.b,
-         donji1.x3, donji1.y3, donji1.r,donji1.g, donji1.b,
-        donji1.x4, donji1.y4,donji1.r, donji1.g, donji1.b,
-
-        donji1l.x1, donji1l.y1, donji1l.r,donji1l.g, donji1l.b,
-        donji1l.x2, donji1l.y2,donji1l.r, donji1l.g, donji1l.b,
-         donji1l.x3, donji1l.y3, donji1l.r,donji1l.g, donji1l.b,
-        donji1l.x4, donji1l.y4,donji1l.r, donji1l.g, donji1l.b,
-        };
-
+        auto vertices1 = buildVertices(allRoads);
         glBindVertexArray(VAO1);
         glBindBuffer(GL_ARRAY_BUFFER, VBO1);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, vertices1.size() * sizeof(float), vertices1.data(), GL_STATIC_DRAW);
 
         glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
         glEnableVertexAttribArray(0);
@@ -1753,5 +1650,26 @@ void connectRoads(RoadSegment& from, std::initializer_list<RoadSegment*> targets
         from.addConnectedRoad(road);
     }
 }
+
+
+std::vector<float> toVertices(const RoadSegment* seg) {
+    return {
+        seg->x1, seg->y1, seg->r, seg->g, seg->b,
+        seg->x2, seg->y2, seg->r, seg->g, seg->b,
+        seg->x3, seg->y3, seg->r, seg->g, seg->b,
+        seg->x4, seg->y4, seg->r, seg->g, seg->b
+    };
+}
+
+// Spoji sve segmente u jedan veliki niz vertices
+std::vector<float> buildVertices(const std::vector<RoadSegment*> segments) {
+    std::vector<float> vertices;
+    for (const auto& seg : segments) {
+        auto v = toVertices(seg);
+        vertices.insert(vertices.end(), v.begin(), v.end());
+    }
+    return vertices;
+}
+
 
 
