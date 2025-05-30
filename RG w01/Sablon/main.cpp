@@ -30,9 +30,12 @@ struct RoadSegment {
         : x1(x1), y1(y1), x2(x2), y2(y2), x3(x3), y3(y3), x4(x4), y4(y4), isRight(isRight), name(name), congestion(0.3f), isGreen(isGreen), isOutside(isOutside), isImportant(isImportant) {
     }
 
+
+
     void addConnectedRoad(RoadSegment* road) {
         connectedRoads.push_back(road);
     }
+
 
     void getColorFromCongestion() {
         r = congestion;      
@@ -156,7 +159,6 @@ struct TrafficLight {
 };
 
 
-
 unsigned int compileShader(GLenum type, const char* source); 
 unsigned int createShader(const char* vsSource, const char* fsSource); 
 void initTrafficLight(TrafficLight& light, float x, float y);
@@ -173,6 +175,7 @@ void drawArrowDown(float offsetX, float offsetY, float length, float width, floa
 bool drawTrafficLightLeft(TrafficLight& light, unsigned int& VAO, unsigned int& VBO, unsigned int& VAO1, unsigned int& VBO1, unsigned int& VAO2, unsigned int& VBO2, unsigned int& VAO3, unsigned int& VBO3, unsigned int& VAO4, unsigned int& VBO4, int& vertexCount);
 void drawArrowUp(float offsetX, float offsetY, float length, float width, float headLength, float red, float green, float blue, unsigned int& VAO, unsigned int& VBO);
 bool drawTrafficLightRight(TrafficLight& light, unsigned int& VAO, unsigned int& VBO, unsigned int& VAO1, unsigned int& VBO1, unsigned int& VAO2, unsigned int& VBO2, unsigned int& VAO3, unsigned int& VBO3, unsigned int& VAO4, unsigned int& VBO4, int& vertexCount);
+void connectRoads(RoadSegment& from, std::initializer_list<RoadSegment*> targets);
 
 int main(void)
 {
@@ -503,36 +506,24 @@ int main(void)
     RoadSegment leviVeliki(-0.75, 0.74, -0.77, 0.74, -0.75, -1.0, -0.77, -1.0, false, "zeleznicka", true, false, false);
     RoadSegment desniKosi(0.75, 0.0, 0.77, 0.0, 1.0, -0.52, 1.0, -0.57, false, "mostonga", true, false, false);
     RoadSegment desniMali(0.75, 0.0, 0.77, 0.0, 0.75, 1.0, 0.77, 1.0, false, "skolska", true, false, false);
-    gornji2.addConnectedRoad(&gornjiDesni);
-    gornji2.addConnectedRoad(&gornjiGornji2);
-    gornji2l.addConnectedRoad(&gornjiGornji2l);
-    gornji2l.addConnectedRoad(&gornjiLevi);
-    gornjiGornji1.addConnectedRoad(&gornji1);
-    gornjiGornji1.addConnectedRoad(&gornjiDesni);
-    gornjiGornji1l.addConnectedRoad(&gornjiLevi);
-    gornjiGornji1l.addConnectedRoad(&gornji1l);
-    gornjiLevi.addConnectedRoad(&gornji1l);
-    gornjiLevi.addConnectedRoad(&gornjiDesni);
-    gornjiLevi.addConnectedRoad(&gornjiGornji2l);
-    gornjiDesni.addConnectedRoad(&gornjiGornji2);
-    gornjiDesni.addConnectedRoad(&gornji1);
-    gornjiDesni.addConnectedRoad(&gornjiLevi);
 
-    donjiDesni.addConnectedRoad(&gornji2);
-    donjiDesni.addConnectedRoad(&donjiLevi);
-    donjiDesni.addConnectedRoad(&donji1);
-    donji2.addConnectedRoad(&donjiDesni);
-    donji2.addConnectedRoad(&gornji2);
-    donji2l.addConnectedRoad(&donjiLevi);
-    donji2l.addConnectedRoad(&gornji2l);
 
-    gornji1l.addConnectedRoad(&donjiLevi);
-    gornji1l.addConnectedRoad(&donji1l);
-    gornji1.addConnectedRoad(&donjiDesni);
-    gornji1.addConnectedRoad(&donji1);
-    donjiLevi.addConnectedRoad(&donji1l);
-    donjiLevi.addConnectedRoad(&donjiDesni);
-    donjiLevi.addConnectedRoad(&gornji2l);
+    connectRoads(gornji2, { &gornjiDesni, &gornjiGornji2 });
+    connectRoads(gornji2l, { &gornjiGornji2l, &gornjiLevi });
+    connectRoads(gornjiGornji1, { &gornji1, &gornjiDesni });
+    connectRoads(gornjiGornji1l, { &gornjiLevi, &gornji1l });
+    connectRoads(gornjiLevi, { &gornji1l, &gornjiDesni, &gornjiGornji2l });
+    connectRoads(gornjiDesni, { &gornjiGornji2, &gornji1, &gornjiLevi });
+
+    connectRoads(donjiDesni, { &gornji2, &donjiLevi, &donji1 });
+    connectRoads(donji2, { &donjiDesni, &gornji2 });
+    connectRoads(donji2l, { &donjiLevi, &gornji2l });
+
+    connectRoads(gornji1l, { &donjiLevi, &donji1l });
+    connectRoads(gornji1, { &donjiDesni, &donji1 });
+    connectRoads(donjiLevi, { &donji1l, &donjiDesni, &gornji2l });
+
+
     TrafficLight light1(gornji2, 0.05, 0.70, "green", "yellow", false);
     TrafficLight light2(gornji2l, -0.05, 0.70, "green", "yellow", false);
     TrafficLight light3(gornjiGornji1, -0.05, 0.9, "green", "yellow", false);
@@ -546,27 +537,16 @@ int main(void)
     TrafficLight light11(gornji1, -0.05, 0.15, "green", "yellow", false);
     TrafficLight light12(donjiLevi, -0.15, -0.05, "red", "redyellow", true);
 
-    gornjiLevi.getColorFromCongestion();
-    gornjiDesni.getColorFromCongestion();
-    gornjiGornji2.getColorFromCongestion();
-    gornji2.getColorFromCongestion();
-    gornji2l.getColorFromCongestion();
-    gornjiGornji2l.getColorFromCongestion();
-    gornji1.getColorFromCongestion();
-    gornji1l.getColorFromCongestion();
-    gornjiGornji1.getColorFromCongestion();
-    gornjiGornji1l.getColorFromCongestion();
-    donjiLevi.getColorFromCongestion();
-    donjiDesni.getColorFromCongestion();
-    donji2.getColorFromCongestion();
-    donji2l.getColorFromCongestion();
-    donji1.getColorFromCongestion();
-    donji1l.getColorFromCongestion();
-    desniVeliki.getColorFromCongestion();
-    leviMali.getColorFromCongestion();
-    leviVeliki.getColorFromCongestion();
-    desniKosi.getColorFromCongestion();
-    desniMali.getColorFromCongestion();
+    std::vector<RoadSegment*> allRoads = {
+    &gornjiLevi, &gornjiDesni, &gornjiGornji2, &gornji2, &gornji2l,
+    &gornjiGornji2l, &gornji1, &gornji1l, &gornjiGornji1, &gornjiGornji1l,
+    &donjiLevi, &donjiDesni, &donji2, &donji2l, &donji1, &donji1l,
+    &desniVeliki, &leviMali, &leviVeliki, &desniKosi, &desniMali
+    };
+
+    for (RoadSegment* road : allRoads) {
+        road->getColorFromCongestion();
+    }
 
     //tekstura za ulice
     unsigned int VAOU, VBOU, EBOU;
@@ -812,27 +792,11 @@ int main(void)
         i += 1;
 
        
-        gornjiLevi.changeCongestion();
-        gornjiDesni.changeCongestion();
-        gornjiGornji2.changeCongestion();
-        gornji2.changeCongestion();
-        gornji2l.changeCongestion();
-        gornjiGornji2l.changeCongestion();
-        gornji1.changeCongestion();
-        gornji1l.changeCongestion();
-        gornjiGornji1.changeCongestion();
-        gornjiGornji1l.changeCongestion();
-        donjiLevi.changeCongestion();
-        donjiDesni.changeCongestion();
-        donji2.changeCongestion();
-        donji2l.changeCongestion();
-        donji1.changeCongestion();
-        donji1l.changeCongestion();
-        desniVeliki.changeCongestion();
-        leviMali.changeCongestion();
-        leviVeliki.changeCongestion();
-        desniKosi.changeCongestion();
-        desniMali.changeCongestion();
+
+        for (RoadSegment* road : allRoads) {
+            road->changeCongestion();
+        }
+
         float vertices[] = {
         desniVeliki.x1, desniVeliki.y1, desniVeliki.r,desniVeliki.g, desniVeliki.b,
         desniVeliki.x2, desniVeliki.y2,desniVeliki.r, desniVeliki.g, desniVeliki.b,
@@ -1782,4 +1746,12 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
     if (freeSpeed < 0.00001) freeSpeed = 0.00001;  // Minimum speed
     if (freeSpeed > 0.00007) freeSpeed = 0.0001;
 }
+
+
+void connectRoads(RoadSegment& from, std::initializer_list<RoadSegment*> targets) {
+    for (RoadSegment* road : targets) {
+        from.addConnectedRoad(road);
+    }
+}
+
 
