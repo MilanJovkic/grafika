@@ -63,47 +63,47 @@ int main(void)
     float cubeVertices[] = {
         // positions         // colors
         // Front face
-        -0.2f, 0.0f,  0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
-         0.2f, 0.0f,  0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
-         0.2f, 0.6f,  0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
-        -0.2f, 0.0f,  0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
-         0.2f, 0.6f,  0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
-        -0.2f, 0.6f,  0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
+        -0.2f, -0.2f,  0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
+         0.2f, -0.2f,  0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
+         0.2f,  0.2f,  0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
+        -0.2f, -0.2f,  0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
+         0.2f,  0.2f,  0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
+        -0.2f,  0.2f,  0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
         // Back face
-        -0.2f, 0.0f, -0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
-         0.2f, 0.0f, -0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
-         0.2f, 0.6f, -0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
-        -0.2f, 0.0f, -0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
-         0.2f, 0.6f, -0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
-        -0.2f, 0.6f, -0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
+        -0.2f, -0.2f, -0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
+         0.2f, -0.2f, -0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
+         0.2f,  0.2f, -0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
+        -0.2f, -0.2f, -0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
+         0.2f,  0.2f, -0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
+        -0.2f,  0.2f, -0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
         // Left face
-        -0.2f, 0.0f, -0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
-        -0.2f, 0.0f,  0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
-        -0.2f, 0.6f,  0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
-        -0.2f, 0.0f, -0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
-        -0.2f, 0.6f,  0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
-        -0.2f, 0.6f, -0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
-        // Right face
-         0.2f, 0.0f, -0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
-         0.2f, 0.0f,  0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
-         0.2f, 0.6f,  0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
-         0.2f, 0.0f, -0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
-         0.2f, 0.6f,  0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
-         0.2f, 0.6f, -0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
-        // Top face
-        -0.2f, 0.6f,  0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
-         0.2f, 0.6f,  0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
-         0.2f, 0.6f, -0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
-        -0.2f, 0.6f,  0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
-         0.2f, 0.6f, -0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
-        -0.2f, 0.6f, -0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
+        -0.2f, -0.2f, -0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
+        -0.2f, -0.2f,  0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
+        -0.2f,  0.2f,  0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
+        -0.2f, -0.2f, -0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
+        -0.2f,  0.2f,  0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
+        -0.2f,  0.2f, -0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
+        // Right face (CCW)
+         0.2f, -0.2f,  0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
+         0.2f, -0.2f, -0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
+         0.2f,  0.2f, -0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
+         0.2f, -0.2f,  0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
+         0.2f,  0.2f, -0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
+         0.2f,  0.2f,  0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
+        // Top face (CCW)
+        -0.2f,  0.2f,  0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
+         0.2f,  0.2f,  0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
+         0.2f,  0.2f, -0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
+        -0.2f,  0.2f,  0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
+         0.2f,  0.2f, -0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
+        -0.2f,  0.2f, -0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
         // Bottom face
-        -0.2f, 0.0f,  0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
-         0.2f, 0.0f,  0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
-         0.2f, 0.0f, -0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
-        -0.2f, 0.0f,  0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
-         0.2f, 0.0f, -0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
-        -0.2f, 0.0f, -0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
+        -0.2f, -0.2f,  0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
+         0.2f, -0.2f,  0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
+         0.2f, -0.2f, -0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
+        -0.2f, -0.2f,  0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
+         0.2f, -0.2f, -0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
+        -0.2f, -0.2f, -0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
     };
     float bladeVertices[] = {
         -0.02f, 0.0f, 0.0f,  0.8f, 0.8f, 0.8f, 1.0f,
@@ -139,7 +139,7 @@ int main(void)
     unsigned int viewLoc = glGetUniformLocation(unifiedShader, "uV");
     unsigned int projectionLoc = glGetUniformLocation(unifiedShader, "uP");
 
-    glm::mat4 projectionP = glm::perspective(glm::radians(90.0f), (float)wWidth / (float)wHeight, 0.1f, 100.0f);
+    glm::mat4 projectionP = glm::perspective(glm::radians(45.0f), (float)wWidth / (float)wHeight, 0.1f, 100.0f);
 
     glm::vec3 camPos(0.0f, 0.0f, 5.0f);
     glm::vec3 camTarget(0.0f, 1.0f, 0.0f);
@@ -206,7 +206,7 @@ int main(void)
             glBindVertexArray(cubeVAO);
             glDrawArrays(GL_TRIANGLES, 0, 36);
             for (int k = 0; k < 4; ++k) {
-                glm::mat4 bladeModel = glm::translate(model, glm::vec3(0.0f, 0.6f, 0.0f));
+                glm::mat4 bladeModel = glm::translate(model, glm::vec3(0.0f, 0.2f, 0.2f)); // na vrh i prednju stranu kocke
                 bladeModel = glm::rotate(bladeModel, glm::radians(bladeAngles[i] + k * 90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
                 glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(bladeModel));
                 glBindVertexArray(bladeVAO);
