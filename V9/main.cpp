@@ -55,6 +55,7 @@ int main(void)
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
     glEnable(GL_DEPTH_TEST);
+    //glDisable(GL_CULL_FACE); // privremeno isklju?en culling radi provere svih stranica
 
     unsigned int unifiedShader = createShader("basic.vert", "basic.frag");
     unsigned int stride = (3 + 4) * sizeof(float);
@@ -141,10 +142,12 @@ int main(void)
 
     glm::mat4 projectionP = glm::perspective(glm::radians(45.0f), (float)wWidth / (float)wHeight, 0.1f, 100.0f);
 
-    glm::vec3 camPos(0.0f, 0.0f, 5.0f);
-    glm::vec3 camTarget(0.0f, 1.0f, 0.0f);
+    // Orbital camera parameters
+    float camRadius = 5.0f;
+    float camAngle = 0.0f; // in radians
+    glm::vec3 camTarget(0.0f, 1.0f, 0.0f); // central windmill top
     glm::vec3 camUp(0.0f, 1.0f, 0.0f);
-    float camSpeed = 0.05f;
+    float camSpeed = 0.02f; // angle/radius speed
 
     float bladeAngles[3] = {0.0f, 0.0f, 0.0f};
     float bladeSpeeds[3] = {1.0f, 1.5f, 2.0f};
@@ -179,10 +182,18 @@ int main(void)
             glfwSetWindowShouldClose(window, GL_TRUE);
         }
 
-        if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) camPos.z -= camSpeed;
-        if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) camPos.z += camSpeed;
-        if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) camPos.x -= camSpeed;
-        if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) camPos.x += camSpeed;
+        // Camera controls: A/D rotate, W/S zoom (orbital)
+        if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) camAngle -= camSpeed;
+        if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) camAngle += camSpeed;
+        if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) camRadius -= 0.05f;
+        if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) camRadius += 0.05f;
+        if (camRadius < 1.5f) camRadius = 1.5f;
+        if (camRadius > 20.0f) camRadius = 20.0f;
+        glm::vec3 camPos = glm::vec3(
+            camRadius * sin(camAngle),
+            0.0f,
+            camRadius * cos(camAngle)
+        );
         glm::mat4 view = glm::lookAt(camPos, camTarget, camUp);
         glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
 
