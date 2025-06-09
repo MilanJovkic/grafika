@@ -11,7 +11,8 @@
 #include "stb_easy_font.h"
 #include <GL/glew.h> 
 #include <GLFW/glfw3.h>
-
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
 //GLM biblioteke
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -109,19 +110,19 @@ int main(void)
         // Prednja strana (gledano iz +Z, CCW)
     -0.02f, 0.0f, 0.0f,  0.8f, 0.8f, 0.8f, 1.0f,
      0.02f, 0.0f, 0.0f,  0.8f, 0.8f, 0.8f, 1.0f,
-     0.02f, 0.5f, 0.0f,  0.8f, 0.8f, 0.8f, 1.0f,
+     0.02f, 0.4f, 0.0f,  0.8f, 0.8f, 0.8f, 1.0f,
 
     -0.02f, 0.0f, 0.0f,  0.8f, 0.8f, 0.8f, 1.0f,
-     0.02f, 0.5f, 0.0f,  0.8f, 0.8f, 0.8f, 1.0f,
-    -0.02f, 0.5f, 0.0f,  0.8f, 0.8f, 0.8f, 1.0f,
+     0.02f, 0.4f, 0.0f,  0.8f, 0.8f, 0.8f, 1.0f,
+    -0.02f, 0.4f, 0.0f,  0.8f, 0.8f, 0.8f, 1.0f,
         // Jedina vidljiva strana (gledano iz -Z, CCW)
      0.02f, 0.0f, 0.0f,  0.8f, 0.8f, 0.8f, 1.0f,
     -0.02f, 0.0f, 0.0f,  0.8f, 0.8f, 0.8f, 1.0f,
-    -0.02f, 0.5f, 0.0f,  0.8f, 0.8f, 0.8f, 1.0f,
+    -0.02f, 0.4f, 0.0f,  0.8f, 0.8f, 0.8f, 1.0f,
 
      0.02f, 0.0f, 0.0f,  0.8f, 0.8f, 0.8f, 1.0f,
-    -0.02f, 0.5f, 0.0f,  0.8f, 0.8f, 0.8f, 1.0f,
-     0.02f, 0.5f, 0.0f,  0.8f, 0.8f, 0.8f, 1.0f,
+    -0.02f, 0.4f, 0.0f,  0.8f, 0.8f, 0.8f, 1.0f,
+     0.02f, 0.4f, 0.0f,  0.8f, 0.8f, 0.8f, 1.0f,
     };
     unsigned int cubeVAO, cubeVBO, bladeVAO, bladeVBO;
     glGenVertexArrays(1, &cubeVAO);
@@ -144,6 +145,56 @@ int main(void)
     glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, stride, (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
     glBindVertexArray(0);
+
+    // --- VAO/VBO/EBO i tekstura za index kvadrat (ime, prezime, indeks) ---
+    float indexQuad[] = {
+        // positions         // colors         // tex coords
+        -0.95f,  0.95f, 0.0f,  1.0f, 1.0f, 1.0f,   0.0f, 1.0f, // top left
+        -0.95f,  0.80f, 0.0f,  1.0f, 1.0f, 1.0f,   0.0f, 0.0f, // bottom left
+        -0.55f,  0.80f, 0.0f,  1.0f, 1.0f, 1.0f,   1.0f, 0.0f, // bottom right
+        -0.55f,  0.95f, 0.0f,  1.0f, 1.0f, 1.0f,   1.0f, 1.0f  // top right
+    };
+    unsigned int indexIndices[] = {
+        0, 1, 2,
+        2, 3, 0
+    };
+    unsigned int VAOI, VBOI, EBOI;
+    glGenVertexArrays(1, &VAOI);
+    glGenBuffers(1, &VBOI);
+    glGenBuffers(1, &EBOI);
+    glBindVertexArray(VAOI);
+    glBindBuffer(GL_ARRAY_BUFFER, VBOI);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(indexQuad), indexQuad, GL_STATIC_DRAW);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBOI);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indexIndices), indexIndices, GL_STATIC_DRAW);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+    glEnableVertexAttribArray(2);
+    unsigned int textureInx;
+    glGenTextures(1, &textureInx);
+    glBindTexture(GL_TEXTURE_2D, textureInx);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    int widthi, heighti, nrChannelsi;
+    stbi_set_flip_vertically_on_load(true);
+    unsigned char* data2 = stbi_load("index.png", &widthi, &heighti, &nrChannelsi, 0);
+    if (data2) {
+        if (nrChannelsi == 3) {
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, widthi, heighti, 0, GL_RGB, GL_UNSIGNED_BYTE, data2);
+        } else if (nrChannelsi == 4) {
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, widthi, heighti, 0, GL_RGBA, GL_UNSIGNED_BYTE, data2);
+        }
+        glGenerateMipmap(GL_TEXTURE_2D);
+    } else {
+        std::cerr << "Failed to load texture index.png" << std::endl;
+    }
+    stbi_image_free(data2);
+    unsigned int indexShader = createShader("index.vert", "index.frag");
 
     unsigned int modelLoc = glGetUniformLocation(unifiedShader, "uM");
     unsigned int viewLoc = glGetUniformLocation(unifiedShader, "uV");
@@ -190,7 +241,12 @@ int main(void)
             glfwSetWindowShouldClose(window, GL_TRUE);
         }
 
-        // WSAD translacija kamere po XZ, kamera uvek gleda u camTarget
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        // 1. Aktiviraj unifiedShader za celu scenu
+        glUseProgram(unifiedShader);
+        glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projectionP));
+
+        // 2. WSAD/QE logika i view matrica
         glm::vec3 dir = glm::normalize(glm::vec3(camTarget.x - camPos.x, 0.0f, camTarget.z - camPos.z));
         glm::vec3 right = glm::normalize(glm::cross(dir, glm::vec3(0.0f, 1.0f, 0.0f)));
         if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) camPos += dir * camSpeed;
@@ -210,17 +266,13 @@ int main(void)
             if (bladeAngles[i] > 360.0f) bladeAngles[i] -= 360.0f;
         }
 
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glUseProgram(unifiedShader);
-        glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projectionP));
-
         for (int i = 0; i < 3; ++i) {
             glm::mat4 model = glm::translate(glm::mat4(1.0f), windmillPositions[i]);
             glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
             glBindVertexArray(cubeVAO);
             glDrawArrays(GL_TRIANGLES, 0, 36);
             for (int k = 0; k < 4; ++k) {
-                glm::mat4 bladeModel = glm::translate(model, glm::vec3(0.0f, 0.2f, 0.22f)); // blize kocki
+                glm::mat4 bladeModel = glm::translate(model, glm::vec3(0.0f, 0.2f, 0.22f));
                 bladeModel = glm::rotate(bladeModel, glm::radians(bladeAngles[i] + k * 90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
                 glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(bladeModel));
                 glBindVertexArray(bladeVAO);
@@ -228,6 +280,16 @@ int main(void)
             }
         }
         glBindVertexArray(0);
+
+        // 3. Prikaz teksture sa imenom, prezimenom i indeksom u gornjem levom uglu
+        glUseProgram(indexShader);
+        glBindVertexArray(VAOI);
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, textureInx);
+        glUniform1i(glGetUniformLocation(indexShader, "ourTexture"), 0);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        glBindVertexArray(0);
+
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
@@ -236,6 +298,9 @@ int main(void)
     glDeleteVertexArrays(1, &cubeVAO);
     glDeleteBuffers(1, &bladeVBO);
     glDeleteVertexArrays(1, &bladeVAO);
+    glDeleteVertexArrays(1, &VAOI);
+    glDeleteBuffers(1, &VBOI);
+    glDeleteBuffers(1, &EBOI);
     glDeleteProgram(unifiedShader);
     glfwTerminate();
     return 0;
