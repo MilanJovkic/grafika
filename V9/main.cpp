@@ -108,22 +108,21 @@ int main(void)
     };
     float bladeVertices[] = {
         // Prednja strana (gledano iz +Z, CCW)
-        -0.02f, 0.0f, 0.0f,  0.8f, 0.8f, 0.8f, 1.0f,
-         0.02f, 0.0f, 0.0f,  0.8f, 0.8f, 0.8f, 1.0f,
-         0.02f, 0.5f, 0.0f,  0.8f, 0.8f, 0.8f, 1.0f,
+    -0.02f, 0.0f, 0.0f,  0.8f, 0.8f, 0.8f, 1.0f,
+     0.02f, 0.0f, 0.0f,  0.8f, 0.8f, 0.8f, 1.0f,
+     0.02f, 0.5f, 0.0f,  0.8f, 0.8f, 0.8f, 1.0f,
 
-        -0.02f, 0.0f, 0.0f,  0.8f, 0.8f, 0.8f, 1.0f,
-         0.02f, 0.5f, 0.0f,  0.8f, 0.8f, 0.8f, 1.0f,
-        -0.02f, 0.5f, 0.0f,  0.8f, 0.8f, 0.8f, 1.0f,
+    -0.02f, 0.0f, 0.0f,  0.8f, 0.8f, 0.8f, 1.0f,
+     0.02f, 0.5f, 0.0f,  0.8f, 0.8f, 0.8f, 1.0f,
+    -0.02f, 0.5f, 0.0f,  0.8f, 0.8f, 0.8f, 1.0f,
+        // Jedina vidljiva strana (gledano iz -Z, CCW)
+     0.02f, 0.0f, 0.0f,  0.8f, 0.8f, 0.8f, 1.0f,
+    -0.02f, 0.0f, 0.0f,  0.8f, 0.8f, 0.8f, 1.0f,
+    -0.02f, 0.5f, 0.0f,  0.8f, 0.8f, 0.8f, 1.0f,
 
-        // Zadnja strana (gledano iz -Z, CCW)
-         0.02f, 0.0f, 0.0f,  0.8f, 0.8f, 0.8f, 1.0f,
-         0.02f, 0.5f, 0.0f,  0.8f, 0.8f, 0.8f, 1.0f,
-        -0.02f, 0.5f, 0.0f,  0.8f, 0.8f, 0.8f, 1.0f,
-
-         0.02f, 0.0f, 0.0f,  0.8f, 0.8f, 0.8f, 1.0f,
-        -0.02f, 0.5f, 0.0f,  0.8f, 0.8f, 0.8f, 1.0f,
-        -0.02f, 0.0f, 0.0f,  0.8f, 0.8f, 0.8f, 1.0f,
+     0.02f, 0.0f, 0.0f,  0.8f, 0.8f, 0.8f, 1.0f,
+    -0.02f, 0.5f, 0.0f,  0.8f, 0.8f, 0.8f, 1.0f,
+     0.02f, 0.5f, 0.0f,  0.8f, 0.8f, 0.8f, 1.0f,
     };
     unsigned int cubeVAO, cubeVBO, bladeVAO, bladeVBO;
     glGenVertexArrays(1, &cubeVAO);
