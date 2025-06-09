@@ -217,7 +217,7 @@ int main(void)
             glBindVertexArray(cubeVAO);
             glDrawArrays(GL_TRIANGLES, 0, 36);
             for (int k = 0; k < 4; ++k) {
-                glm::mat4 bladeModel = glm::translate(model, glm::vec3(0.0f, 0.2f, 0.2f)); // na vrh i prednju stranu kocke
+                glm::mat4 bladeModel = glm::translate(model, glm::vec3(0.0f, 0.2f, 0.22f)); // blize kocki
                 bladeModel = glm::rotate(bladeModel, glm::radians(bladeAngles[i] + k * 90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
                 glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(bladeModel));
                 glBindVertexArray(bladeVAO);
