@@ -71,12 +71,12 @@ int main(void)
          0.2f,  0.2f,  0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
         -0.2f,  0.2f,  0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
         // Back face
-        -0.2f, -0.2f, -0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
-         0.2f, -0.2f, -0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
-         0.2f,  0.2f, -0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
-        -0.2f, -0.2f, -0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
-         0.2f,  0.2f, -0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
-        -0.2f,  0.2f, -0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
+         0.2f,  0.2f, -0.2f,0.7f, 0.5f, 0.2f, 1.0f,
+         0.2f, -0.2f, -0.2f,0.7f, 0.5f, 0.2f, 1.0f,
+        -0.2f, -0.2f, -0.2f,0.7f, 0.5f, 0.2f, 1.0f,
+         0.2f,  0.2f, -0.2f,0.7f, 0.5f, 0.2f, 1.0f,
+        -0.2f, -0.2f, -0.2f,0.7f, 0.5f, 0.2f, 1.0f,
+        -0.2f,  0.2f, -0.2f,0.7f, 0.5f, 0.2f, 1.0f    ,    
         // Left face
         -0.2f, -0.2f, -0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
         -0.2f, -0.2f,  0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
@@ -107,12 +107,23 @@ int main(void)
         -0.2f, -0.2f, -0.2f,  0.7f, 0.5f, 0.2f, 1.0f,
     };
     float bladeVertices[] = {
+        // Prednja strana (gledano iz +Z, CCW)
         -0.02f, 0.0f, 0.0f,  0.8f, 0.8f, 0.8f, 1.0f,
          0.02f, 0.0f, 0.0f,  0.8f, 0.8f, 0.8f, 1.0f,
          0.02f, 0.5f, 0.0f,  0.8f, 0.8f, 0.8f, 1.0f,
+
         -0.02f, 0.0f, 0.0f,  0.8f, 0.8f, 0.8f, 1.0f,
          0.02f, 0.5f, 0.0f,  0.8f, 0.8f, 0.8f, 1.0f,
         -0.02f, 0.5f, 0.0f,  0.8f, 0.8f, 0.8f, 1.0f,
+
+        // Zadnja strana (gledano iz -Z, CCW)
+         0.02f, 0.0f, 0.0f,  0.8f, 0.8f, 0.8f, 1.0f,
+         0.02f, 0.5f, 0.0f,  0.8f, 0.8f, 0.8f, 1.0f,
+        -0.02f, 0.5f, 0.0f,  0.8f, 0.8f, 0.8f, 1.0f,
+
+         0.02f, 0.0f, 0.0f,  0.8f, 0.8f, 0.8f, 1.0f,
+        -0.02f, 0.5f, 0.0f,  0.8f, 0.8f, 0.8f, 1.0f,
+        -0.02f, 0.0f, 0.0f,  0.8f, 0.8f, 0.8f, 1.0f,
     };
     unsigned int cubeVAO, cubeVBO, bladeVAO, bladeVBO;
     glGenVertexArrays(1, &cubeVAO);
@@ -221,7 +232,7 @@ int main(void)
                 bladeModel = glm::rotate(bladeModel, glm::radians(bladeAngles[i] + k * 90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
                 glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(bladeModel));
                 glBindVertexArray(bladeVAO);
-                glDrawArrays(GL_TRIANGLES, 0, 6);
+                glDrawArrays(GL_TRIANGLES, 0, 12);
             }
         }
         glBindVertexArray(0);
