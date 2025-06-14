@@ -1,5 +1,5 @@
-// Autor: Nedeljko Tesanovic
-// Opis: Testiranje dubine, Uklanjanje lica, Transformacije, Prostori i Projekcije
+// Autor: Milan Jovkic sv8-2021
+// Vetrenjace
 
 #define _CRT_SECURE_NO_WARNINGS
  
@@ -8,7 +8,6 @@
 #include <sstream>
 #include <chrono>
 #include <thread>
-#include "stb_easy_font.h"
 #include <GL/glew.h> 
 #include <GLFW/glfw3.h>
 #define STB_IMAGE_IMPLEMENTATION
@@ -36,7 +35,7 @@ int main(void)
     GLFWwindow* window;
     unsigned int wWidth = 500;
     unsigned int wHeight = 500;
-    const char wTitle[] = "Nedeljko Tesanovic, RN123/2020 - Vetrenjace";
+    const char wTitle[] = "Milan Jovkic, sv8/2021 - Vetrenjace";
     window = glfwCreateWindow(wWidth, wHeight, wTitle, NULL, NULL);
     if (window == NULL)
     {
