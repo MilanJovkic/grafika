@@ -24,12 +24,19 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="basic.frag" />
-    <None Include="basic.vert" />
-    <None Include="texture.frag" />
-    <None Include="texture.vert" />
+    <None Include="basic.frag">
+      <Filter>Source Files\Shader Files</Filter>
+    </None>
+    <None Include="basic.vert">
+      <Filter>Source Files\Shader Files</Filter>
+    </None>
+    <None Include="index.vert" />
+    <None Include="index.frag" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="stb_easy_font.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="stb_image.h">
       <Filter>Header Files</Filter>
     </ClInclude>
